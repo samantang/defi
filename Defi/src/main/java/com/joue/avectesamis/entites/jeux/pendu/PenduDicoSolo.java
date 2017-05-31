@@ -27,9 +27,15 @@ public class PenduDicoSolo implements Serializable{
 	private Long id;
 	private Date date;
 	private String dateString;
+	private String lettreString;
 	private int temps;
+	private String tempsDepart;
+	private String tempsRestant;
 	private boolean timeOut;
+	private String cinqErreurs;
 	private String mot;
+	private String motDepart;
+	private int nbErreurs;
 	private int nbEssais;
 	private boolean reussi;
 	// en fonction du nombre, on determine l'image correspondante qui sera
@@ -39,6 +45,7 @@ public class PenduDicoSolo implements Serializable{
 	@Fetch(FetchMode.SUBSELECT)
 	private Collection<Character> choix;
 	private int score;
+	private int scoreMax;
 	private boolean aide;
 	private int nbAide;
 	@ManyToOne
@@ -48,6 +55,202 @@ public class PenduDicoSolo implements Serializable{
 	
 	
 	
+	
+	
+//	/**
+//	 * @param date
+//	 * @param dateString
+//	 * @param tempsDepart
+//	 * @param tempsRestant
+//	 * @param mot
+//	 * @param motDepart
+//	 * @param nbErreurs
+//	 * @param score
+//	 * @param scoreMax
+//	 * @param friend
+//	 */
+//	public PenduDicoSolo(Date date, String dateString, String tempsDepart,
+//			String tempsRestant, String mot, String motDepart, int nbErreurs,
+//			int score, int scoreMax, Friend friend) {
+//		super();
+//		this.date = date;
+//		this.dateString = dateString;
+//		this.tempsDepart = tempsDepart;
+//		this.tempsRestant = tempsRestant;
+//		this.mot = mot;
+//		this.motDepart = motDepart;
+//		this.nbErreurs = nbErreurs;
+//		this.score = score;
+//		this.scoreMax = scoreMax;
+//		this.friend = friend;
+//	}
+	
+	
+	
+
+	/**
+	 * @param date
+	 * @param dateString
+	 * @param lettreString
+	 * @param tempsDepart
+	 * @param tempsRestant
+	 * @param mot
+	 * @param motDepart
+	 * @param nbErreurs
+	 * @param score
+	 * @param scoreMax
+	 */
+	public PenduDicoSolo(Date date, String dateString, String lettreString,
+			String tempsDepart, String tempsRestant, String mot,
+			String motDepart, int nbErreurs, int score, int scoreMax) {
+		super();
+		this.date = date;
+		this.dateString = dateString;
+		this.lettreString = lettreString;
+		this.tempsDepart = tempsDepart;
+		this.tempsRestant = tempsRestant;
+		this.mot = mot;
+		this.motDepart = motDepart;
+		this.nbErreurs = nbErreurs;
+		this.score = score;
+		this.scoreMax = scoreMax;
+	}
+
+
+
+
+
+
+
+
+
+	/**
+ * @param cinqErreurs
+ * @param nbErreurs
+ */
+public PenduDicoSolo(String cinqErreurs, int nbErreurs) {
+	super();
+	this.cinqErreurs = cinqErreurs;
+	this.nbErreurs = nbErreurs;
+}
+
+
+
+
+
+
+
+
+
+	/**
+	 * @return the cinqErreurs
+	 */
+	public String getCinqErreurs() {
+		return cinqErreurs;
+	}
+
+
+
+
+	/**
+	 * @param cinqErreurs the cinqErreurs to set
+	 */
+	public void setCinqErreurs(String cinqErreurs) {
+		this.cinqErreurs = cinqErreurs;
+	}
+
+
+
+
+	/**
+	 * @return the lettreString
+	 */
+	public String getLettreString() {
+		return lettreString;
+	}
+
+
+
+
+	/**
+	 * @param lettreString the lettreString to set
+	 */
+	public void setLettreString(String lettreString) {
+		this.lettreString = lettreString;
+	}
+
+
+
+
+	/**
+	 * @return the scoreMax
+	 */
+	public int getScoreMax() {
+		return scoreMax;
+	}
+
+	/**
+	 * @param scoreMax the scoreMax to set
+	 */
+	public void setScoreMax(int scoreMax) {
+		this.scoreMax = scoreMax;
+	}
+
+	/**
+	 * @return the tempsDepart
+	 */
+	public String getTempsDepart() {
+		return tempsDepart;
+	}
+
+	/**
+	 * @param tempsDepart the tempsDepart to set
+	 */
+	public void setTempsDepart(String tempsDepart) {
+		this.tempsDepart = tempsDepart;
+	}
+
+	/**
+	 * @return the tempsRestant
+	 */
+	public String getTempsRestant() {
+		return tempsRestant;
+	}
+
+	/**
+	 * @param tempsRestant the tempsRestant to set
+	 */
+	public void setTempsRestant(String tempsRestant) {
+		this.tempsRestant = tempsRestant;
+	}
+
+	/**
+	 * @return the motDepart
+	 */
+	public String getMotDepart() {
+		return motDepart;
+	}
+
+	/**
+	 * @param motDepart the motDepart to set
+	 */
+	public void setMotDepart(String motDepart) {
+		this.motDepart = motDepart;
+	}
+
+	/**
+	 * @return the nbErreurs
+	 */
+	public int getNbErreurs() {
+		return nbErreurs;
+	}
+
+	/**
+	 * @param nbErreurs the nbErreurs to set
+	 */
+	public void setNbErreurs(int nbErreurs) {
+		this.nbErreurs = nbErreurs;
+	}
 
 	/**
 	 * @return the motUser
@@ -71,38 +274,7 @@ public class PenduDicoSolo implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param date
-	 * @param dateString
-	 * @param temps
-	 * @param timeOut
-	 * @param mot
-	 * @param nbEssais
-	 * @param reussi
-	 * @param imageIconJeu
-	 * @param choix
-	 * @param score
-	 * @param aide
-	 * @param nbAide
-	 */
-	public PenduDicoSolo(Date date, String dateString, int temps,
-			boolean timeOut, String mot, int nbEssais, boolean reussi,
-			int imageIconJeu, Collection<Character> choix, int score,
-			boolean aide, int nbAide) {
-		super();
-		this.date = date;
-		this.dateString = dateString;
-		this.temps = temps;
-		this.timeOut = timeOut;
-		this.mot = mot;
-		this.nbEssais = nbEssais;
-		this.reussi = reussi;
-		this.imageIconJeu = imageIconJeu;
-		this.choix = choix;
-		this.score = score;
-		this.aide = aide;
-		this.nbAide = nbAide;
-	}
+	
 
 	/**
 	 * @return the id

@@ -1,6 +1,9 @@
 package com.joue.avectesamis.controlleurs.rest;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,9 +27,11 @@ import com.joue.avectesamis.entites.jeux.Nobels;
 import com.joue.avectesamis.entites.jeux.Pays_Capitale;
 import com.joue.avectesamis.entites.jeux.President;
 import com.joue.avectesamis.entites.jeux.pendu.PenduDicoSolo;
+import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsSolo;
 import com.joue.avectesamis.metier.ChallengeMetier;
 import com.joue.avectesamis.models.GameModel;
 import com.joue.avectesamis.models.PenduModel;
+import com.joue.avectesamis.models.PenduSujetModel;
 import com.joue.avectesamis.models.SocialModel;
 import com.joue.avectesamis.models.Word;
 
@@ -60,6 +65,18 @@ public class PenduSoloSujetControlleur {
 	@RequestMapping(value="penduSoloSujetJeu", method=RequestMethod.GET)
 	public String penduSoloSujetJeu(Model model, PenduModel penduModel, HttpServletRequest request){
 		HttpSession session = request.getSession();
+		
+//		si l'utilisateur ne joue pas un sujet alors la methode de resultat de ce sujet
+//		ne sera pas interrogé et par conséquant dans la methode penduResultatSujet, quand
+//		on va chercher à récupérer les objets en session, on aura une NulPoitException
+//		POUR EVITER ces erreurs, on va creer et initialiser ces objets
+		objetEnsession(session);
+		
+		session.setAttribute("soumissionPays", "non");
+		session.setAttribute("soumissionCapitale", "non");
+		session.setAttribute("soumissionNobel", "non");
+		session.setAttribute("soumissionArtiste", "non");
+		session.setAttribute("soumissionPresident", "non");
 			
 //			Pays
 			Random random = new  Random();
@@ -280,6 +297,51 @@ public class PenduSoloSujetControlleur {
 		return "penduSoloSujetJeu";
 	}
 	
+	private void objetEnsession(HttpSession session) {
+		// TODO Auto-generated method stub
+		int points = 0;
+		int pointsMax = 0;
+		String motComplet = "XXX";
+		String nbErreurs = "0";
+		String lettreString = "X";
+		String mot = "XXX";
+		
+		session.setAttribute("pointsPays", points);
+		session.setAttribute("pointsMaxPays", pointsMax);
+		session.setAttribute("motCompletPays", motComplet);
+		session.setAttribute("nbErreursPays", nbErreurs);
+		session.setAttribute("lettreStringPays", lettreString);
+		session.setAttribute("motPays", mot);
+		
+		session.setAttribute("pointsCapitales", points);
+		session.setAttribute("pointsMaxCapitales", pointsMax);
+		session.setAttribute("motCompletCapitales", motComplet);
+		session.setAttribute("nbErreursCapitales", nbErreurs);
+		session.setAttribute("lettreStringCapitales", lettreString);
+		session.setAttribute("motCapitales", mot);
+		
+		session.setAttribute("pointsNobels", points);
+		session.setAttribute("pointsMaxNobels", pointsMax);
+		session.setAttribute("motCompletNobels", motComplet);
+		session.setAttribute("nbErreursNobels", nbErreurs);
+		session.setAttribute("lettreStringNobels", lettreString);
+		session.setAttribute("motNobels", mot);
+		
+		session.setAttribute("pointsPresident", points);
+		session.setAttribute("pointsMaxPresident", pointsMax);
+		session.setAttribute("motCompletPresident", motComplet);
+		session.setAttribute("nbErreursPresident", nbErreurs);
+		session.setAttribute("lettreStringPresident", lettreString);
+		session.setAttribute("motPresident", mot);
+		
+		session.setAttribute("pointsArtistes", points);
+		session.setAttribute("pointsMaxArtistes", pointsMax);
+		session.setAttribute("motCompletArtistes", motComplet);
+		session.setAttribute("nbErreursArtistes", nbErreurs);
+		session.setAttribute("lettreStringArtistes", lettreString);
+		session.setAttribute("motArtistes", mot);
+		
+	}
 	@RequestMapping(value="penduSoloSujetCorrection", method=RequestMethod.GET)
 	public String penduSoloSujetCorrection(PenduModel penduModel, HttpServletRequest request){
 		
@@ -295,11 +357,24 @@ public class PenduSoloSujetControlleur {
 		
 	}
 	@RequestMapping(value="resultatPenduPays")
-	public String resultatPenduPays(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	public String resultatPenduPays(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 		HttpSession session = req.getSession();
+		Long id =1L;
+		
+		session.setAttribute("soumissionPays", "oui");
+		
+		
 		String motComplet = (String) session.getAttribute("motPays");
 		String nbErreurs = req.getParameter("nbErreursPays");
+		System.out.println("le nombre d'erreurs dans le pays est : "+nbErreurs);
 		int nbErreursInt = Integer.parseInt(nbErreurs);
+		String tempsRestant = 	req.getParameter("tempsRestant");
+		
+		if (nbErreursInt==5) {
+			model.addAttribute("motComplet", motComplet);
+			return "resultatPenduPays";
+		}
+		
 		
 		String lettreDevoilee = (String) session.getAttribute("lettreStringPays");
 		char lettreChar = lettreDevoilee.charAt(0);
@@ -333,10 +408,29 @@ public class PenduSoloSujetControlleur {
 		}else {
 			points = 0;
 		}
-//		je peux inserer les données dans la base que si "motUser = null"		
-		System.out.println("le nombre de points ganés au final = "+points);
 		
-		System.out.println("le nombre Erreurs "+nbErreurs);
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		if(nbErreursInt == 5){
+			System.out.println("le nombre d'erreurs est de cinq ==============");
+			penduSujetModel.setNbErreursPays(5);
+		}else {
+			System.out.println("la date now est "+now);
+			penduSujetModel.setDatePays(now);
+			System.out.println("la date now du model  est "+penduSujetModel.getDatePays());
+			penduSujetModel.setDateStringPays(dateString);
+			penduSujetModel.setLettreStringPays(lettreDevoilee);
+			penduSujetModel.setTempsDepartPays(null);
+			penduSujetModel.setTempsRestantPays(tempsRestant);
+			penduSujetModel.setMotPays(motComplet);
+			penduSujetModel.setMotDepartPays(null);
+			penduSujetModel.setNbErreursPays(nbErreursInt);
+			penduSujetModel.setScorePays(points);
+			penduSujetModel.setScoreMaxPays(pointsMax);
+			
+		}
 		
 //		Pour les points: chaque lettre rapporte 10 points
 //		quand on trouve tout le mot avant la fin, chaque 10 secondes rapportent 5 points de BONUS
@@ -344,14 +438,14 @@ public class PenduSoloSujetControlleur {
 		
 //		bien que le timer n'est plus visible, mais il continu à s'exécuter alors on donne comme longueur du mot un nombre arbitraire
 //		pour etre sûr qu'avant la fin du décompte l'utilisateur a quitter la page (le mieux serai d'arreter la timer, A VOIR APRES)
-		int longueurMot =5000;
+//		int longueurMot =5000;
 		
 		session.setAttribute("pointsPays", points);
 		session.setAttribute("pointsMaxPays", pointsMax);
 		session.setAttribute("motCompletPays", motComplet);
 		session.setAttribute("nbErreursPays", nbErreurs);
 		
-		model.addAttribute("longueurMot", longueurMot);
+//		model.addAttribute("longueurMot", longueurMot);
 		model.addAttribute("nbErreurs", nbErreurs);
 		model.addAttribute("motComplet", motComplet);
 		model.addAttribute("penduModel", penduModel);
@@ -361,11 +455,20 @@ public class PenduSoloSujetControlleur {
 		return "resultatPenduPays";
 	}
 	@RequestMapping(value="resultatPenduCapitales")
-	public String resultatPenduCapitales(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	public String resultatPenduCapitales(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 		HttpSession session = req.getSession();
+		
+		session.setAttribute("soumissionCapitale", "oui");
+		
 		String motComplet = (String) session.getAttribute("motCapitales");
 		String nbErreurs = req.getParameter("nbErreursCapitales");
 		int nbErreursInt = Integer.parseInt(nbErreurs);
+		String tempsRestant = 	req.getParameter("tempsRestant");
+		
+		if (nbErreursInt==5) {
+			model.addAttribute("motComplet", motComplet);
+			return "resultatPenduPays";
+		}
 		
 		String lettreDevoilee = (String) session.getAttribute("lettreStringCapitales");
 		char lettreChar = lettreDevoilee.charAt(0);
@@ -399,7 +502,28 @@ public class PenduSoloSujetControlleur {
 		}else {
 			points = 0;
 		}
-//		je peux inserer les données dans la base que si "motUser = null"		
+
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		if(nbErreursInt == 5){
+			System.out.println("le nombre d'erreurs est de cinq ==============");
+			penduSujetModel.setNbErreursCapitale(5);
+		}else {
+			penduSujetModel.setDateCapitale(now);
+			penduSujetModel.setDateStringCapitale(dateString);
+			penduSujetModel.setLettreStringCapitale(lettreDevoilee);
+			penduSujetModel.setTempsDepartCapitale(null);
+			penduSujetModel.setTempsRestantCapitale(tempsRestant);
+			penduSujetModel.setMotCapitale(motComplet);
+			penduSujetModel.setMotDepartCapitale(null);
+			penduSujetModel.setNbErreursCapitale(nbErreursInt);
+			penduSujetModel.setScoreCapitale(points);
+			penduSujetModel.setScoreMaxCapitale(pointsMax);
+			
+		}
+		
 		System.out.println("le nombre de points ganés au final = "+points);
 		
 		System.out.println("le nombre Erreurs "+nbErreurs);
@@ -430,11 +554,20 @@ public class PenduSoloSujetControlleur {
 		return "resultatPenduCapitales";
 	}
 	@RequestMapping(value="resultatPenduNobels")
-	public String resultatPenduNobels(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	public String resultatPenduNobels(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 		HttpSession session = req.getSession();
+		
+		session.setAttribute("soumissionNobel", "oui");
+		
 		String motComplet = (String) session.getAttribute("motNobels");
 		String nbErreurs = req.getParameter("nbErreursNobels");
 		int nbErreursInt = Integer.parseInt(nbErreurs);
+		String tempsRestant = 	req.getParameter("tempsRestant");
+		
+		if (nbErreursInt==5) {
+			model.addAttribute("motComplet", motComplet);
+			return "resultatPenduPays";
+		}
 		
 		String lettreDevoilee = (String) session.getAttribute("lettreStringNobels");
 		char lettreChar = lettreDevoilee.charAt(0);
@@ -468,7 +601,28 @@ public class PenduSoloSujetControlleur {
 		}else {
 			points = 0;
 		}
-//		je peux inserer les données dans la base que si "motUser = null"		
+		
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		if(nbErreursInt == 5){
+			System.out.println("le nombre d'erreurs est de cinq ==============");
+			penduSujetModel.setNbErreursNobel(5);
+		}else {
+			penduSujetModel.setDateNobel(now);
+			penduSujetModel.setDateStringNobel(dateString);
+			penduSujetModel.setLettreStringNobel(lettreDevoilee);
+			penduSujetModel.setTempsDepartNobel(null);
+			penduSujetModel.setTempsRestantNobel(tempsRestant);
+			penduSujetModel.setMotNobel(motComplet);
+			penduSujetModel.setMotDepartNobel(null);
+			penduSujetModel.setNbErreursNobel(nbErreursInt);
+			penduSujetModel.setScoreNobel(points);
+			penduSujetModel.setScoreMaxNobel(pointsMax);
+			
+		}
+		
 		System.out.println("le nombre de points ganés au final = "+points);
 		
 		System.out.println("le nombre Erreurs "+nbErreurs);
@@ -498,11 +652,20 @@ public class PenduSoloSujetControlleur {
 		return "resultatPenduCapitales";
 	}
 	@RequestMapping(value="resultatPenduArtistes")
-	public String resultatPenduArtistes(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	public String resultatPenduArtistes(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 		HttpSession session = req.getSession();
+		
+		session.setAttribute("soumissionArtiste", "oui");
+		
 		String motComplet = (String) session.getAttribute("motArtistes");
 		String nbErreurs = req.getParameter("nbErreursArtistes");
 		int nbErreursInt = Integer.parseInt(nbErreurs);
+		String tempsRestant = 	req.getParameter("tempsRestant");
+		
+		if (nbErreursInt==5) {
+			model.addAttribute("motComplet", motComplet);
+			return "resultatPenduPays";
+		}
 		
 		String lettreDevoilee = (String) session.getAttribute("lettreStringArtistes");
 		char lettreChar = lettreDevoilee.charAt(0);
@@ -536,7 +699,28 @@ public class PenduSoloSujetControlleur {
 		}else {
 			points = 0;
 		}
-//		je peux inserer les données dans la base que si "motUser = null"		
+		
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		if(nbErreursInt == 5){
+			System.out.println("le nombre d'erreurs est de cinq ==============");
+			penduSujetModel.setNbErreursPays(5);
+		}else {
+			penduSujetModel.setDateArtiste(now);
+			penduSujetModel.setDateStringArtiste(dateString);
+			penduSujetModel.setLettreStringArtiste(lettreDevoilee);
+			penduSujetModel.setTempsDepartArtiste(null);
+			penduSujetModel.setTempsRestantArtiste(tempsRestant);
+			penduSujetModel.setMotArtiste(motComplet);
+			penduSujetModel.setMotDepartArtiste(null);
+			penduSujetModel.setNbErreursArtiste(nbErreursInt);
+			penduSujetModel.setScoreArtiste(points);
+			penduSujetModel.setScoreMaxArtiste(pointsMax);
+			
+		}
+		
 		System.out.println("le nombre de points ganés au final = "+points);
 		
 		System.out.println("le nombre Erreurs "+nbErreurs);
@@ -564,14 +748,24 @@ public class PenduSoloSujetControlleur {
 		model.addAttribute("pointsPerdus", pointsPerdus);
 		return "resultatPenduCapitales";
 	}
-	@RequestMapping(value="resultatPenduPresidents")
-	public String resultatPenduPresidents(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	@RequestMapping(value="resultatPenduPresident")
+	public String resultatPenduPresident(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 		HttpSession session = req.getSession();
-		String motComplet = (String) session.getAttribute("motPresidents");
-		String nbErreurs = req.getParameter("nbErreursPresidents");
-		int nbErreursInt = Integer.parseInt(nbErreurs);
 		
-		String lettreDevoilee = (String) session.getAttribute("lettreStringPresidents");
+		session.setAttribute("soumissionPresident", "oui");
+		
+		String motComplet = (String) session.getAttribute("motPresident");
+		String nbErreurs = req.getParameter("nbErreursPresident");
+		int nbErreursInt = Integer.parseInt(nbErreurs);
+		String tempsRestant = 	req.getParameter("tempsRestant");
+		
+		if (nbErreursInt==5) {
+			model.addAttribute("motComplet", motComplet);
+			return "resultatPenduPays";
+		}
+		
+		String lettreDevoilee = (String) session.getAttribute("lettreStringPresident");
+		System.out.println("la lettreStrig déoilée du président "+lettreDevoilee);
 		char lettreChar = lettreDevoilee.charAt(0);
 		
 		String motUser = req.getParameter("motUser");
@@ -603,7 +797,29 @@ public class PenduSoloSujetControlleur {
 		}else {
 			points = 0;
 		}
-//		je peux inserer les données dans la base que si "motUser = null"		
+		
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		if(nbErreursInt == 5){
+			System.out.println("le nombre d'erreurs est de cinq ==============");
+			penduSujetModel.setNbErreursPays(5);
+		}else {
+			penduSujetModel.setDateArtiste(now);
+			penduSujetModel.setDateStringArtiste(dateString);
+			penduSujetModel.setLettreStringArtiste(lettreDevoilee);
+			penduSujetModel.setTempsDepartArtiste(null);
+			penduSujetModel.setTempsRestantArtiste(tempsRestant);
+			penduSujetModel.setMotArtiste(motComplet);
+			penduSujetModel.setMotDepartArtiste(null);
+			penduSujetModel.setNbErreursArtiste(nbErreursInt);
+			penduSujetModel.setScoreArtiste(points);
+			penduSujetModel.setScoreMaxArtiste(pointsMax);
+			
+		}
+		
+		
 		System.out.println("le nombre de points ganés au final = "+points);
 		
 		System.out.println("le nombre Erreurs "+nbErreurs);
@@ -616,10 +832,10 @@ public class PenduSoloSujetControlleur {
 //		pour etre sûr qu'avant la fin du décompte l'utilisateur a quitter la page (le mieux serai d'arreter la timer, A VOIR APRES)
 		int longueurMot =5000;
 		
-		session.setAttribute("pointsPresidents", points);
-		session.setAttribute("pointsMaxPresidents", pointsMax);
-		session.setAttribute("motCompletPresidents", motComplet);
-		session.setAttribute("nbErreursPresidents", nbErreurs);
+		session.setAttribute("pointsPresident", points);
+		session.setAttribute("pointsMaxPresident", pointsMax);
+		session.setAttribute("motCompletPresident", motComplet);
+		session.setAttribute("nbErreursPresident", nbErreurs);
 		
 		
 		model.addAttribute("longueurMot", longueurMot);
@@ -632,20 +848,34 @@ public class PenduSoloSujetControlleur {
 		return "resultatPenduCapitales";
 	}
 	@RequestMapping(value="resultatPenduSujets")
-	public String resultatPenduSujets(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	public String resultatPenduSujets(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 //		recupération pour chaque sujet: le mot, la lettre, les points (gagnés et totals)
 //		pour tous les sujets: la longueur
 //		le temps restant
 		HttpSession session = req.getSession();
+		Long moi = 2L;
+//				(Long) session.getAttribute("id");
+		
+		PenduSujetsSolo penduSujetsSolo = new PenduSujetsSolo();
 		
 		String motCompletPays = (String) session.getAttribute("motPays");
 		String lettreDevoileePays = (String) session.getAttribute("lettreStringPays");
 		char lettreCharPays = lettreDevoileePays.charAt(0);
-		Integer pointsMaxPays = (Integer) session.getAttribute("pointsMaxPays");
-		Integer pointsPays = (Integer) session.getAttribute("pointsPays");
+		int pointsMaxPays = (Integer) session.getAttribute("pointsMaxPays");
+		int pointsPays = (Integer) session.getAttribute("pointsPays");
 		String nbErreursPays = (String)session.getAttribute("nbErreursPays");
 		System.out.println("le mot du pays: "+motCompletPays+", la lettre : "+lettreCharPays+", les pointsMax: "+pointsMaxPays);
-		
+//		savoir si on dejà soumis les pays pour correction, dans ce cas on met les données dans les attributs du pendu qui sera ensuite enregiste dans la BDD, sinon on les laisse par defaut
+		String soumissionPays = (String) session.getAttribute("soumissionPays");
+		if (soumissionPays =="oui") {
+			penduSujetsSolo.setMotPays(motCompletPays);
+			penduSujetsSolo.setLettreStringPays(lettreDevoileePays);
+			penduSujetsSolo.setLettreCharPays(lettreCharPays);
+			System.out.println("le nombre d'erreurs dans pays "+nbErreursPays);
+			penduSujetsSolo.setNbErreursPays(Integer.parseInt(nbErreursPays));
+			penduSujetsSolo.setScorePays(pointsPays);
+			penduSujetsSolo.setScoreMaxPays(pointsMaxPays);
+		}
 		String motCompletCapitales = (String) session.getAttribute("motCapitales");
 		String lettreDevoileeCapitales = (String) session.getAttribute("lettreStringCapitales");
 		char lettreCharCapitales = lettreDevoileeCapitales.charAt(0);
@@ -653,35 +883,112 @@ public class PenduSoloSujetControlleur {
 		Integer pointsCapitales = (Integer) session.getAttribute("pointsCapitales");
 		String nbErreursCapitales = (String)session.getAttribute("nbErreursCapitales");
 		System.out.println("le mot de la  Capitale: "+motCompletCapitales+", la lettre : "+lettreCharCapitales+", les pointsMax: "+pointsMaxCapitales);
-		
+		String soumissionCapitale = (String) session.getAttribute("soumissionCapitale");
+		if (soumissionCapitale=="oui") {
+			penduSujetsSolo.setMotCapitale(motCompletCapitales);
+			penduSujetsSolo.setLettreStringCapitale(lettreDevoileeCapitales);
+			penduSujetsSolo.setLettreCharCapitale(lettreCharCapitales);
+			penduSujetsSolo.setNbErreursCapitale(Integer
+					.parseInt(nbErreursCapitales));
+			penduSujetsSolo.setScoreCapitale(pointsCapitales);
+			penduSujetsSolo.setScoreMaxCapitale(pointsMaxCapitales);
+		}
 		String motCompletNobels = (String) session.getAttribute("motNobels");
 		String lettreDevoileeNobels = (String) session.getAttribute("lettreStringNobels");
 		char lettreCharNobels = lettreDevoileeNobels.charAt(0);
-		Integer pointsMaxNobels = (Integer) session.getAttribute("pointsMaxNobels");
-		Integer pointsNobels = (Integer) session.getAttribute("pointsNobels");
+		int pointsMaxNobels = (Integer) session.getAttribute("pointsMaxNobels");
+		int pointsNobels = (Integer) session.getAttribute("pointsNobels");
 		String nbErreursNobels = (String)session.getAttribute("nbErreursNobels");
 		System.out.println("le mot du Nobel: "+motCompletNobels+", la lettre : "+lettreCharNobels+", les pointsMax: "+pointsMaxNobels);
-		
+		String soumissionNobel = (String) session.getAttribute("soumissionNobel");
+		if (soumissionNobel=="oui") {
+			penduSujetsSolo.setMotNobel(motCompletNobels);
+			penduSujetsSolo.setLettreStringNobel(lettreDevoileeNobels);
+			penduSujetsSolo.setLettreCharNobel(lettreCharNobels);
+			penduSujetsSolo
+					.setNbErreursNobel(Integer.parseInt(nbErreursNobels));
+			penduSujetsSolo.setScoreNobel(pointsNobels);
+			penduSujetsSolo.setScoreMaxNobel(pointsMaxNobels);
+		}
 		String motCompletArtistes = (String) session.getAttribute("motArtistes");
 		String lettreDevoileeArtistes = (String) session.getAttribute("lettreStringArtistes");
 		char lettreCharArtistes = lettreDevoileeArtistes.charAt(0);
-		Integer pointsMaxArtistes = (Integer) session.getAttribute("pointsMaxArtistes");
-		Integer pointsArtistes = (Integer) session.getAttribute("pointsArtistes");
+		int pointsMaxArtistes = (Integer) session.getAttribute("pointsMaxArtistes");
+		int pointsArtistes = (Integer) session.getAttribute("pointsArtistes");
 		String nbErreursArtistes = (String)session.getAttribute("nbErreursArtistes");
 		System.out.println("le mot de l'ARTISTE: "+motCompletArtistes+", la lettre : "+lettreCharArtistes+", les pointsMax: "+pointsMaxArtistes);
-		
-		String motCompletPresidents = (String) session.getAttribute("motPresidents");
-		String lettreDevoileePresidents = (String) session.getAttribute("lettreStringPresidents");
-//		char lettreCharPresidents = lettreDevoileePresidents.charAt(0);
-		Integer pointsMaxPresidents = (Integer) session.getAttribute("pointsMaxPresidents");
-		Integer pointsPresidents = (Integer) session.getAttribute("pointsPresidents");
-		String nbErreursPresidents = (String)session.getAttribute("nbErreursPresidents");
+		String soumissionArtiste = (String) session.getAttribute("soumissionArtiste");
+		if (soumissionArtiste=="oui") {
+			penduSujetsSolo.setMotArtiste(motCompletArtistes);
+			penduSujetsSolo.setLettreStringArtiste(lettreDevoileeArtistes);
+			penduSujetsSolo.setLettreCharArtiste(lettreCharArtistes);
+			penduSujetsSolo.setNbErreursArtiste(Integer
+					.parseInt(nbErreursArtistes));
+			penduSujetsSolo.setScoreArtiste(pointsArtistes);
+			penduSujetsSolo.setScoreMaxArtiste(pointsMaxArtistes);
+		}
+		String motCompletPresidents = (String) session.getAttribute("motPresident");
+		String lettreDevoileePresidents = (String) session.getAttribute("lettreStringPresident");
+		char lettreCharPresidents = lettreDevoileePresidents.charAt(0);
+		int pointsMaxPresidents = (Integer) session.getAttribute("pointsMaxPresident");
+		int pointsPresidents = (Integer) session.getAttribute("pointsPresident");
+		String nbErreursPresidents = (String)session.getAttribute("nbErreursPresident");
 		System.out.println("le mot du President: "+motCompletPresidents+", le mot complet : "+motCompletPresidents+", les pointsMax: "+pointsMaxPresidents);
+		String soumissionPresident = (String) session.getAttribute("soumissionPresident");
+		if (soumissionPresident=="oui") {
+			penduSujetsSolo.setMotPresident(motCompletPresidents);
+			penduSujetsSolo.setLettreStringPresident(lettreDevoileePresidents);
+			penduSujetsSolo.setLettreCharPresident(lettreCharPresidents);
+			penduSujetsSolo.setNbErreursPresident(Integer
+					.parseInt(nbErreursPresidents));
+			penduSujetsSolo.setScorePresident(pointsPresidents);
+			penduSujetsSolo.setScoreMaxPresident(pointsMaxPresidents);
+		}
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		penduSujetsSolo.setDate(now);
+		penduSujetsSolo.setDateString(dateString); 
 		
+//		suppression des données en session ..............................................................................
+//		session.removeAttribute("motCompletPays");
+//		session.removeAttribute("lettreCharPays");
+//		session.removeAttribute("pointsMaxPays");
+//		session.removeAttribute("pointsPays");
+//		session.removeAttribute("nbErreursPays");
+//		session.removeAttribute("soumissionPays");
+//		
+//		session.removeAttribute("motCompletCapitales");
+//		session.removeAttribute("lettreCharCapitales");
+//		session.removeAttribute("pointsMaxCapitales");
+//		session.removeAttribute("pointsCapitales");
+//		session.removeAttribute("nbErreursCapitales");
+//		session.removeAttribute("soumissionCapitales");
+//		
+//		session.removeAttribute("motCompletNobels");
+//		session.removeAttribute("lettreCharNobels");
+//		session.removeAttribute("pointsMaxNobels");
+//		session.removeAttribute("pointsNobels");
+//		session.removeAttribute("nbErreursNobels");
+//		session.removeAttribute("soumissionNobels");
+//		
+//		session.removeAttribute("motCompletArtistes");
+//		session.removeAttribute("lettreCharArtistes");
+//		session.removeAttribute("pointsMaxArtistes");
+//		session.removeAttribute("pointsArtistes");
+//		session.removeAttribute("nbErreursArtistes");
+//		session.removeAttribute("soumissionArtistes");
+//		
+//		session.removeAttribute("motCompletPresidents");
+//		session.removeAttribute("lettreCharPresidents");
+//		session.removeAttribute("pointsMaxPresidents");
+//		session.removeAttribute("pointsPresidents");
+//		session.removeAttribute("nbErreursPresidents");
+//		session.removeAttribute("soumissionPresidents");
 		
 //		Enregistement des données dans la base
-		
-	
+		penduDao.savePenduSujetSolo(penduSujetsSolo, moi);
+		System.out.println("après l'insertion dans la BDD, la dateString "+penduSujetsSolo.getDateString());
 		
 //		Envoie des resultats à la vue pour affichage
 		
@@ -710,7 +1017,7 @@ public class PenduSoloSujetControlleur {
 		model.addAttribute("nbErreursArtistes", nbErreursArtistes);
 		
 		model.addAttribute("motCompletPresidents", motCompletPresidents);
-//		model.addAttribute("lettreCharPresidents", lettreCharPresidents);
+		model.addAttribute("lettreCharPresidents", lettreCharPresidents);
 		model.addAttribute("pointsMaxPresidents", pointsMaxPresidents);
 		model.addAttribute("pointsPresidents", pointsPresidents);
 		model.addAttribute("nbErreursPresidents", nbErreursPresidents);
@@ -720,6 +1027,11 @@ public class PenduSoloSujetControlleur {
 		Integer longueurSujets = (Integer)session.getAttribute("longueurMot");
 		String tempsRestant = req.getParameter("tempsRestant");
 		
+		int totalPoints = pointsPays+pointsCapitales+pointsNobels+pointsArtistes+pointsPresidents;
+		int totalPointsMax = pointsMaxArtistes+pointsMaxCapitales+pointsMaxNobels+pointsMaxPays+pointsMaxPresidents;
+		
+		model.addAttribute("totalPoints", totalPoints);
+		model.addAttribute("totalPointsMax", totalPointsMax);
 		model.addAttribute("longueurSujets", longueurSujets);
 		model.addAttribute("tempsRestant", tempsRestant);
 		
@@ -734,6 +1046,13 @@ public class PenduSoloSujetControlleur {
 //		le temps restant
 		HttpSession session = req.getSession();
 		
+		Long id = 1L;
+//		(Long) session.getAttribute("id");
+		
+		System.out.println("le temps est fini ====================");
+		
+		PenduSujetsSolo penduSujetsSolo = new PenduSujetsSolo();
+		
 		String motCompletPays = (String) session.getAttribute("motPays");
 		String lettreDevoileePays = (String) session.getAttribute("lettreStringPays");
 		char lettreCharPays = lettreDevoileePays.charAt(0);
@@ -768,7 +1087,7 @@ public class PenduSoloSujetControlleur {
 		
 		String motCompletPresidents = (String) session.getAttribute("motPresidents");
 		String lettreDevoileePresidents = (String) session.getAttribute("lettreStringPresidents");
-//		char lettreCharPresidents = lettreDevoileePresidents.charAt(0);
+		char lettreCharPresidents = lettreDevoileePresidents.charAt(0);
 		Integer pointsMaxPresidents = (Integer) session.getAttribute("pointsMaxPresidents");
 		Integer pointsPresidents = (Integer) session.getAttribute("pointsPresidents");
 		String nbErreursPresidents = (String)session.getAttribute("nbErreursPresidents");
@@ -776,8 +1095,8 @@ public class PenduSoloSujetControlleur {
 		
 		
 //		Enregistement des données dans la base
+		penduDao.savePenduSujetSolo(penduSujetsSolo, id);
 		
-	
 		
 //		Envoie des resultats à la vue pour affichage
 		
@@ -806,7 +1125,7 @@ public class PenduSoloSujetControlleur {
 		model.addAttribute("nbErreursArtistes", nbErreursArtistes);
 		
 		model.addAttribute("motCompletPresidents", motCompletPresidents);
-//		model.addAttribute("lettreCharPresidents", lettreCharPresidents);
+		model.addAttribute("lettreCharPresidents", lettreCharPresidents);
 		model.addAttribute("pointsMaxPresidents", pointsMaxPresidents);
 		model.addAttribute("pointsPresidents", pointsPresidents);
 		model.addAttribute("nbErreursPresidents", nbErreursPresidents);

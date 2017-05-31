@@ -521,7 +521,7 @@
 							 $('#QPays').removeClass('btn-info').addClass('btn-danger');
 							 var nbE = $('#nbErreurPays').text();
 							 nbE ++;
-							 $('#nbErreuPays').html(nbE);
+							 $('#nbErreurPays').html(nbE);
 						}	
 						 $('#valeurMotCachePays').html(motSecret);
 						 
@@ -959,9 +959,8 @@
 						 var nbErreurs = $('#nbErreurPays').text();
 						 if(nbErreurs === "5"){
 							 var motCache = $('#valeurMotCachePays').text();
-							// var param ='nbErreurs='+$('#nbErreurPays').text()+'&tempsRestant='+$('#timePays').text()+'&motUser='+$('#valeurMotCachePays').text();
-							// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
-						//	 $('#resultatPays').load('resultatPendu .resultatCinqErreurs', param);
+							 var param ='nbErreursPays='+$('#nbErreurPays').text();
+							 $('#resultatPays').load('resultatPenduPays .resultatCinqErreurs', param);
 							 $('.communPays').attr('disabled','disabled');
 							 $('#infosTempsRestantPays').remove();					 
 							// $('#resultat').show();

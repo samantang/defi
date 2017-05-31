@@ -521,7 +521,7 @@
 							 $('#QNobels').removeClass('btn-info').addClass('btn-danger');
 							 var nbE = $('#nbErreurNobels').text();
 							 nbE ++;
-							 $('#nbErreuNobels').html(nbE);
+							 $('#nbErreurNobels').html(nbE);
 						}	
 						 $('#valeurMotCacheNobels').html(motSecret);
 						 
@@ -962,6 +962,8 @@
 							// var param ='nbErreurs='+$('#nbErreurNobels').text()+'&tempsRestant='+$('#timeNobels').text()+'&motUser='+$('#valeurMotCacheNobels').text();
 							// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
 						//	 $('#resultatNobels').load('resultatPendu .resultatCinqErreurs', param);
+							 var param ='nbErreursNobels='+$('#nbErreurNobels').text();
+							 $('#resultatNobels').load('resultatPenduNobels .resultatCinqErreurs', param);
 							 $('.communNobels').attr('disabled','disabled');
 							 $('#infosTempsRestantNobels').remove();					 
 							// $('#resultat').show();

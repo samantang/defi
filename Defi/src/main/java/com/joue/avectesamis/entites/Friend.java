@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +21,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.IndexColumn;
@@ -44,21 +42,19 @@ public class Friend implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private boolean admin;
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy="friend", fetch=FetchType.LAZY)
 	private Collection<Album> albums;
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy="friendpost", fetch=FetchType.LAZY)
 	private Collection<Post> posts;
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy="friendpost", fetch=FetchType.LAZY)
 	private Collection<Message> messages;
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToOne
 	private Reglages reglage;
 	
-//	@LazyCollection(LazyCollectionOption.FALSE)
-	@JsonIgnore
 	@OneToMany(mappedBy="friend", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 //	@IndexColumn(name="IDEX_COL")
 	@Fetch(FetchMode.SUBSELECT)
@@ -79,21 +75,18 @@ public class Friend implements Serializable{
 	@ManyToMany
 	@JoinTable(name="meschallengesevoi")
 	private Collection<Friend> challengeenvoiyes;
-	@JsonIgnore
-//	@ManyToMany
-//	@JoinTable(name="meschallenges")
-//	private Collection<Abc_Challenge> abcchallenges;
+//	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name="meschallengesrecus")
 	private Collection<Friend> challengerecus;
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="nro_like")
 	private Likes like;
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToMany
 	private Collection<Comment> comments;
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name="mesjeux")
 	private Collection<Game> games;
@@ -141,48 +134,48 @@ public class Friend implements Serializable{
 	private String nomPhoto;
 
 //	POUR LA PARTIE DES SERVICES REST, LES JEUX DU PENDU
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy="friend", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 //	@IndexColumn(name="IDEX_COL")
 	@Fetch(FetchMode.SUBSELECT)
 	private Collection<PenduDicoSolo> penduDicoSolos;
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(mappedBy="friend", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 //	@IndexColumn(name="IDEX_COL")
 	@Fetch(FetchMode.SUBSELECT)
 	private Collection<PenduSujetsSolo> penduSujetsSolos;
 	
 	@ElementCollection
-	@JsonIgnore
+//	@JsonIgnore
 	private Map<Friend, String> challengesRecusPenduDico;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection
 	private Map<Friend, String> challengesEnvoyesPenduDico;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Map<Friend, String> challengeEnAttentesPenduDico;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection
 	private Map<Friend, String> challengeEnJouesPenduDico;
 //	@JsonIgnore
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<PenduDicoChallenge> mesChallengesJouesPenduDico;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection
 	private Map<Friend, String> challengesRecusPenduSujets;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection
 	private Map<Friend, String> challengesEnvoyesPenduSujets;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Map<Friend, String> challengeEnAttentesPenduSujets;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection
 	private Map<Friend, String> challengeEnJouesPenduSujets;
-	@JsonIgnore
+//	@JsonIgnore
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<PenduSujetsChallenge> mesChallengesJouesPenduSujets;
@@ -938,40 +931,6 @@ public class Friend implements Serializable{
 	
 	
 	
-//	/**
-//	 * @return the friends
-//	 */
-//	public Collection<Friend> getFriends() {
-//		return friends;
-//	}
-//
-//
-//
-//	/**
-//	 * @param friends the friends to set
-//	 */
-//	public void setFriends(Collection<Friend> friends) {
-//		this.friends = friends;
-//	}
-//
-//
-//
-//	/**
-//	 * @return the friendfriend
-//	 */
-//	public Friend getFriendfriend() {
-//		return friendfriend;
-//	}
-//
-//
-//
-//	/**
-//	 * @param friendfriend the friendfriend to set
-//	 */
-//	public void setFriendfriend(Friend friendfriend) {
-//		this.friendfriend = friendfriend;
-//	}
-
 	
 	
 	/**
@@ -1122,18 +1081,6 @@ public class Friend implements Serializable{
 	public void setGames(Collection<Game> games) {
 		this.games = games;
 	}
-//	/**
-//	 * @return the friends
-//	 */
-//	public Collection<Friend> getFriends() {
-//		return friends;
-//	}
-//	/**
-//	 * @param friends the friends to set
-//	 */
-//	public void setFriends(Collection<Friend> friends) {
-//		this.friends = friends;
-//	}
 	/**
 	 * @return the like
 	 */
@@ -1305,24 +1252,6 @@ public class Friend implements Serializable{
 
 
 
-//	/**
-//	 * @return the abcchallenges
-//	 */
-//	public Collection<Abc_Challenge> getAbcchallenges() {
-//		return abcchallenges;
-//	}
-//
-//
-//
-//	/**
-//	 * @param abcchallenges the abcchallenges to set
-//	 */
-//	public void setAbcchallenges(Collection<Abc_Challenge> abcchallenges) {
-//		this.abcchallenges = abcchallenges;
-//	}
-
-
-//	sexe, nom, prenom, email, pseudo, pass
 	
 	/**
 	 * @param nom

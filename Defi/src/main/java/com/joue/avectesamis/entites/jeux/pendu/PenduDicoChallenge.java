@@ -31,9 +31,10 @@ public class PenduDicoChallenge implements Serializable {
 	private int tempsRestant;
 	private boolean timeOut;
 	private String mot;
+	private String motSecret;
 	private int nbEssais;
 	private boolean reussi;
-//	en fonction du nombre, on determine l'image correspondante qui sera stockée au sein de l'appli et nom pas dans la BDD
+//	en fonction du nombre, on determine l'image correspondante qui sera stockée au sein de l'appli et non pas dans la BDD
 	private int imageIconJeu;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
@@ -54,6 +55,20 @@ public class PenduDicoChallenge implements Serializable {
 	
 	
 	
+	/**
+	 * @return the motSecret
+	 */
+	public String getMotSecret() {
+		return motSecret;
+	}
+
+	/**
+	 * @param motSecret the motSecret to set
+	 */
+	public void setMotSecret(String motSecret) {
+		this.motSecret = motSecret;
+	}
+
 	/**
 	 * @param date
 	 * @param dateString

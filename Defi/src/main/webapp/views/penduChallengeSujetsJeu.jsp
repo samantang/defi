@@ -66,6 +66,7 @@
 				<div style="text-align: center;">
 				<div id ="infosTemps"><h3>il vous reste au toal <span id="infosTempsFini">00</span> <span id="time"></span> minutes</h3></div>
 				<div><button data-toggle="modal" class="btn btn-success validerSujets" data-target="#infos">Valider Tous les Sujets</button></div><br><hr>
+				<div id="resultatChallengeSujets"></div>
 				<div class="modal fade" id="infos">
 			        <div class="modal-dialog modal-lg">  
 			          <div class="modal-content"></div>  
@@ -139,12 +140,13 @@
 				  $('.validerSujets')
 				  .click(function(){
 					  var param ='tempsRestant='+$('#time').text()+'';
-					  $('button').attr('href', 'resultatPenduSujets/?'+param);
+					  $('button').attr('href', 'penduChallengeCorrection/?'+param);
 					  	$('.communPays').attr('disabled','disabled');
 			        	 $('.communCapitales').attr('disabled','disabled');
 			        	 $('.communArtistes').attr('disabled','disabled');
 			        	 $('.communNobels').attr('disabled','disabled');
 			        	 $('.communPresidents').attr('disabled','disabled');
+			        	 /* $('#resultatChallengeSujets').load(''); */
 			        	 /* $('.validerSujets').attr('disabled','disabled'); */
 			        	 $('#infosTemps').remove();
 				  })
@@ -153,7 +155,6 @@
 			/* POUR LA GESTION DU TIMER ----------------------------------------------------- */
 					window.onload = function () {
 						$('#infosTempsFini').hide();
-						$('#image').load('imageErreurPendu #imageDepart');
 						/* $('#resultatTempsFini').hide();
 						$('#resultatCinqErreurs').hide(); */
 						

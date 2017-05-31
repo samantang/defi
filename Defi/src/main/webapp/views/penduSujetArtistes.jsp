@@ -521,7 +521,7 @@
 							 $('#QArtistes').removeClass('btn-info').addClass('btn-danger');
 							 var nbE = $('#nbErreurArtistes').text();
 							 nbE ++;
-							 $('#nbErreuArtistes').html(nbE);
+							 $('#nbErreurArtistes').html(nbE);
 						}	
 						 $('#valeurMotCacheArtistes').html(motSecret);
 						 
@@ -962,6 +962,8 @@
 							// var param ='nbErreurs='+$('#nbErreurArtistes').text()+'&tempsRestant='+$('#timeArtistes').text()+'&motUser='+$('#valeurMotCacheArtistes').text();
 							// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
 						//	 $('#resultatArtistes').load('resultatPendu .resultatCinqErreurs', param);
+							var param ='nbErreursArtistes='+$('#nbErreurArtistes').text();
+							 $('#resultatArtistes').load('resultatPenduArtistes .resultatCinqErreurs', param);
 							 $('.communArtistes').attr('disabled','disabled');
 							 $('#infosTempsRestantArtistes').remove();					 
 							// $('#resultat').show();

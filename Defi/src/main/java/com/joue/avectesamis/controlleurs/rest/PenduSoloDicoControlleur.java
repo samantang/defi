@@ -1,5 +1,7 @@
 package com.joue.avectesamis.controlleurs.rest;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -59,7 +61,7 @@ public class PenduSoloDicoControlleur {
 		
 		penduModel.setMesDicoSolo(penduDao.mesDicoSolos(id));
 		
-	     map.put("penduModel", penduModel);
+//	     map.put("penduModel", penduModel);
 	     model.addAttribute("penduModel", penduModel);
 
 		return "penduSoloDico";
@@ -85,6 +87,13 @@ public class PenduSoloDicoControlleur {
 	public String AbcSoloDicoJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
 		word = new Word(request);
 		
+//		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+//		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//		Date now = new Date();
+//		String dateString = df.format(now);
+//		
+//		System.out.println("la date String est"+dateString );
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		HttpSession session = request.getSession();
@@ -98,13 +107,16 @@ public class PenduSoloDicoControlleur {
 		
 		session.setAttribute("motComplet", motComplet);
 		session.setAttribute("lettreString", lettreString);
+		session.setAttribute("lettreString", lettreString);
+		
+		System.out.println("le mot: "+word.getWord());
 					
 					model.addAttribute("longueurMot", longueurMot);
 					model.addAttribute("lettreDevoilee", lettreDevoilee);
 					model.addAttribute("penduModel", penduModel);
 					model.addAttribute("word", word);
-					map.put("penduModel", penduModel);
-					map.put("word", word);
+//					map.put("penduModel", penduModel);
+//					map.put("word", word);
 				
 		
 		return "penduSoloDicoJeu";
@@ -142,10 +154,10 @@ public class PenduSoloDicoControlleur {
 //		moi
 		Friend moi = metier.getFriend(id);
 		
-		PenduDicoSolo solo = new PenduDicoSolo(new Date(), null, 0, false, null, 0, false, 0, null, 0, true, 0);
+//		PenduDicoSolo solo = new PenduDicoSolo(new Date(), null, 0, false, null, 0, false, 0, null, 0, true, 0);
 //		penduDao.savePenduDicoChallenge(challenge, id, idAmi);
 		
-		map.put("solo", solo);
+//		map.put("solo", solo);
 		
 		return map;
 	}
@@ -171,10 +183,16 @@ public class PenduSoloDicoControlleur {
 		return "imageErreurPendu";
 	}
 	@RequestMapping(value="resultatPendu")
-	public String resultat(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	public String resultatPendu (Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
 		HttpSession session = req.getSession();
+		
+		
+		Long id = 2L;
+//				(Long) session.getAttribute("id");
+		
 		String motComplet = (String) session.getAttribute("motComplet");
 		String nbErreurs = req.getParameter("nbErreurs");
+		int nbErreursInt = Integer.parseInt(nbErreurs);
 		String tempsRestant = 	req.getParameter("tempsRestant");
 		
 		String lettreDevoilee = (String) session.getAttribute("lettreString");
@@ -183,6 +201,7 @@ public class PenduSoloDicoControlleur {
 		String motUser = req.getParameter("motUser");
 		int points =0;
 		int nbFoisLettreDansMot =0;
+		int pointsMax =0;
 		if(motUser!="null"){
 			for(int i =0; i<motComplet.length(); i++){
 				if(motComplet.charAt(i)==lettreChar){
@@ -192,17 +211,38 @@ public class PenduSoloDicoControlleur {
 					System.out.println("motComplet.charAt(i) = "+motComplet.charAt(i)+" motUser.charAt(i)"+motUser.charAt(i));
 					points = points + 10;
 				}
+				pointsMax = points;
 				System.out.println("le nombre de points Total "+points);
 			}
 			motUser = null;
 		}	
+//		pointsMax = pointsMax - nbFoisLettreDansMot;
+//		si les points gagnes sont superieurs aux perdu alors
 		if(points>nbFoisLettreDansMot){
 			points = points - nbFoisLettreDansMot;
 		}else {
 			points = 0;
 		}
 //		je peux inserer les données dans la base que si "motUser = null"
-		PenduDicoSolo penduDicoSolo = new PenduDicoSolo();
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		
+		
+		if(nbErreursInt == 5){
+			System.out.println("le nombre d'erreurs est de cinq ==============");
+			PenduDicoSolo solo = new PenduDicoSolo("oui", nbErreursInt);
+			penduDao.savePenduDicoSolo(solo, id);
+		}else {
+			PenduDicoSolo penduDicoSolo = new PenduDicoSolo(now, dateString, lettreDevoilee, null, tempsRestant, motComplet, null, nbErreursInt, points, pointsMax);
+			penduDao.savePenduDicoSolo(penduDicoSolo, id);
+		}
+		
+		
+		
+		
+		System.out.println("la date String est"+dateString );
 		
 		System.out.println("le nombre de points ganés au final = "+points);
 		
@@ -211,11 +251,9 @@ public class PenduSoloDicoControlleur {
 //		Pour les points: chaque lettre rapporte 10 points
 //		quand on trouve tout le mot avant la fin, chaque 10 secondes rapportent 5 points de BONUS
 		
-		
-//		bien que le timer n'est plus visible, mais il continu à s'exécuter alors on donne comme longueur du mot un nombre arbitraire
-//		pour etre sûr qu'avant la fin du décompte l'utilisateur a quitter la page (le mieux serai d'arreter la timer, A VOIR APRES)
-		
+				
 		model.addAttribute("points", points);
+		model.addAttribute("pointsMax", pointsMax);
 		model.addAttribute("nbErreurs", nbErreurs);
 		model.addAttribute("tempsRestant", tempsRestant);
 		model.addAttribute("motComplet", motComplet);

@@ -15,6 +15,7 @@ import com.joue.avectesamis.entites.Friend;
 import com.joue.avectesamis.entites.Post;
 import com.joue.avectesamis.entites.jeux.pendu.PenduDicoChallenge;
 import com.joue.avectesamis.entites.jeux.pendu.PenduDicoSolo;
+import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsChallenge;
 import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsSolo;
 import com.joue.avectesamis.metier.ChallengeMetier;
 
@@ -51,17 +52,26 @@ public class DefiApplication implements CommandLineRunner{
 //		metier.posterPost(1L, " et de trois");
 //		metier.commenterPost(2L, 1L, "commentaire pour le premier post");
 //		metier.posterPost(new Post("messagePost", true));
+//		friendRepository.save(new Friend("BAH", "Saliou", "saliou@bah.com", "M", "saliou"));
+//		friendRepository.save(new Friend("DIALLO", "Daouda", "diallo@daouda.com", "M", "daouda"));
+//		friendRepository.save(new Friend("KABA", "Mamady", "kaba@mamady.com", "M", "mamady"));
 //		friendRepository.save(new Friend("nouveauNom", "nouveauPrenom", "nouveau@email.com", "M", "nouveau"));
-		
-		
+//		
+//		
 //		Collection<Character> characters = new ArrayList<Character>();
 //		characters.add('e');
 //		characters.add('A');
 //		characters.add('f');
-//		PenduDicoChallenge challengeb = new PenduDicoChallenge(new Date(), "aujourdhui", 120, false, "leMot", 10, true, 5, characters, 15, true, 3);
+//		PenduDicoChallenge challengeb = new PenduDicoChallenge(new Date(), "aujourdhui", 120, false, "leMot", 10, true, 2, characters, 15, true, 3);
 //
 //		penduDao.sendChallengeDico(1L, 2L);
 //		penduDao.acceptChallengeDico(2L, 1L);
 //		penduDao.savePenduDicoChallenge(challengeb, 1L, 2L);
+//		
+//		penduDao.sedChallengeSujets(2L, 3L);
+//		penduDao.acceptChallengeSujets(3L, 2L);
+		
+//		PenduSujetsChallenge penduSujetsChallenge = new PenduSujetsChallenge(new Date(), null, 3, "lePays", "laCapitale", "leNobel", "lartiste", "lePresident", 's', 'e', 'e', 'e', 'd');		
+//		penduDao.savePenduSujetChallenge(penduSujetsChallenge, 2L, 3L);
 	}
 }

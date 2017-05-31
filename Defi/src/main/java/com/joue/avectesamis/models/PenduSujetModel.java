@@ -1,47 +1,9 @@
-package com.joue.avectesamis.entites.jeux.pendu;
+package com.joue.avectesamis.models;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+public class PenduSujetModel {
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.joue.avectesamis.entites.Friend;
-@Entity
-public class PenduSujetsSolo implements Serializable{
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	private Date date;
-	private String dateString;
-	private int temps;
-	private boolean timeOut;
-	private String mot;
-	private int nbEssais;
-	private boolean reussi;
-//	en fonction du nombre, on determine l'image correspondante qui sera stockée au sein de l'appli et nom pas dans la BDD
-	private int imageIconJeu;
-	@ElementCollection(fetch=FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
-	private Collection<Character> choix;
-	private int score;
-	private boolean aide;
-	private int nbAide;
-	@ManyToOne
-	private Friend friend;
 	
 	private Date datePays;
 	private String  dateStringPays;
@@ -53,7 +15,6 @@ public class PenduSujetsSolo implements Serializable{
 	private int nbErreursPays;
 	private int scorePays;
 	private int scoreMaxPays;
-	private char lettreCharPays;
 	
 	private Date dateCapitale;
 	private String  dateStringCapitale;
@@ -65,7 +26,6 @@ public class PenduSujetsSolo implements Serializable{
 	private int nbErreursCapitale;
 	private int scoreCapitale;
 	private int scoreMaxCapitale;
-	private char lettreCharCapitale;
 	
 	private Date dateNobel;
 	private String  dateStringNobel;
@@ -77,7 +37,6 @@ public class PenduSujetsSolo implements Serializable{
 	private int nbErreursNobel;
 	private int scoreNobel;
 	private int scoreMaxNobel;
-	private char lettreCharNobel;
 	
 	
 	private Date dateArtiste;
@@ -90,7 +49,6 @@ public class PenduSujetsSolo implements Serializable{
 	private int nbErreursArtiste;
 	private int scoreArtiste;
 	private int scoreMaxArtiste;
-	private char lettreCharArtiste;
 	
 	
 	private Date datePresident;
@@ -103,251 +61,6 @@ public class PenduSujetsSolo implements Serializable{
 	private int nbErreursPresident;
 	private int scorePresident;
 	private int scoreMaxPresident;
-	private char lettreCharPresident;
-	
-	
-	
-	
-	/**
-	 * @return the lettreCharPays
-	 */
-	public char getLettreCharPays() {
-		return lettreCharPays;
-	}
-	/**
-	 * @param lettreCharPays the lettreCharPays to set
-	 */
-	public void setLettreCharPays(char lettreCharPays) {
-		this.lettreCharPays = lettreCharPays;
-	}
-	/**
-	 * @return the lettreCharCapitale
-	 */
-	public char getLettreCharCapitale() {
-		return lettreCharCapitale;
-	}
-	/**
-	 * @param lettreCharCapitale the lettreCharCapitale to set
-	 */
-	public void setLettreCharCapitale(char lettreCharCapitale) {
-		this.lettreCharCapitale = lettreCharCapitale;
-	}
-	/**
-	 * @return the lettreCharNobel
-	 */
-	public char getLettreCharNobel() {
-		return lettreCharNobel;
-	}
-	/**
-	 * @param lettreCharNobel the lettreCharNobel to set
-	 */
-	public void setLettreCharNobel(char lettreCharNobel) {
-		this.lettreCharNobel = lettreCharNobel;
-	}
-	/**
-	 * @return the lettreCharArtiste
-	 */
-	public char getLettreCharArtiste() {
-		return lettreCharArtiste;
-	}
-	/**
-	 * @param lettreCharArtiste the lettreCharArtiste to set
-	 */
-	public void setLettreCharArtiste(char lettreCharArtiste) {
-		this.lettreCharArtiste = lettreCharArtiste;
-	}
-	
-	/**
-	 * @return the lettreCharPresident
-	 */
-	public char getLettreCharPresident() {
-		return lettreCharPresident;
-	}
-	/**
-	 * @param lettreCharPresident the lettreCharPresident to set
-	 */
-	public void setLettreCharPresident(char lettreCharPresident) {
-		this.lettreCharPresident = lettreCharPresident;
-	}
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
-	 * @return the date
-	 */
-	public Date getDate() {
-		return date;
-	}
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	/**
-	 * @return the dateString
-	 */
-	public String getDateString() {
-		return dateString;
-	}
-	/**
-	 * @param dateString the dateString to set
-	 */
-	public void setDateString(String dateString) {
-		this.dateString = dateString;
-	}
-	/**
-	 * @return the temps
-	 */
-	public int getTemps() {
-		return temps;
-	}
-	/**
-	 * @param temps the temps to set
-	 */
-	public void setTemps(int temps) {
-		this.temps = temps;
-	}
-	/**
-	 * @return the timeOut
-	 */
-	public boolean isTimeOut() {
-		return timeOut;
-	}
-	/**
-	 * @param timeOut the timeOut to set
-	 */
-	public void setTimeOut(boolean timeOut) {
-		this.timeOut = timeOut;
-	}
-	/**
-	 * @return the mot
-	 */
-	public String getMot() {
-		return mot;
-	}
-	/**
-	 * @param mot the mot to set
-	 */
-	public void setMot(String mot) {
-		this.mot = mot;
-	}
-	/**
-	 * @return the nbEssais
-	 */
-	public int getNbEssais() {
-		return nbEssais;
-	}
-	/**
-	 * @param nbEssais the nbEssais to set
-	 */
-	public void setNbEssais(int nbEssais) {
-		this.nbEssais = nbEssais;
-	}
-	/**
-	 * @return the reussi
-	 */
-	public boolean isReussi() {
-		return reussi;
-	}
-	/**
-	 * @param reussi the reussi to set
-	 */
-	public void setReussi(boolean reussi) {
-		this.reussi = reussi;
-	}
-	/**
-	 * @return the imageIconJeu
-	 */
-	public int getImageIconJeu() {
-		return imageIconJeu;
-	}
-	/**
-	 * @param imageIconJeu the imageIconJeu to set
-	 */
-	public void setImageIconJeu(int imageIconJeu) {
-		this.imageIconJeu = imageIconJeu;
-	}
-	/**
-	 * @return the choix
-	 */
-	public Collection<Character> getChoix() {
-		return choix;
-	}
-	/**
-	 * @param choix the choix to set
-	 */
-	public void setChoix(Collection<Character> choix) {
-		this.choix = choix;
-	}
-	/**
-	 * @return the score
-	 */
-	public int getScore() {
-		return score;
-	}
-	/**
-	 * @param score the score to set
-	 */
-	public void setScore(int score) {
-		this.score = score;
-	}
-	/**
-	 * @return the aide
-	 */
-	public boolean isAide() {
-		return aide;
-	}
-	/**
-	 * @param aide the aide to set
-	 */
-	public void setAide(boolean aide) {
-		this.aide = aide;
-	}
-	/**
-	 * @return the nbAide
-	 */
-	public int getNbAide() {
-		return nbAide;
-	}
-	/**
-	 * @param nbAide the nbAide to set
-	 */
-	public void setNbAide(int nbAide) {
-		this.nbAide = nbAide;
-	}
-	/**
-	 * @return the friend
-	 */
-	public Friend getFriend() {
-		return friend;
-	}
-	/**
-	 * @param friend the friend to set
-	 */
-	public void setFriend(Friend friend) {
-		this.friend = friend;
-	}
-	/**
-	 * @return the agglo
-	 */
-
-	/**
-	 * 
-	 */
-	public PenduSujetsSolo() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	/**
 	 * @return the datePays
 	 */
@@ -949,6 +662,13 @@ public class PenduSujetsSolo implements Serializable{
 		this.scoreMaxPresident = scoreMaxPresident;
 	}
 	/**
+	 * 
+	 */
+	public PenduSujetModel() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	/**
 	 * @param datePays
 	 * @param dateStringPays
 	 * @param lettreStringPays
@@ -1000,7 +720,7 @@ public class PenduSujetsSolo implements Serializable{
 	 * @param scorePresident
 	 * @param scoreMaxPresident
 	 */
-	public PenduSujetsSolo(Date datePays, String dateStringPays,
+	public PenduSujetModel(Date datePays, String dateStringPays,
 			String lettreStringPays, String tempsDepartPays,
 			String tempsRestantPays, String motPays, String motDepartPays,
 			int nbErreursPays, int scorePays, int scoreMaxPays,
@@ -1073,7 +793,7 @@ public class PenduSujetsSolo implements Serializable{
 		this.scorePresident = scorePresident;
 		this.scoreMaxPresident = scoreMaxPresident;
 	}
-	
+
 	
 	
 }

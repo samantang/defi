@@ -521,7 +521,7 @@
 							 $('#QCapitales').removeClass('btn-info').addClass('btn-danger');
 							 var nbE = $('#nbErreurCapitales').text();
 							 nbE ++;
-							 $('#nbErreuCapitales').html(nbE);
+							 $('#nbErreurCapitales').html(nbE);
 						}	
 						 $('#valeurMotCacheCapitales').html(motSecret);
 						 
@@ -962,6 +962,8 @@
 							// var param ='nbErreurs='+$('#nbErreurCapitales').text()+'&tempsRestant='+$('#timeCapitales').text()+'&motUser='+$('#valeurMotCacheCapitales').text();
 							// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
 						//	 $('#resultatCapitales').load('resultatPendu .resultatCinqErreurs', param);
+							var param ='nbErreursCapitales='+$('#nbErreurCapitales').text();
+							 $('#resultatCapitales').load('resultatPenduCapitales .resultatCinqErreurs', param);
 							 $('.communCapitales').attr('disabled','disabled');
 							 $('#infosTempsRestantCapitales').remove();					 
 							// $('#resultat').show();

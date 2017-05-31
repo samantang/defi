@@ -68,11 +68,11 @@
 					<div id="resultat"></div>
 					<div>
 					
-						<c:out value="${word.word }"></c:out><br>
+						<%-- <c:out value="${word.word }"></c:out><br> --%>
 						<%-- <c:out value="${word.secretWord }"></c:out><br>
 						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
 						<p> Nombre d'erreurs: &nbsp; <span id="nbErreur">0</span></p>
-						<p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouves">0</span> </p>
+						<!-- <p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouves">0</span> </p> -->
 						<div id="valeurMotCache">${word.secretWord }</div><br>
 						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
@@ -111,7 +111,7 @@
 				</div>
 			</div>
 			<div class="col-md-3 col-lg-3">
-				<div id ="image"> ici une image qui représente le jeu</div>
+				<div id ="image"></div>
 				<div>
 					<%-- <jsp:include page="menuDroit.jsp"></jsp:include> --%>
 					<%-- <c:import url="menuDroit.jsp"></c:import> --%>
@@ -1014,8 +1014,14 @@
 					 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text()+'&motUser='+$('#valeurMotCache').text();
 					 $('#resultat').load('resultatPendu .resultatGagnant', param);
 					 $('.commun').attr('disabled','disabled');
-					 $('#time').remove();
-					 $('#infosTempsRestant').remove();
+					 
+					 var minutes = 60 * 100000,
+				     display = document.querySelector('#time');
+				    startTimer(minutes, display);
+				    
+				    
+					  $('#time').remove();
+					 $('#infosTempsRestant').remove(); 
 					 $('#resultat').show();
 				 }
 				 /* si le nombre d'erreur est égal à 5, le jeu est fini */
@@ -1026,13 +1032,20 @@
 					 $('#resultat').load('resultatPendu .resultatCinqErreurs', param);
 					 $('.commun').attr('disabled','disabled');
 					 $('#infosTempsRestant').remove();					 
-					// $('#resultat').show();
+					 $('#resultat').show();
+					 
+					 var minutes = 60 * 100000,
+				     display = document.querySelector('#time');
+				    startTimer(minutes, display);
+					 
+					 
 				 }
 			}
 			
 			/* POUR LA GESTION DU TIMER ----------------------------------------------------- */
 			window.onload = function () {
 				$('#resultat').hide();
+				$('#image').load('imageErreurPendu #imageDepart');
 				/* $('#resultatTempsFini').hide();
 				$('#resultatCinqErreurs').hide(); */
 				
@@ -1077,8 +1090,11 @@
 			        	 
 			            // add one second so that the count down starts at the full duration
 			            // example 05:00 not 04:59
+			            var minutes = 60 * 1000000,
+					     display = document.querySelector('#time');
+					    startTimer(minutes, display);
 			            
-			             start = Date.now() + 10000000; 
+			              start = Date.now() + 10000000; 
 			        }
 			    
 		    };

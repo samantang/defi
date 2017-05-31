@@ -520,7 +520,7 @@
 							 $('#QPresident').removeClass('btn-info').addClass('btn-danger');
 							 var nbE = $('#nbErreurPresident').text();
 							 nbE ++;
-							 $('#nbErreuPresident').html(nbE);
+							 $('#nbErreurPresident').html(nbE);
 						}	
 						 $('#valeurMotCachePresident').html(motSecret);
 						 
@@ -961,6 +961,8 @@
 							// var param ='nbErreurs='+$('#nbErreurPresident').text()+'&tempsRestant='+$('#timePresident').text()+'&motUser='+$('#valeurMotCachePresident').text();
 							// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
 						//	 $('#resultatPresident').load('resultatPendu .resultatCinqErreurs', param);
+							var param ='nbErreursPresident='+$('#nbErreurPresident').text();
+							 $('#resultatPresident').load('resultatPenduPresident .resultatCinqErreurs', param);
 							 $('.communPresident').attr('disabled','disabled');
 							 $('#infosTempsRestantPresident').remove();					 
 							// $('#resultat').show();

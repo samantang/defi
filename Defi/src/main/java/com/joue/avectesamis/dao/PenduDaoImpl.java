@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.joue.avectesamis.entites.Friend;
+import com.joue.avectesamis.entites.jeux.Agglo;
 import com.joue.avectesamis.entites.jeux.Artistes;
 import com.joue.avectesamis.entites.jeux.Nobels;
 import com.joue.avectesamis.entites.jeux.Pays_Capitale;
@@ -83,12 +84,21 @@ public class PenduDaoImpl implements PenduDao {
 	}
 
 	@Override
-	public void savePenduSujetSolo(PenduSujetsSolo solo, Long id) {
-		Friend moi = em.find(Friend.class, id);
-		solo.setFriend(moi);
-		moi.getPenduSujetsSolos().add(solo);
-		em.persist(solo);
-		em.merge(moi);
+	public void savePenduSujetSolo(PenduSujetsSolo solo, Long m) {
+		System.out.println("juste avant le Friend");
+		System.out.println("le code "+m);
+		Agglo a = em.find(Agglo.class, m);
+		System.out.println("après agglo");
+		Nobels n = em.find(Nobels.class, m);
+		System.out.println("après le Nobel");
+		Friend f = em.find(Friend.class, m);
+		System.out.println("après le Friend");
+//		Friend moi = em.find(Friend.class, m);
+//		System.out.println("juste après");
+//		solo.setFriend(moi);
+//		moi.getPenduSujetsSolos().add(solo);
+//		em.persist(solo);
+//		em.merge(moi);
 		
 	}
 
@@ -310,20 +320,23 @@ public class PenduDaoImpl implements PenduDao {
 
 	@Override
 	public String getCodeAttenteMoiAmiSujets(Long m, Long a) {
-		// TODO Auto-generated method stub
-		return null;
+		Friend moi = em.find(Friend.class, m);
+		Friend ami = em.find(Friend.class, a);
+		return moi.getChallengeEnAttentesPenduSujets().get(ami);
 	}
 
 	@Override
 	public String getCodeAttenteAmiMoiSujets(Long m, Long a) {
-		// TODO Auto-generated method stub
-		return null;
+		Friend moi = em.find(Friend.class, m);
+		Friend ami = em.find(Friend.class, a);
+		return ami.getChallengeEnAttentesPenduSujets().get(moi);
 	}
 
 	@Override
 	public String getCodeJoueAmiMoiSujets(Long m, Long a) {
-		// TODO Auto-generated method stub
-		return null;
+		Friend moi = em.find(Friend.class, m);
+		Friend ami = em.find(Friend.class, a);
+		return ami.getChallengeEnJouesPenduSujets().get(moi);
 	}
 
 	@Override

@@ -5,7 +5,10 @@
 <head>
 <meta charset="UTF-8">
 </head>
-<body>
+<body>	
+		<div id="imageDepart">
+			<img height="50px" width="50px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
+		</div>
 		<div id="image1">
 			<img height="50px" width="50px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
 		</div>

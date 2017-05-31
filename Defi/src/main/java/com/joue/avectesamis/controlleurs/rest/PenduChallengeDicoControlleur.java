@@ -1,5 +1,7 @@
 package com.joue.avectesamis.controlleurs.rest;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -63,7 +65,7 @@ public class PenduChallengeDicoControlleur {
 		}
 		
 		
-		return "";
+		return "envoyerChallengeDico";
 		
 	}
 	
@@ -298,7 +300,7 @@ public class PenduChallengeDicoControlleur {
 		
 	}
 	@RequestMapping(value="penduChallengeDicoJeu", method=RequestMethod.GET)
-	public String AbcChallengeJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
+	public String penduChallengeDicoJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
 		word = new Word(request);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -337,14 +339,53 @@ public class PenduChallengeDicoControlleur {
 //			recupération d'un mot au hasard dans le DICO
 			word.initWord(request);
 			mot = word.getWord();
+//			à partir du mot tiré au sort, on choisit une lettre qui sera affichée pour guider le joueur
+			String motComplet = word.getWord();
+			int longueurMot = motComplet.length();
+			int indexLettre = longueurMot/2;
+			char lettreDevoilee = motComplet.charAt(indexLettre);
+			String lettreString = String.valueOf(lettreDevoilee);
+			
+			session.setAttribute("motComplet", motComplet);
+			session.setAttribute("lettreString", lettreString);
+						
+						model.addAttribute("longueurMot", longueurMot);
+						model.addAttribute("lettreDevoilee", lettreDevoilee);
+						model.addAttribute("penduModel", penduModel);
+						model.addAttribute("word", word);
+						model.addAttribute("motComplet", motComplet);
+						System.out.println("il n'a pas encore joué");
 		}else{
 			for(PenduDicoChallenge c:ami.getMesChallengesJouesPenduDico()){
 				if(c.getCodeIndentification().equals(codeAttenteMoiDico)){
-					mot = c.getMot();
-					System.out.println("le mot avec lequel il a joué est : "+c.getMot());
-//					dans ce cas, modification des attributs de Word
-//					word.setWord(mot);
-//					word.setSecretWord(mot);
+					System.out.println("il a déjà joué");
+//					recuperer egalement le mot caché de la BDD, qui doit être enregiste
+					String motSecret = c.getMotSecret().toUpperCase();
+					String motComplet = c.getMot().toUpperCase();
+					int longueurMot = motComplet.length();
+					int indexLettre = longueurMot/2;
+					char lettreDevoilee = motComplet.charAt(indexLettre);
+					String lettreString = String.valueOf(lettreDevoilee);
+					
+					System.out.println("le mot complet : "+motComplet);
+					System.out.println("le mot secret : "+motSecret);
+					
+					word.setSecretWord(motSecret);
+					word.setWord(motComplet);
+					System.out.println("le mot complet dans word est : "+word.getSecretWord());
+					System.out.println("le mot secret dans word est : "+word.getSecretWord());
+					
+					session.setAttribute("motComplet", motComplet);
+					session.setAttribute("motSecret", motSecret);
+					session.setAttribute("lettreString", lettreString);
+					session.setAttribute("lettreChar", lettreDevoilee);
+								
+								model.addAttribute("longueurMot", longueurMot);
+								model.addAttribute("lettreDevoilee", lettreDevoilee);
+								model.addAttribute("penduModel", penduModel);
+								model.addAttribute("motSecret", motSecret);
+								model.addAttribute("motComplet", motComplet);
+								model.addAttribute("word", word);
 				}					
 			}
 		}
@@ -352,39 +393,85 @@ public class PenduChallengeDicoControlleur {
 
 					
 //					map.put("mot", mot);
-					map.put("word", word);
-					model.addAttribute("word", word);
-					model.addAttribute("penduModel", penduModel);
+//					map.put("word", word);
+//					model.addAttribute("word", word);
+//					model.addAttribute("penduModel", penduModel);
 				
 		
 		return "penduChallengeDicoJeu";
 		
 	}
+
+
+
 	@RequestMapping(value="penduChallengeDicoCorrection", method=RequestMethod.GET)
-	public Map<String, Object> penduChallengeCorrection(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
+	public String penduChallengeDicoCorrection(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
+		HttpSession session = request.getSession();
+		
 		
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-//		recuperation du mot, nombre de coups, nombre d'erreurs, temps restant, points gagnés, pointsMax
-		String mot ="";
+		
+//		recuperation du mot, nombre de coups, nombre d'erreurs, temps restant, points gagnés, pointsMax, du mot cache
+		String motComplet = (String) session.getAttribute("motComplet");
+		String motSecet = (String) session.getAttribute("motSecret");
+		String lettreString = (String) session.getAttribute("lettreString");
+		char lettreChar = (char) session.getAttribute("lettreChar");
+		String nbErreursString = request.getParameter("nbErreurs");
+		int nbErreurs = Integer.parseInt(nbErreursString);
+		String tempsRestantString =request.getParameter("tempsRestant");
+//		int tempsRestant = Integer.parseInt(tempsRestantString);
+		
+		
+		String motUser = request.getParameter("motUser");
+		int points =0;
+		int nbFoisLettreDansMot =0;
+		int pointsMax =0;
+		if(motUser!=null){
+			for(int i =0; i<motComplet.length(); i++){
+				if(motComplet.charAt(i)==lettreChar){
+					nbFoisLettreDansMot = nbFoisLettreDansMot + 10;
+				}
+				if(motComplet.charAt(i)== motUser.charAt(i)){
+					System.out.println("motComplet.charAt(i) = "+motComplet.charAt(i)+" motUser.charAt(i)"+motUser.charAt(i));
+					points = points + 10;
+				}
+				pointsMax = points;
+				System.out.println("le nombre de points Total "+points);
+			}
+			motUser = null;
+		}	
+//		pointsMax = pointsMax - nbFoisLettreDansMot;
+//		si les points gagnes sont superieurs aux perdu alors
+		if(points>nbFoisLettreDansMot){
+			points = points - nbFoisLettreDansMot;
+		}else {
+			points = 0;
+		}
+//		je peux inserer les données dans la base que si "motUser = null"
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+		
+		
+		System.out.println("LES INFOS DU RESULTAT "+motComplet+" "+motSecet+" "+lettreString+" "+lettreChar+" "+nbErreursString+" "+nbErreurs+" "+tempsRestantString+" lesPoints: "+points+" et "+pointsMax);
+		
+		
 		int nbCoups =0;
-		int nbErreurs =0;
 		int score =0;
 		int scoreMax = 0;
 		int temps =0;
-		int tempsRestants = 10;
 		int nbAide = 0;
 		boolean aide = false;
 		Collection<Character> lesChoix =null;
 		
-		HttpSession session = request.getSession();
-		Long id =  1L;
+		Long id =  2L;
 //				(Long) session.getAttribute("id");
 //		le temps en fonction du nombre de r�sultats possibles
 		
 //		recup�raiton de l'ami
-		Long idAmi= 2L;
+		Long idAmi= 1L;
 //				(long) Integer.parseInt(request.getParameter("idAmi"));
 		session.setAttribute("idAmi", idAmi);
 		Friend ami= metier.getFriend(idAmi);
@@ -392,12 +479,64 @@ public class PenduChallengeDicoControlleur {
 //		moi
 		Friend moi = metier.getFriend(id);
 		
-		PenduDicoChallenge challenge = new PenduDicoChallenge(new Date(), "laDate", temps, nbErreurs, tempsRestants, true, mot, nbCoups, true, 0, null, score, scoreMax, aide, nbAide);
+//		PenduDicoChallenge challenge = new PenduDicoChallenge(new Date(), "laDate", temps, nbErreurs, tempsRestants, true, mot, nbCoups, true, 0, null, score, scoreMax, aide, nbAide);
 //		penduDao.savePenduDicoChallenge(challenge, id, idAmi);
 		
-		map.put("challenge", challenge);
-		model.addAttribute("challenge", challenge);
+//		map.put("challenge", challenge);
+//		model.addAttribute("challenge", challenge);
 		
-		return map;
+		int longueurMot = 10000000;
+		model.addAttribute("longueurMot", longueurMot);
+		
+		model.addAttribute("motComplet", motComplet);
+		model.addAttribute("nbErreurs", nbErreursString);
+		model.addAttribute("lettreChar", lettreChar);
+		model.addAttribute("points", points);
+		model.addAttribute("pointsMax", pointsMax);
+		
+		return "penduChallengeDicoCorrection";
+	}
+	
+	@RequestMapping(value="penduChallengeDicoCorrectionCinqsErreurs", method=RequestMethod.GET)
+	public String penduChallengeDicoCorrectionCinqsErreurs(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
+		HttpSession session = request.getSession();		
+		
+//		recuperation du mot, nombre de coups, nombre d'erreurs, temps restant, points gagnés, pointsMax, du mot cache
+		String motUser = request.getParameter("motUser");
+		String motComplet = (String) session.getAttribute("motComplet");
+		String motSecet = (String) session.getAttribute("motSecret");
+		String lettreString = (String) session.getAttribute("lettreString");
+		char lettreChar = (char) session.getAttribute("lettreChar");
+		String nbErreursString = request.getParameter("nbErreurs");
+		int nbErreurs = Integer.parseInt(nbErreursString);
+		String tempsRestantString =request.getParameter("tempsRestant");	
+		if(tempsRestantString.equals("0")){
+			System.out.println("le temps est fini ================= INSERTION DES DONNEES EN FONCTION ...");
+			return "penduChallengeDicoCorrection";
+		}
+		
+			
+		int points =0;
+		int nbFoisLettreDansMot =0;
+		int pointsMax =0;
+		
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Date now = new Date();
+		String dateString = df.format(now);
+			
+		System.out.println("LES INFOS DU RESULTAT CINQS ERREURS "+motComplet+" "+motSecet+" "+lettreString+" "+lettreChar+" "+nbErreursString+" "+nbErreurs+" "+tempsRestantString+" lesPoints: "+points+" et "+pointsMax);
+		
+		model.addAttribute("motComplet", motComplet);
+		model.addAttribute("nbErreurs", nbErreursString);
+		model.addAttribute("lettreChar", lettreChar);
+		model.addAttribute("points", points);
+		model.addAttribute("pointsMax", pointsMax);
+
+
+		
+		int longueurMot = 10000000;
+		model.addAttribute("longueurMot", longueurMot);
+		
+		return "penduChallengeDicoCorrection";
 	}
 }
