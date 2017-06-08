@@ -24,5 +24,8 @@
 		<div id="image5">
 			<img height="50px" width="50px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
 		</div>
+		<div id="imageGagnant">
+			<img height="50px" width="50px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
+		</div>
 </body>
 </html>

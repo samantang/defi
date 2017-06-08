@@ -42,7 +42,6 @@ public class ChallengeDaoImpl implements ChallengeDao {
 	@Override
 	public Friend monProfil(Long m) {
 		// TODO Auto-generated method stub
-		System.out.println("l'id dans la DAO  ======================="+m);
 		Friend moi = em.find(Friend.class, m);
 		return moi;
 

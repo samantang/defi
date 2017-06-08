@@ -64,9 +64,9 @@
 			</div>
 			<div class="col-md-6 col-lg-6">
 				<div align="center">
-					<h3>LE JEU DU PENDU DICO</h3>
+					<h3>LE JEU DU PENDU SUJETS SOLO</h3>
 					<div style="text-align: center;">
-						<a class="btn btn-success" href="penduSoloDicoJeu">commencer une nouvellle partie</a><br>
+						<a class="btn btn-success" href="penduSoloSujetJeu">commencer une nouvellle partie</a><br>
 					</div><br>
 					<%-- <div>
 						<ul class="list-group">
@@ -85,16 +85,16 @@
 						        <img class="media-object" src="<%=request.getContextPath()%>/resources/images/user.png" height="50px" width="50px">
 						      </a>
 						      <div class="media-body">
-						        <h4 class="media-heading">Pendu Dico Solo</h4>
-						        <p>Jouer avec les mots du dictionnaire, vous en avez plus de 36 000,
-						    le mot avec lequel vous allez jouer est tiré au sort et une littre vous ai indiqué dans le mot pour vous guider.</p>
+						        <h4 class="media-heading">Pendu Sujets Solo</h4>
+						        <p>Jouer avec les 5 sujets qui vous sont proposés pour augmenter votre culture général, pour chaque sujet
+						    le mot avec lequel vous allez jouer est tiré au sort et une littre vous ai dévoilée dans le mot pour vous guider.</p>
 						      </div>  
 						   </li>
 						 </ul>
 					</div>
 					<!-- bouton détails sur les jeux ------------------------------------------------------------------------------------------- -->
-					 <button data-toggle="modal" href="infosPenduDicoSolo" data-target="#infos" class="btn btn-primary">
-				        Détails sur vos jeux en solo DICO
+					 <button data-toggle="modal" href="infosPenduSujetsSolo" data-target="#infos" class="btn btn-primary">
+				        Détails sur tous vos jeux en solo Sujets
 				      </button><br><br>
 				      <div class="modal fade" id="infos">
 				        <div class="modal-dialog modal-lg">  
@@ -104,36 +104,39 @@
 				</div>
 				<div>
 					<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">Vos dix derniers jeux</h2>
-				</div>
+				</div><br>
 				<div id="infoPublicationSolo">
 				</div>
 				<div>
-					<table class="table table-bordered table-striped table-condensed" style="text-align: center;">
+					<table class="table table-bordered table-striped table-condensed" style="text-align: center; border: 2px" >
 						<thead>
-								<tr>
+								<tr class="success">
 									<th>Date</th>
-									<th style="text-align: center;">Le Mot</th>
-									<th>Lettre</th>
-									<th>Score</th>
-									<!-- <th>Publier</th>
-									<th>Supprimer</th> -->
-									<th>Publier</th>
+									<th>Points <br>Pays</th>
+									<th>Points <br>Capitale</th>
+									<th>Points <br>Presi</th>
+									<th>Points <br>Nobel</th>
+									<th>Points <br>Artiste</th>
+									<th>Points <br>TOTAUX</th>
+									<th>Détail<br> JEU</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${penduModel.mesDicoSolo }" var="solo" begin="0" end="9">
+								<c:forEach items="${penduModel.mesSujetsoSolo }" var="solo" begin="0" end="18" step="2" >
 									<tr>
-										<td>${solo.dateString }</td>
-										<td>${solo.mot }</td>
-										<td>${solo.lettreString }</td>
-										<td>${solo.score }/${solo.scoreMax }</td>
+										<td ><c:out value="${solo.dateString }"></c:out></td>
+										<td><c:out value="${solo.scorePays }"></c:out>/<c:out value="${solo.scoreMaxPays }"></c:out></td>
+										<td><c:out value="${solo.scoreCapitale }"></c:out>/<c:out value="${solo.scoreMaxCapitale }"></c:out></td>
+										<td><c:out value="${solo.scorePresident }"></c:out>/<c:out value="${solo.scoreMaxPresident }"></c:out></td>
+										<td><c:out value="${solo.scoreNobel }"></c:out>/<c:out value="${solo.scoreMaxNobel }"></c:out></td>
+										<td><c:out value="${solo.scoreArtiste }"></c:out>/<c:out value="${solo.scoreMaxArtiste }"></c:out></td>
+										<td><c:out value="${solo.score }"></c:out>/<c:out value="${solo.scoreMax }"></c:out></td>
 										<%-- <td><a href="publierSoloDico?id=${solo.id}">pubier</a></td>
 										<td><a href="supprimerSoloDico?id=${solo.id}">Supp</a></td> --%>
-										<td><button id="${solo.id}" onclick="publierUnSolo(this,${solo.id} )"  class="btn btn-primary" >
-									        	<span class="glyphicon glyphicon-share"></span>
+									 	<td><button data-toggle="modal" href="infosPenduSujetSoloId?id=${solo.id }" data-target="#infos"  class="btn btn-primary" >
+									        	<span class="glyphicon glyphicon-eye-open"></span>
 									     	 </button>
-									     	 <%-- <a  class="btn btn-ifo" href="publierSoloDico?id=${solo.id}">Publier</a> --%>
-								      	</td>
+								      	</td> 
 									</tr>
 								</c:forEach>
 							</tbody>

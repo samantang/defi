@@ -9,7 +9,7 @@
 </head>
 	<body>
 		<div class="menuDroit">
-			<p> <strong>Les derniers jeux que vous avez joué</strong></p>
+			<h3> <strong> VOS DERNIERS JEUX</strong></h3>
 			<div class="panel panel-default " style="margin-top: 15px;"> 
 				<div class="panel-heading" style="text-align: center;">
 			    	<a href="#solo" data-toggle="collapse">Vos Jeux SOLO</a><br>

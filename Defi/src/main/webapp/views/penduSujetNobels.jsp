@@ -7,18 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-					 <div id="infosTempsRestantNobels" class="infosTempsRestantNobels">Votre temps restant est de  <span id="timeNobels"></span> minutes!</div><br> 
 					 
 					<div id="resultatNobels"></div>
 					<div>
 					
 						<c:out value="${motNobels }"></c:out><br>
-						<%-- <c:out value="${word.secretWord }"></c:out><br>
-						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
 						<p> Nombre d'erreurs: &nbsp; <span id="nbErreurNobels">0</span></p>
-						<p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouvesNobels">0</span> </p>
 						<div id="valeurMotCacheNobels">${motCacheDepartNobels }</div><br>
-						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
 							<a id="ANobels" class="btn btn-info communNobels" href="#" style="margin: 2px;">A</a>
 							<a id="ZNobels" class="btn btn-info communNobels" href="#" style="margin: 2px;">Z</a>

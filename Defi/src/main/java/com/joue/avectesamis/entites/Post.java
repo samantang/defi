@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -50,8 +52,44 @@ public class Post implements Serializable{
 	private int nbLikesPost;
 //	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 //	private Collection<Post> posts;
+	@Enumerated(EnumType.STRING)
+	private TypePost typePost;
+	
+	
+	
 	
 	 
+	/**
+ * @param postDate
+ * @param message
+ * @param jeu
+ * @param typePost
+ */
+public Post(Date postDate, String message, boolean jeu, TypePost typePost) {
+	super();
+	this.postDate = postDate;
+	this.message = message;
+	this.jeu = jeu;
+	this.typePost = typePost;
+}
+
+
+	/**
+	 * @return the typePost
+	 */
+	public TypePost getTypePost() {
+		return typePost;
+	}
+
+
+	/**
+	 * @param typePost the typePost to set
+	 */
+	public void setTypePost(TypePost typePost) {
+		this.typePost = typePost;
+	}
+
+
 	/**
 	 * 
 	 */

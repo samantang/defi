@@ -6,9 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
-					 <div id="infosTempsRestantArtistes" class="infosTempsRestantArtistes">Votre temps restant est de  <span id="timeArtistes"></span> minutes!</div><br> 
-					 
+<body>					 
 					<div id="resultatArtistes"></div>
 					<div>
 					

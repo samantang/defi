@@ -29,7 +29,7 @@
 <body>
 		<div class="modal-header">
   <button type="button" class="close" data-dismiss="modal">&times;</button>
-  <h1>Les Détails de vos jeux</h1>
+  <h2>LES DETAILS DE VOS JEUX</h2>
   
 </div>
 <div class="modal-body">

@@ -51,13 +51,18 @@ public class PenduDaoImpl implements PenduDao {
 	@Override
 	public Collection<PenduDicoSolo> mesDicoSolos(Long id) {
 		Friend moi = em.find(Friend.class, id);
-		return moi.getPenduDicoSolos();
+		Query req = em.createQuery("select p from PenduDicoSolo as p where p.friend.id="+id+" order by date desc" );
+
+		return req.getResultList();
+//				moi.getPenduDicoSolos();
 	}
 
 	@Override
 	public Collection<PenduSujetsSolo> mesSujetsSolos(Long id) {
 		Friend moi = em.find(Friend.class, id);
-		return moi.getPenduSujetsSolos();
+		Query req = em.createQuery("select p from PenduSujetsSolo as p where p.friend.id="+id+" order by date desc" );
+		return req.getResultList();
+//				moi.getPenduSujetsSolos();
 	}
 
 	@Override
@@ -85,20 +90,21 @@ public class PenduDaoImpl implements PenduDao {
 
 	@Override
 	public void savePenduSujetSolo(PenduSujetsSolo solo, Long m) {
-		System.out.println("juste avant le Friend");
-		System.out.println("le code "+m);
-		Agglo a = em.find(Agglo.class, m);
-		System.out.println("après agglo");
-		Nobels n = em.find(Nobels.class, m);
-		System.out.println("après le Nobel");
-		Friend f = em.find(Friend.class, m);
-		System.out.println("après le Friend");
-//		Friend moi = em.find(Friend.class, m);
-//		System.out.println("juste après");
-//		solo.setFriend(moi);
-//		moi.getPenduSujetsSolos().add(solo);
-//		em.persist(solo);
-//		em.merge(moi);
+//		System.out.println("juste avant le Friend");
+//		System.out.println("le code "+m);
+//		Agglo a = em.find(Agglo.class, m);
+//		System.out.println("après agglo");
+//		Nobels n = em.find(Nobels.class, m);
+//		System.out.println("après le Nobel");
+//		Friend f = em.find(Friend.class, m);
+//		System.out.println("après le Friend");
+		
+		
+		Friend moi = em.find(Friend.class, m);
+		solo.setFriend(moi);
+		moi.getPenduSujetsSolos().add(solo);
+		em.persist(solo);
+		em.merge(moi);
 		
 	}
 
@@ -391,6 +397,34 @@ public class PenduDaoImpl implements PenduDao {
 	public List<String> challengeSujetVilleF(char c) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public PenduDicoSolo getDicoSolo(Long id) {
+		// TODO Auto-generated method stub
+		return em.find(PenduDicoSolo.class, id);
+	}
+
+	@Override
+	public void mettreAjourDicoSolo(Long id) {
+		// TODO Auto-generated method stub
+		PenduDicoSolo solo = em.find(PenduDicoSolo.class, id);
+		solo.setPublie(true);
+		em.merge(solo);
+	}
+
+	@Override
+	public PenduSujetsSolo getSujetSolo(Long id) {
+		// TODO Auto-generated method stub
+		return em.find(PenduSujetsSolo.class, id);
+	}
+
+	@Override
+	public void mettreAjourSujetSolo(Long id) {
+		PenduSujetsSolo solo = em.find(PenduSujetsSolo.class, id);
+		solo.setPublie(true);
+		em.merge(solo);
+		
 	}
 
 }

@@ -63,16 +63,11 @@
 			</div>
 			<div class="col-md-6 col-lg-6">
 				<div align="center" >
-					 <div id="infosTempsRestant" class="infosTempsRestant">Votre temps restant est de  <span id="time"></span> minutes!</div><br> 
-					 
+				
+					 <div id="infosTempsRestant" class="infosTempsRestant"><h3>Votre temps restant est de  <span id="time"></span> minutes !</h3></div><br> 
 					<div id="resultat"></div>
 					<div>
-					
-						<%-- <c:out value="${word.word }"></c:out><br> --%>
-						<%-- <c:out value="${word.secretWord }"></c:out><br>
-						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
 						<p> Nombre d'erreurs: &nbsp; <span id="nbErreur">0</span></p>
-						<!-- <p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouves">0</span> </p> -->
 						<div id="valeurMotCache">${word.secretWord }</div><br>
 						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
@@ -107,14 +102,22 @@
 							<a id="B" class="btn btn-info commun" href="#" style="margin: 2px;">B</a>
 							<a id="N" class="btn btn-info commun" href="#" style="margin: 2px;">N</a>
 						</div>
+					</div><br><br><br>
+					<div>
+						<ul class="list-group">
+						  <a href="#" class="list-group-item ">
+						    <h4 class="list-group-item-heading">Pendu Dico Solo</h4>
+						    <p  class="list-group-item-text pull-right">Jouer avec les mots du dictionnaire, vous en avez plus de 36 000,
+						    le mot avec lequel vous allez jouer est tiré au sort et une lettre vous ai indiqué dans le mot pour vous guider.</p>
+						    <img src="<%=request.getContextPath()%>/resources/images/user.png" height="50px" width="50px">
+						  </a>
+						 </ul> 
 					</div>	
 				</div>
 			</div>
 			<div class="col-md-3 col-lg-3">
-				<div id ="image"></div>
+				<div id ="image" style="text-align: center; margin-top: 15px;"></div>
 				<div>
-					<%-- <jsp:include page="menuDroit.jsp"></jsp:include> --%>
-					<%-- <c:import url="menuDroit.jsp"></c:import> --%>
 				</div>
 			</div>
 		</div>
@@ -1006,21 +1009,18 @@
 			function verifieMotEntierOuNombreErreurMax(mot, motSecret){
 				 /* si tout le mot est trouve */
 				 if(mot === motSecret){
-					 /* on envoie la lettre, le mot, le temps,le nombre derreur, on met tous les bouttons non clickables */
-					// var motCache = $('#valeurMotCache').text();
-					// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
+					 /* on envoie la lettre, le mot, le temps,le nombre derreur, on rend tous les bouttons non clickables */
 					 alert("Bravo !!! vous avez trouvé tout le mot");
-					// var tempsRestant = $('#time').text();
 					 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text()+'&motUser='+$('#valeurMotCache').text();
 					 $('#resultat').load('resultatPendu .resultatGagnant', param);
 					 $('.commun').attr('disabled','disabled');
-					 
-					 var minutes = 60 * 100000,
+					 //pour augmenter le temps
+					 var minutes = 60 * 10000000,
 				     display = document.querySelector('#time');
-				    startTimer(minutes, display);
+				     startTimer(minutes, display);
 				    
-				    
-					  $('#time').remove();
+				     $('#image').load('imageErreurPendu #imageGagnant');
+					 $('#time').remove();
 					 $('#infosTempsRestant').remove(); 
 					 $('#resultat').show();
 				 }
@@ -1033,70 +1033,60 @@
 					 $('.commun').attr('disabled','disabled');
 					 $('#infosTempsRestant').remove();					 
 					 $('#resultat').show();
+					 $('#image').load('imageErreurPendu #image5');
 					 
-					 var minutes = 60 * 100000,
+					 var minutes = 60 * 1000000,
 				     display = document.querySelector('#time');
 				    startTimer(minutes, display);
-					 
-					 
 				 }
 			}
-			
+		});
 			/* POUR LA GESTION DU TIMER ----------------------------------------------------- */
 			window.onload = function () {
 				$('#resultat').hide();
 				$('#image').load('imageErreurPendu #imageDepart');
-				/* $('#resultatTempsFini').hide();
-				$('#resultatCinqErreurs').hide(); */
 				
-				var corrects = "${longueurMot}";
-			    var fiveMinutes = 60 * 0.3 * corrects,
+				var corrects = '${longueurMot}';
+			    var fiveMinutes = 60 * 0.2 * corrects,
 			        display = document.querySelector('#time');
 			    startTimer(fiveMinutes, display);
-		    
 			};
 			function startTimer(duration, display) {
-			      /* $('#redirect').hide(); */
 		   	  	var start = Date.now(),
 		        diff,
 		        minutes,
 		        seconds;
+		   	  	
 		    	function timer() {
+		    		display = document.querySelector('#time');
 			        // get the number of seconds that have elapsed since 
 			        // startTimer() was called
 			        diff = duration - (((Date.now() - start) / 1000) | 0);
-			
 			        // does the same job as parseInt truncates the float
 			        minutes = (diff / 60) | 0;
 			        seconds = (diff % 60) | 0;
-			
 			        minutes = minutes < 10 ? "0" + minutes : minutes;
 			        seconds = seconds < 10 ? "0" + seconds : seconds;
-			
 			        display.textContent = minutes + ":" + seconds; 
-		
 			        if (diff <= 0) {
 
 			        	 var motCache = $('#valeurMotCache').text();
-						 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text()+'&motUser='+$('#valeurMotCache').text();
+			        	 var timeOut = "oui";
+						 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text()+'&motUser='+$('#valeurMotCache').text()+'&timeOut='+timeOut;
 			        	 $('#resultat').load('resultatPendu .resultatTempsFini', param);
 			        	 $('.commun').attr('disabled','disabled');
 			        	 $('#time').remove();
 						 $('#infosTempsRestant').remove();
 			        	 $('#resultat').show();
 			        	 $('#image').load('imageErreurPendu #image5');
-			      //  	 $('#time').hide();
-			     //   	 window.location = "http://localhost:8080/penduSoloDicoJeu";
 			        	 
-			            // add one second so that the count down starts at the full duration
-			            // example 05:00 not 04:59
-			            var minutes = 60 * 1000000,
+			            // augmentation du temps meme si le temps n'est plus visibles pour empecher une nouvelle insertion dans la BDD
+			            var minutes = 60 * 10000000,
 					     display = document.querySelector('#time');
 					    startTimer(minutes, display);
 			            
 			              start = Date.now() + 10000000; 
 			        }
-			    
 		    };
 		    // we don't want to wait a full second before the timer starts
 		    timer();
@@ -1104,7 +1094,8 @@
 		}
 		
 		
-		});
+		
+		
 	</script>
 </body>
 </html>

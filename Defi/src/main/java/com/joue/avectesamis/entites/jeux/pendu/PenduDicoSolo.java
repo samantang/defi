@@ -52,6 +52,7 @@ public class PenduDicoSolo implements Serializable{
 	@JsonIgnore
 	private Friend friend;
 	private String motUser;
+	private boolean publie;
 	
 	
 	
@@ -87,6 +88,72 @@ public class PenduDicoSolo implements Serializable{
 	
 	
 	
+
+	/**
+	 * @return the publie
+	 */
+	public boolean isPublie() {
+		return publie;
+	}
+
+
+
+
+
+
+
+
+
+	/**
+	 * @param publie the publie to set
+	 */
+	public void setPublie(boolean publie) {
+		this.publie = publie;
+	}
+
+
+
+
+
+
+
+
+
+	/**
+	 * @param timeOut
+	 */
+	public PenduDicoSolo(boolean timeOut) {
+		super();
+		this.timeOut = timeOut;
+	}
+
+
+	
+
+
+
+
+
+
+	/**
+	 * @param date
+	 * @param dateString
+	 * @param lettreString
+	 * @param timeOut
+	 * @param mot
+	 */
+	public PenduDicoSolo(Date date, String dateString, String lettreString,
+			boolean timeOut, String mot) {
+		super();
+		this.date = date;
+		this.dateString = dateString;
+		this.lettreString = lettreString;
+		this.timeOut = timeOut;
+		this.mot = mot;
+	}
+
+
+
 
 	/**
 	 * @param date

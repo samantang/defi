@@ -3,6 +3,7 @@ package com.joue.avectesamis.controlleurs.rest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.joue.avectesamis.dao.PenduDao;
 import com.joue.avectesamis.entites.Friend;
+import com.joue.avectesamis.entites.Post;
+import com.joue.avectesamis.entites.TypePost;
 import com.joue.avectesamis.entites.jeux.Artistes;
 import com.joue.avectesamis.entites.jeux.Nobels;
 import com.joue.avectesamis.entites.jeux.Pays_Capitale;
@@ -42,26 +45,21 @@ public class PenduSoloSujetControlleur {
 	private PenduDao penduDao;
 	@Autowired
 	private ChallengeMetier metier;
+	public static int nbFoisAppelResultat =0;
 	
-	
-	@RequestMapping(value="/soloSujet" , method=RequestMethod.GET)
+	@RequestMapping(value="pendusoloSujets" , method=RequestMethod.GET)
 	public String soloSujets(Model model, HttpServletRequest req, PenduModel penduModel ){
-		Map<String, Object> map = new HashMap<String, Object>();
 		
 		HttpSession session = req.getSession();
-		Long id =  1L;
-//				(Long) session.getAttribute("id");
+		Long id = (Long) session.getAttribute("id");
 		Friend moi = metier.getFriend(id);
 		 
 //		recuperation de tous mes soloSujets
-		penduModel.setMesSujetsoSolo(penduDao.mesSujetsSolos(id));
-   
-		 
+		penduModel.setMesSujetsoSolo(penduDao.mesSujetsSolos(id));	 
 		
-		map.put("penduModel", penduModel);
-		return "soloSujet";
-		
+		return "pendusoloSujets";
 	}
+	
 	@RequestMapping(value="penduSoloSujetJeu", method=RequestMethod.GET)
 	public String penduSoloSujetJeu(Model model, PenduModel penduModel, HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -847,14 +845,18 @@ public class PenduSoloSujetControlleur {
 		model.addAttribute("pointsPerdus", pointsPerdus);
 		return "resultatPenduCapitales";
 	}
+	
 	@RequestMapping(value="resultatPenduSujets")
 	public String resultatPenduSujets(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
+
+		nbFoisAppelResultat ++;
+		System.out.println("le nombre de fois appelle de resultat "+nbFoisAppelResultat);
+		System.out.println("nb fois");
 //		recupération pour chaque sujet: le mot, la lettre, les points (gagnés et totals)
 //		pour tous les sujets: la longueur
 //		le temps restant
 		HttpSession session = req.getSession();
-		Long moi = 2L;
-//				(Long) session.getAttribute("id");
+		Long moi =(Long) session.getAttribute("id");
 		
 		PenduSujetsSolo penduSujetsSolo = new PenduSujetsSolo();
 		
@@ -865,6 +867,8 @@ public class PenduSoloSujetControlleur {
 		int pointsPays = (Integer) session.getAttribute("pointsPays");
 		String nbErreursPays = (String)session.getAttribute("nbErreursPays");
 		System.out.println("le mot du pays: "+motCompletPays+", la lettre : "+lettreCharPays+", les pointsMax: "+pointsMaxPays);
+		penduSujetsSolo.setMotPays(motCompletPays);
+		penduSujetsSolo.setLettreStringPays(lettreDevoileePays);
 //		savoir si on dejà soumis les pays pour correction, dans ce cas on met les données dans les attributs du pendu qui sera ensuite enregiste dans la BDD, sinon on les laisse par defaut
 		String soumissionPays = (String) session.getAttribute("soumissionPays");
 		if (soumissionPays =="oui") {
@@ -882,11 +886,12 @@ public class PenduSoloSujetControlleur {
 		Integer pointsMaxCapitales = (Integer) session.getAttribute("pointsMaxCapitales");
 		Integer pointsCapitales = (Integer) session.getAttribute("pointsCapitales");
 		String nbErreursCapitales = (String)session.getAttribute("nbErreursCapitales");
+		penduSujetsSolo.setMotCapitale(motCompletCapitales);
+		penduSujetsSolo.setLettreStringCapitale(lettreDevoileeCapitales);
 		System.out.println("le mot de la  Capitale: "+motCompletCapitales+", la lettre : "+lettreCharCapitales+", les pointsMax: "+pointsMaxCapitales);
 		String soumissionCapitale = (String) session.getAttribute("soumissionCapitale");
 		if (soumissionCapitale=="oui") {
-			penduSujetsSolo.setMotCapitale(motCompletCapitales);
-			penduSujetsSolo.setLettreStringCapitale(lettreDevoileeCapitales);
+			
 			penduSujetsSolo.setLettreCharCapitale(lettreCharCapitales);
 			penduSujetsSolo.setNbErreursCapitale(Integer
 					.parseInt(nbErreursCapitales));
@@ -899,11 +904,12 @@ public class PenduSoloSujetControlleur {
 		int pointsMaxNobels = (Integer) session.getAttribute("pointsMaxNobels");
 		int pointsNobels = (Integer) session.getAttribute("pointsNobels");
 		String nbErreursNobels = (String)session.getAttribute("nbErreursNobels");
+		penduSujetsSolo.setMotNobel(motCompletNobels);
+		penduSujetsSolo.setLettreStringNobel(lettreDevoileeNobels);
 		System.out.println("le mot du Nobel: "+motCompletNobels+", la lettre : "+lettreCharNobels+", les pointsMax: "+pointsMaxNobels);
 		String soumissionNobel = (String) session.getAttribute("soumissionNobel");
 		if (soumissionNobel=="oui") {
-			penduSujetsSolo.setMotNobel(motCompletNobels);
-			penduSujetsSolo.setLettreStringNobel(lettreDevoileeNobels);
+			
 			penduSujetsSolo.setLettreCharNobel(lettreCharNobels);
 			penduSujetsSolo
 					.setNbErreursNobel(Integer.parseInt(nbErreursNobels));
@@ -916,11 +922,12 @@ public class PenduSoloSujetControlleur {
 		int pointsMaxArtistes = (Integer) session.getAttribute("pointsMaxArtistes");
 		int pointsArtistes = (Integer) session.getAttribute("pointsArtistes");
 		String nbErreursArtistes = (String)session.getAttribute("nbErreursArtistes");
+		penduSujetsSolo.setMotArtiste(motCompletArtistes);
+		penduSujetsSolo.setLettreStringArtiste(lettreDevoileeArtistes);
 		System.out.println("le mot de l'ARTISTE: "+motCompletArtistes+", la lettre : "+lettreCharArtistes+", les pointsMax: "+pointsMaxArtistes);
 		String soumissionArtiste = (String) session.getAttribute("soumissionArtiste");
 		if (soumissionArtiste=="oui") {
-			penduSujetsSolo.setMotArtiste(motCompletArtistes);
-			penduSujetsSolo.setLettreStringArtiste(lettreDevoileeArtistes);
+			
 			penduSujetsSolo.setLettreCharArtiste(lettreCharArtistes);
 			penduSujetsSolo.setNbErreursArtiste(Integer
 					.parseInt(nbErreursArtistes));
@@ -933,18 +940,19 @@ public class PenduSoloSujetControlleur {
 		int pointsMaxPresidents = (Integer) session.getAttribute("pointsMaxPresident");
 		int pointsPresidents = (Integer) session.getAttribute("pointsPresident");
 		String nbErreursPresidents = (String)session.getAttribute("nbErreursPresident");
+		penduSujetsSolo.setMotPresident(motCompletPresidents);
+		penduSujetsSolo.setLettreStringPresident(lettreDevoileePresidents);
 		System.out.println("le mot du President: "+motCompletPresidents+", le mot complet : "+motCompletPresidents+", les pointsMax: "+pointsMaxPresidents);
 		String soumissionPresident = (String) session.getAttribute("soumissionPresident");
 		if (soumissionPresident=="oui") {
-			penduSujetsSolo.setMotPresident(motCompletPresidents);
-			penduSujetsSolo.setLettreStringPresident(lettreDevoileePresidents);
+			
 			penduSujetsSolo.setLettreCharPresident(lettreCharPresidents);
 			penduSujetsSolo.setNbErreursPresident(Integer
 					.parseInt(nbErreursPresidents));
 			penduSujetsSolo.setScorePresident(pointsPresidents);
 			penduSujetsSolo.setScoreMaxPresident(pointsMaxPresidents);
 		}
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
 		String dateString = df.format(now);
 		penduSujetsSolo.setDate(now);
@@ -986,10 +994,22 @@ public class PenduSoloSujetControlleur {
 //		session.removeAttribute("nbErreursPresidents");
 //		session.removeAttribute("soumissionPresidents");
 		
+		int totalPoints = pointsPays+pointsCapitales+pointsNobels+pointsArtistes+pointsPresidents;
+		int totalPointsMax = pointsMaxArtistes+pointsMaxCapitales+pointsMaxNobels+pointsMaxPays+pointsMaxPresidents;
+		Integer longueurSujets = (Integer)session.getAttribute("longueurMot");
+		String tempsRestant = req.getParameter("tempsRestant");
+		
+		penduSujetsSolo.setScore(totalPoints);
+		penduSujetsSolo.setScoreMax(totalPointsMax);
+		penduSujetsSolo.setTempsRestantString(tempsRestant);
+		
+		
+		
 //		Enregistement des données dans la base
 		penduDao.savePenduSujetSolo(penduSujetsSolo, moi);
-		System.out.println("après l'insertion dans la BDD, la dateString "+penduSujetsSolo.getDateString());
+//		System.out.println("après l'insertion dans la BDD, la dateString "+penduSujetsSolo.getDateString());
 		
+	
 //		Envoie des resultats à la vue pour affichage
 		
 		model.addAttribute("motCompletPays", motCompletPays);
@@ -1021,14 +1041,7 @@ public class PenduSoloSujetControlleur {
 		model.addAttribute("pointsMaxPresidents", pointsMaxPresidents);
 		model.addAttribute("pointsPresidents", pointsPresidents);
 		model.addAttribute("nbErreursPresidents", nbErreursPresidents);
-		
-		
-		
-		Integer longueurSujets = (Integer)session.getAttribute("longueurMot");
-		String tempsRestant = req.getParameter("tempsRestant");
-		
-		int totalPoints = pointsPays+pointsCapitales+pointsNobels+pointsArtistes+pointsPresidents;
-		int totalPointsMax = pointsMaxArtistes+pointsMaxCapitales+pointsMaxNobels+pointsMaxPays+pointsMaxPresidents;
+			
 		
 		model.addAttribute("totalPoints", totalPoints);
 		model.addAttribute("totalPointsMax", totalPointsMax);
@@ -1046,8 +1059,7 @@ public class PenduSoloSujetControlleur {
 //		le temps restant
 		HttpSession session = req.getSession();
 		
-		Long id = 1L;
-//		(Long) session.getAttribute("id");
+		Long id =(Long) session.getAttribute("id");
 		
 		System.out.println("le temps est fini ====================");
 		
@@ -1138,8 +1150,65 @@ public class PenduSoloSujetControlleur {
 		model.addAttribute("longueurSujets", longueurSujets);
 		model.addAttribute("tempsRestant", tempsRestant);
 		
+		model.addAttribute("penduModel", penduModel);
+		
 		
 		return "resultatPenduSujetsTempsFini";
+	}
+	
+	@RequestMapping(value="infosPenduSujetSoloId")
+	public String infosPenduSujetSoloId (Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+		System.out.println("l'id du jeu envoyé est : "+req.getParameter("id"));
+		Long id = Long.parseLong(req.getParameter("id"));
+		System.out.println("lid du jeu est "+id);
+		PenduSujetsSolo penduSujetsSolo = penduDao.getSujetSolo(id);
+		
+		model.addAttribute("penduSujetsSolo", penduSujetsSolo);
+		model.addAttribute("penduModel", penduModel);
+		model.addAttribute("gm", gm);
+		return "infosPenduSujetSoloId";
+		
+	}
+	@RequestMapping(value="infosPenduSujetsSolo")
+	public String infosPenduSujetsSolo (Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		Collection<PenduSujetsSolo> penduSujetsSolos = penduDao.mesSujetsSolos(id);
+		
+		model.addAttribute("penduSujetsSolos", penduSujetsSolos);
+		model.addAttribute("penduModel", penduModel);
+		model.addAttribute("gm", gm);
+		return "infosPenduSujetsSolo";
+		
+	}
+	@RequestMapping(value="infoPublicationSoloSujet")
+	public String infoPublicationSoloSujet (Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+		HttpSession session = req.getSession();
+		Long id =(Long) session.getAttribute("id");
+		//		recupération des infos du solo
+		String idSoloStr = req.getParameter("idSolo");
+		
+		Long idSolo = Long.valueOf(idSoloStr);
+		PenduSujetsSolo sujetSolo = penduDao.getSujetSolo(idSolo);
+//		le message du post
+		String messagePost = ""+sujetSolo.getDateString()+" a joué un soloSujets avec les mots suivants:  "+sujetSolo.getMotPays()+", "+sujetSolo.getMotCapitale()+", "+sujetSolo.getMotPresident()+", "+sujetSolo.getMotNobel()+", "+sujetSolo.getMotArtiste()+ " . J'ai eu au total"
+				+ " "+sujetSolo.getScore()+"/"+sujetSolo.getScoreMax()+" Points";		
+//		comme le jeu ne doit etre publie qu'une seule fois, s'il n'est pas publie on le publie 
+//		sinon on informe à l'utilisateur qu'il est déjà pubie
+		if(sujetSolo.isPublie()){
+			return "infoPubSoloDejaPublie";
+		}
+		
+		Post post = new Post(new Date(), messagePost, true, TypePost.PENDUSUJETSOLO);		
+		System.out.println("le message du Post "+post.getMessage());
+		System.out.println("le type du Post "+post.getTypePost());
+		
+		metier.posterPost(id, messagePost);
+		
+		penduDao.mettreAjourSujetSolo(idSolo);
+		
+		return "infoPublicationSolo";
+		
 	}
 
 }

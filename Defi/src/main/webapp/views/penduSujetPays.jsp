@@ -7,18 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-					 <div id="infosTempsRestantPays" class="infosTempsRestantPays">Votre temps restant est de  <span id="timePays"></span> minutes!</div><br> 
 					 
 					<div id="resultatPays"></div>
 					<div>
 					
 						<c:out value="${motPays }"></c:out><br>
-						<%-- <c:out value="${word.secretWord }"></c:out><br>
-						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
+						
 						<p> Nombre d'erreurs: &nbsp; <span id="nbErreurPays">0</span></p>
-						<p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouvesPays">0</span> </p>
 						<div id="valeurMotCachePays">${motCacheDepartPays }</div><br>
-						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
 							<a id="APays" class="btn btn-info communPays" href="#" style="margin: 2px;">A</a>
 							<a id="ZPays" class="btn btn-info communPays" href="#" style="margin: 2px;">Z</a>

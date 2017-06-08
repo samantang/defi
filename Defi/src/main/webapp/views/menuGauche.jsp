@@ -8,5 +8,9 @@
 				  					 <li><a href="mesamis">Amis</a></li>
 				                    <li><a href="abcSoloHome">ABC Solo</a></li>
 				                    <li><a href="abcChallengeHome">ABC Challenge</a></li>
+				                    <li><a href="penduSoloDico">Penu Dico Solo</a></li>
+				                    <li><a href="penduChallengeDico">Pendu Dico Challenge</a></li>
+				                    <li><a href="pendusoloSujets">Pendu Sujets Solo</a></li>
+				                    <li><a href="penduChallengeSujets">Pendu Sujets Challenge</a></li>
 								</ul>
 							</div>

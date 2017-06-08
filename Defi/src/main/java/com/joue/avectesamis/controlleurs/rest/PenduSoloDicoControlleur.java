@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -29,6 +30,8 @@ import com.joue.avectesamis.dao.repositories.FriendRepository;
 import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.AbcSolo;
 import com.joue.avectesamis.entites.Friend;
+import com.joue.avectesamis.entites.Post;
+import com.joue.avectesamis.entites.TypePost;
 import com.joue.avectesamis.entites.jeux.pendu.PenduDicoChallenge;
 import com.joue.avectesamis.entites.jeux.pendu.PenduDicoSolo;
 import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsSolo;
@@ -48,21 +51,14 @@ public class PenduSoloDicoControlleur {
 	
 	@RequestMapping(value="penduSoloDico", method=RequestMethod.GET)
 	public String soloDico(Model model, HttpServletRequest req, PenduModel penduModel, Word word ){
-//		word = new Word(req);
 		word.initWord(req);
-		
-//		la map qui va stocker tous les objets
-		Map<String, Object> map = new HashMap<String, Object>();
-		
+				
 		HttpSession session = req.getSession();
 		Long id = (Long) session.getAttribute("id");
 		Friend moi = metier.getFriend(id);
 		
-		
 		penduModel.setMesDicoSolo(penduDao.mesDicoSolos(id));
-		
-//	     map.put("penduModel", penduModel);
-	     model.addAttribute("penduModel", penduModel);
+	    model.addAttribute("penduModel", penduModel);
 
 		return "penduSoloDico";
 		
@@ -87,17 +83,8 @@ public class PenduSoloDicoControlleur {
 	public String AbcSoloDicoJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
 		word = new Word(request);
 		
-//		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-//		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-//		Date now = new Date();
-//		String dateString = df.format(now);
-//		
-//		System.out.println("la date String est"+dateString );
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
 		HttpSession session = request.getSession();
-		Long id = 2L; 
+		Long id = (Long) session.getAttribute("id"); 
 //		à partir du mot tiré au sort, on choisit une lettre qui sera affichée pour guider le joueur
 		String motComplet = word.getWord();
 		int longueurMot = motComplet.length();
@@ -114,10 +101,7 @@ public class PenduSoloDicoControlleur {
 					model.addAttribute("longueurMot", longueurMot);
 					model.addAttribute("lettreDevoilee", lettreDevoilee);
 					model.addAttribute("penduModel", penduModel);
-					model.addAttribute("word", word);
-//					map.put("penduModel", penduModel);
-//					map.put("word", word);
-				
+					model.addAttribute("word", word);				
 		
 		return "penduSoloDicoJeu";
 		
@@ -162,8 +146,8 @@ public class PenduSoloDicoControlleur {
 		return map;
 	}
 	
-	@RequestMapping(value="infosPenduSolo")
-	public String infosPenduSolo(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+	@RequestMapping(value="infosPenduDicoSolo")
+	public String infosPenduDicoSolo(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
 		HttpSession session = req.getSession();
 		Long id =  (Long) session.getAttribute("id");
 		
@@ -174,7 +158,7 @@ public class PenduSoloDicoControlleur {
 		model.addAttribute("sm", sm);
 		model.addAttribute("gm", gm);
 		model.addAttribute("penduModel", penduModel);
-		return "infosPenduSolo";
+		return "infosPenduDicoSolo";
 	}
 	@RequestMapping(value="imageErreurPendu")
 	public String imageErreurPendu(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
@@ -187,8 +171,7 @@ public class PenduSoloDicoControlleur {
 		HttpSession session = req.getSession();
 		
 		
-		Long id = 2L;
-//				(Long) session.getAttribute("id");
+		Long id = (Long) session.getAttribute("id");
 		
 		String motComplet = (String) session.getAttribute("motComplet");
 		String nbErreurs = req.getParameter("nbErreurs");
@@ -224,29 +207,25 @@ public class PenduSoloDicoControlleur {
 			points = 0;
 		}
 //		je peux inserer les données dans la base que si "motUser = null"
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyy hh:mm", Locale.FRANCE);
+//		DtateFormat formater = new SimpleDateFormat(pattern, locale)
 		Date now = new Date();
 		String dateString = df.format(now);
-		
-		
-		
-		if(nbErreursInt == 5){
+//		savoir si le temps est fini avant de trouver tout le mot, dans ce cas mettre le timeOut à true
+		String timeOut = req.getParameter("timeOut");
+		System.out.println("le timeout est : "+timeOut);
+		if(timeOut=="oui"){
+			PenduDicoSolo solo = new PenduDicoSolo(true);
+			penduDao.savePenduDicoSolo(solo, id);
+		}
+		else if(nbErreursInt == 5){
 			System.out.println("le nombre d'erreurs est de cinq ==============");
-			PenduDicoSolo solo = new PenduDicoSolo("oui", nbErreursInt);
+			PenduDicoSolo solo = new PenduDicoSolo(now, dateString, lettreDevoilee, true, motComplet);
 			penduDao.savePenduDicoSolo(solo, id);
 		}else {
 			PenduDicoSolo penduDicoSolo = new PenduDicoSolo(now, dateString, lettreDevoilee, null, tempsRestant, motComplet, null, nbErreursInt, points, pointsMax);
 			penduDao.savePenduDicoSolo(penduDicoSolo, id);
 		}
-		
-		
-		
-		
-		System.out.println("la date String est"+dateString );
-		
-		System.out.println("le nombre de points ganés au final = "+points);
-		
-		System.out.println("le nombre Erreurs "+nbErreurs+" et le temps Restant "+tempsRestant);
 		
 //		Pour les points: chaque lettre rapporte 10 points
 //		quand on trouve tout le mot avant la fin, chaque 10 secondes rapportent 5 points de BONUS
@@ -259,6 +238,52 @@ public class PenduSoloDicoControlleur {
 		model.addAttribute("motComplet", motComplet);
 		model.addAttribute("penduModel", penduModel);
 		return "resultatPendu";
+	}
+	@RequestMapping(value="publierSoloDico")
+	public String publierSoloDico(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+		HttpSession session = req.getSession();
+		Long id = 2L;
+//				(Long) session.getAttribute("id");
+		//		recupération des infos du solo
+		Long idSolo = Long.parseLong(req.getParameter("id"));
+		PenduDicoSolo dicoSolo = penduDao.getDicoSolo(idSolo);
+		String messagePost = ""+dicoSolo.getDateString()+" j'ai joué un soloDico avec le mot "+dicoSolo.getMot()+", j'ai eu "+dicoSolo.getScore()+"/"+dicoSolo.getScoreMax()+" Points";
+		
+		Post post = new Post(new Date(), messagePost, true, TypePost.PENDUDICOSOLO);
+		
+		System.out.println("le message du Post "+post.getMessage());
+		System.out.println("le type du Post "+post.getTypePost());
+		
+		return "penduSoloDico";
+		
+	}
+	@RequestMapping(value="infoPublicationSolo")
+	public String infoPublicationSolo (Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel){
+		HttpSession session = req.getSession();
+		Long id =(Long) session.getAttribute("id");
+		//		recupération des infos du solo
+		String idSoloStr = req.getParameter("idSolo");
+		
+		Long idSolo = Long.valueOf(idSoloStr);
+		PenduDicoSolo dicoSolo = penduDao.getDicoSolo(idSolo);
+//		le message du post
+		String messagePost = ""+dicoSolo.getDateString()+" a joué un soloDico avec le mot "+dicoSolo.getMot()+" j'ai eu "+dicoSolo.getScore()+"/"+dicoSolo.getScoreMax()+" Points";		
+//		comme le jeu ne doit etre publie qu'une seule fois, s'il n'est pas publie on le publie 
+//		sinon on informe à l'utilisateur qu'il est déjà pubie
+		if(dicoSolo.isPublie()){
+			return "infoPubSoloDejaPublie";
+		}
+		
+		Post post = new Post(new Date(), messagePost, true, TypePost.PENDUDICOSOLO);		
+		System.out.println("le message du Post "+post.getMessage());
+		System.out.println("le type du Post "+post.getTypePost());
+		
+		metier.posterPost(id, messagePost);
+		
+		penduDao.mettreAjourDicoSolo(idSolo);
+		
+		return "infoPublicationSolo";
+		
 	}
 	
 	

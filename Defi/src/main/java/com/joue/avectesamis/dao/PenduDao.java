@@ -28,6 +28,10 @@ public interface PenduDao {
 	
 	public void savePenduDicoSolo (PenduDicoSolo solo, Long id );
 	public void savePenduSujetSolo (PenduSujetsSolo solo, Long id);
+	public PenduDicoSolo getDicoSolo(Long id);
+	public PenduSujetsSolo getSujetSolo(Long id);
+	public void mettreAjourDicoSolo(Long id);
+	public void mettreAjourSujetSolo(Long id);
 	
 	
 	public void sendChallengeDico(Long moi, Long ami);
@@ -54,4 +58,5 @@ public interface PenduDao {
 	public List<Pays_Capitale> challengeSujetPays(char c);
 	public List<Pays_Capitale> challengeSujetCapitale(char c);
 	public List<String> challengeSujetVilleF(char c);
+	
 }

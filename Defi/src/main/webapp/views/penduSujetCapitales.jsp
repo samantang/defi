@@ -7,18 +7,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-					 <div id="infosTempsRestantCapitales" class="infosTempsRestantCapitales">Votre temps restant est de  <span id="timeCapitales"></span> minutes!</div><br> 
 					 
 					<div id="resultatCapitales"></div>
 					<div>
-					
 						<c:out value="${motCapitales}"></c:out><br>
-						<%-- <c:out value="${word.secretWord }"></c:out><br>
-						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
 						<p> Nombre d'erreurs: &nbsp; <span id="nbErreurCapitales">0</span></p>
-						<p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouvesCapitales">0</span> </p>
 						<div id="valeurMotCacheCapitales">${motCacheDepartCapitales}</div><br>
-						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
 							<a id="ACapitales" class="btn btn-info communCapitales" href="#" style="margin: 2px;">A</a>
 							<a id="ZCapitales" class="btn btn-info communCapitales" href="#" style="margin: 2px;">Z</a>

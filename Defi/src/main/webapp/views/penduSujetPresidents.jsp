@@ -7,17 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-					 <div id="infosTempsRestantPresident" class="infosTempsRestantPresident">Votre temps restant est de  <span id="timePresident"></span> minutes!</div><br> 
 					 
 					<div id="resultatPresident"></div>
 					<div>
 					
 						<c:out value="${motPresident }"></c:out><br>
-						<%-- <c:out value="${word.secretWord }"></c:out><br>
-						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
+						
 						<p> Nombre d'erreurs: &nbsp; <span id="nbErreurPresident">0</span></p>
 						<div id="valeurMotCachePresident">${motCacheDepartPresident }</div><br>
-						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
 							<a id="APresident" class="btn btn-info communPresident" href="#" style="margin: 2px;">A</a>
 							<a id="ZPresident" class="btn btn-info communPresident" href="#" style="margin: 2px;">Z</a>

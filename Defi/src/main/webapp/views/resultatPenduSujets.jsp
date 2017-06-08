@@ -30,7 +30,7 @@
 		<div class="modal-header">
 		  <button type="button" class="close" data-dismiss="modal">&times;</button>
 		  <h1>Le résultat de votre jeu</h1>
-		  <h3>TOTAL POINTS GAGNES: <c:out value="${totalMaxPoints }"></c:out> SUR <c:out value="${totalPointsMax }"></c:out> </h3>
+		  <h3>TOTAL POINTS GAGNES: <c:out value="${totalPoints }"></c:out> SUR <c:out value="${totalPointsMax }"></c:out> </h3>
 		  <h3>Le temps Restant <c:out value="${tempsRestant }"></c:out> </h3>
 		</div>
 		<div class="modal-body">

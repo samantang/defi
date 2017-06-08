@@ -38,10 +38,13 @@ public class PenduSujetsSolo implements Serializable{
 	@Fetch(FetchMode.SUBSELECT)
 	private Collection<Character> choix;
 	private int score;
+	private int scoreMax;
 	private boolean aide;
 	private int nbAide;
 	@ManyToOne
 	private Friend friend;
+	private String tempsRestantString;
+	private boolean publie;
 	
 	private Date datePays;
 	private String  dateStringPays;
@@ -108,6 +111,42 @@ public class PenduSujetsSolo implements Serializable{
 	
 	
 	
+	/**
+	 * @return the publie
+	 */
+	public boolean isPublie() {
+		return publie;
+	}
+	/**
+	 * @param publie the publie to set
+	 */
+	public void setPublie(boolean publie) {
+		this.publie = publie;
+	}
+	/**
+	 * @return the tempsRestantString
+	 */
+	public String getTempsRestantString() {
+		return tempsRestantString;
+	}
+	/**
+	 * @param tempsRestantString the tempsRestantString to set
+	 */
+	public void setTempsRestantString(String tempsRestantString) {
+		this.tempsRestantString = tempsRestantString;
+	}
+	/**
+	 * @return the scoreMax
+	 */
+	public int getScoreMax() {
+		return scoreMax;
+	}
+	/**
+	 * @param scoreMax the scoreMax to set
+	 */
+	public void setScoreMax(int scoreMax) {
+		this.scoreMax = scoreMax;
+	}
 	/**
 	 * @return the lettreCharPays
 	 */

@@ -61,16 +61,17 @@
 						<c:import url="menuGauche.jsp"></c:import>
 					</div>	
 			</div>
-			<div class="col-md-9 col-lg-9">
+			<div class="col-md-6 col-lg-6">
 				
 				<div style="text-align: center;">
 				<div id ="infosTemps"><h3>il vous reste au toal <span id="infosTempsFini">00</span> <span id="time"></span> minutes</h3></div>
-				<div><button data-toggle="modal" class="btn btn-success validerSujets" data-target="#infos">Valider Tous les Sujets</button></div><br><hr>
+				<div><button data-toggle="modal" class="btn btn-success validerSujets" data-target="#infos">Valider Tous Les Sujets</button></div><br>
 				<div class="modal fade" id="infos">
 			        <div class="modal-dialog modal-lg">  
 			          <div class="modal-content"></div>  
 			        </div> 
-			      </div>
+			    </div>
+			    <div><button class="btn btn-danger quitterLeJeuPenduSoloSujets">Quitter le jeu</button></div> <br><hr>
 				<div id="resultatSujets"></div>
 					<ul class="nav nav-pills">
 					    <li class="active"><a href="#pays">Pays</a></li>
@@ -78,9 +79,6 @@
 					    <li><a href="#nobels">Prix Nobels</a></li>
 					    <li><a href="#artistes">Artistes</a></li>
 					    <li><a href="#presidents">Présidents/Chef d'Etats</a></li>
-					    <!-- <li><a href="#animaux">Animaux</a></li>
-					    <li><a href="#agglos">Agglomerations</a></li> -->
-					    <!-- <li><a href="#villesFr">Villes de France</a></li> -->
 					</ul><hr>
 					<div class="tab-content">
 					    <div class="tab-pane active" id="pays">
@@ -98,27 +96,13 @@
 					    <div class="tab-pane" id="presidents">
 					    	<c:import url="penduSujetPresidents.jsp"></c:import>
 					    </div>
-					    <div class="tab-pane" id="Animaux">LES ANIMAUX</div>
-					    <div class="tab-pane" id="agglos">LES AGGLOMERATIONS</div>
-					    <!-- <div class="tab-pane" id="villesFr">LES VILLES DE FRANCE</div> -->
 					</div>
 				
-				</div>
-				
-				
-				
-				
-				
-						
-				
+				</div>	
 			</div>
-			<%-- <div class="col-md-3 col-lg-3">
-				<div id ="image"> ici une image qui représente le jeu</div>
-				<div>
-					<jsp:include page="menuDroit.jsp"></jsp:include>
-					<c:import url="menuDroit.jsp"></c:import>
-				</div>
-			</div> --%>
+			 <div class="col-md-3 col-lg-3">
+				<div align="center" id ="image"></div>
+			</div> 
 		</div>
 	</div>
 </div>
@@ -145,8 +129,15 @@
 			        	 $('.communArtistes').attr('disabled','disabled');
 			        	 $('.communNobels').attr('disabled','disabled');
 			        	 $('.communPresidents').attr('disabled','disabled');
-			        	 /* $('.validerSujets').attr('disabled','disabled'); */
+			        	  /* $('.validerSujets').attr('disabled','disabled');  */
+			        	  $('.validerSujets').remove();
 			        	 $('#infosTemps').remove();
+			        	 $('#time').remove();
+				  })
+				  /* pour quitter le jeu */
+				  $('.quitterLeJeuPenduSoloSujets')
+				  .click(function(){
+					  location = "http://localhost:8080/pendusoloSujets";
 				  })
 				});
 			
@@ -182,7 +173,6 @@
 					        seconds = seconds < 10 ? "0" + seconds : seconds;
 					
 					        display.textContent = minutes + ":" + seconds; 
-				
 					        if (diff <= 0) {
 					        	
 					        	 /* var motCache = $('#valeurMotCache').text();
