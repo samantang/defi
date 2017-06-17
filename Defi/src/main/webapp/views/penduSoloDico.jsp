@@ -154,7 +154,6 @@
 	function publierUnSolo(lui, id){
 		lui.disabled='true';
 		var param = 'idSolo='+id+'';
-	//	alert(id);
 		$("#infoPublicationSolo").load("infoPublicationSolo", param);
 	};
 	</script>

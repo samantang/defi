@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.joue.avectesamis.dao.PenduDao;
 import com.joue.avectesamis.dao.repositories.FriendRepository;
+import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.Friend;
 import com.joue.avectesamis.entites.Post;
 import com.joue.avectesamis.entites.jeux.pendu.PenduDicoChallenge;
@@ -36,6 +37,11 @@ public class DefiApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... arg0) throws Exception {
+//		PenduDicoChallenge challenge = new PenduDicoChallenge(null, null, 0, true, null, 0, true, 0, null, 0, false, 0);
+		penduDao.sendChallengeDico(2L, 1L);
+//		penduDao.acceptChallengeDico(4L, 3L);
+//		penduDao.savePenduDicoChallenge(challenge, 4L, 3L);
+		 
 		// TODO Auto-generated method stub
 //		Collection<Character> cha = new ArrayList<Character>();
 //		penduDao.savePenduDicoSolo(new PenduDicoSolo(new Date(), "date1", 140, false, "tsllksj", 110, true, 3, cha, 100, false, 2), 1L);

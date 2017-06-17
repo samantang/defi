@@ -7,7 +7,7 @@ public class DbConnection {
 
 	public static Connection getConnect() throws Exception{
 		Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/fchallengedb","root","");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/defi","root","");
         return con;
 		
 	}

@@ -26,9 +26,11 @@ public class PenduDicoChallenge implements Serializable {
 	private Long id;
 	private Date date;
 	private String dateString;
+//	private char lettre;
 	private int temps;
 	private int nbErreurs;
 	private int tempsRestant;
+	private String tempsRestantMoi;
 	private boolean timeOut;
 	private String mot;
 	private String motSecret;
@@ -51,10 +53,131 @@ public class PenduDicoChallenge implements Serializable {
 	private Friend monFriend;
 	private String codeIndentification;
 	
+	private int scoreAmi;
+	private boolean aideAmi;
+	private String dateStringAmi;
+	private String tempsRestantAmi;
+	private boolean timeOutAmi;
+	private boolean publie;
 	
 	
 	
 	
+	
+	
+	
+//	/**
+//	 * @return the lettre
+//	 */
+//	public char getLettre() {
+//		return lettre;
+//	}
+//
+//	/**
+//	 * @param lettre the lettre to set
+//	 */
+//	public void setLettre(char lettre) {
+//		this.lettre = lettre;
+//	}
+
+	/**
+	 * @return the publie
+	 */
+	public boolean isPublie() {
+		return publie;
+	}
+
+	/**
+	 * @param publie the publie to set
+	 */
+	public void setPublie(boolean publie) {
+		this.publie = publie;
+	}
+
+	/**
+	 * @return the tempsRestantMoi
+	 */
+	public String getTempsRestantMoi() {
+		return tempsRestantMoi;
+	}
+
+	/**
+	 * @param tempsRestantMoi the tempsRestantMoi to set
+	 */
+	public void setTempsRestantMoi(String tempsRestantMoi) {
+		this.tempsRestantMoi = tempsRestantMoi;
+	}
+
+	/**
+	 * @return the scoreAmi
+	 */
+	public int getScoreAmi() {
+		return scoreAmi;
+	}
+
+	/**
+	 * @param scoreAmi the scoreAmi to set
+	 */
+	public void setScoreAmi(int scoreAmi) {
+		this.scoreAmi = scoreAmi;
+	}
+
+	/**
+	 * @return the aideAmi
+	 */
+	public boolean isAideAmi() {
+		return aideAmi;
+	}
+
+	/**
+	 * @param aideAmi the aideAmi to set
+	 */
+	public void setAideAmi(boolean aideAmi) {
+		this.aideAmi = aideAmi;
+	}
+
+	/**
+	 * @return the dateStringAmi
+	 */
+	public String getDateStringAmi() {
+		return dateStringAmi;
+	}
+
+	/**
+	 * @param dateStringAmi the dateStringAmi to set
+	 */
+	public void setDateStringAmi(String dateStringAmi) {
+		this.dateStringAmi = dateStringAmi;
+	}
+
+	/**
+	 * @return the tempsRestantAmi
+	 */
+	public String getTempsRestantAmi() {
+		return tempsRestantAmi;
+	}
+
+	/**
+	 * @param tempsRestantAmi the tempsRestantAmi to set
+	 */
+	public void setTempsRestantAmi(String tempsRestantAmi) {
+		this.tempsRestantAmi = tempsRestantAmi;
+	}
+
+	/**
+	 * @return the timeOutAmi
+	 */
+	public boolean isTimeOutAmi() {
+		return timeOutAmi;
+	}
+
+	/**
+	 * @param timeOutAmi the timeOutAmi to set
+	 */
+	public void setTimeOutAmi(boolean timeOutAmi) {
+		this.timeOutAmi = timeOutAmi;
+	}
+
 	/**
 	 * @return the motSecret
 	 */

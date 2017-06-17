@@ -28,6 +28,8 @@ import com.joue.avectesamis.dao.PenduDao;
 import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.AbcSolo;
 import com.joue.avectesamis.entites.Friend;
+import com.joue.avectesamis.entites.Post;
+import com.joue.avectesamis.entites.TypePost;
 import com.joue.avectesamis.entites.jeux.APresident;
 import com.joue.avectesamis.entites.jeux.Agglo;
 import com.joue.avectesamis.entites.jeux.Animaux;
@@ -40,6 +42,7 @@ import com.joue.avectesamis.entites.jeux.pendu.PenduDicoChallenge;
 import com.joue.avectesamis.metier.ChallengeMetier;
 import com.joue.avectesamis.models.GameModel;
 import com.joue.avectesamis.models.PenduModel;
+import com.joue.avectesamis.models.SocialModel;
 import com.joue.avectesamis.models.Word;
 
 
@@ -72,27 +75,23 @@ public class PenduChallengeDicoControlleur {
 	
 	@RequestMapping(value="penduChallengeDico", method=RequestMethod.GET)
 	public String penduChallengDico(Model model, HttpServletRequest req, PenduModel penduModel, Word word ){
-//		word = new Word(req);
-		word.initWord(req);
-		
-//		la map qui va stocker tous les objets
-		Map<String, Object> map = new HashMap<String, Object>();
-		
+		word.initWord(req);		
 		HttpSession session = req.getSession();
-		Long id =  1L;
-//				(Long) session.getAttribute("id");
-		Friend moi = metier.getFriend(id);
-		
+		Long id = (Long) session.getAttribute("id");
+		Friend moi = metier.getFriend(id);	
+		penduModel.setMesChallengesDicoRecus(penduDao.mesChallengesDicoRecus(id));
 		penduModel.setMesChallengesDico(penduDao.mesDicoChallenges(id));
-//		Collection<PenduDicoChallenge> mesChallengesDico=penduDao.mesDicoChallenges(id);
-//		List<Friend> mesChallengesDicoEnvoyes = penduDao.mesChallengesDicoEnvoyes(id);
 		penduModel.setMesChallengesDicoEnvoyes(penduDao.mesChallengesDicoEnvoyes(id));
-//		gm.setMesChallengesEnvoyes(penduDao.mesChallengesDicoEnvoyes(id));
-//		List<Friend> mesChallengesDicoEnAttentes = penduDao.mesChallengesDicoAttentes(id);
 		penduModel.setMesChallengesDicoEnAttentes(penduDao.mesChallengesDicoAttentes(id));
-//		gm.setMesChallengesEnAttentes(penduDao.mesChallengesDicoAttentes(id));
-//		List<Friend> mesChallengesDicoAttentes = penduDao.mesChallengesDicoAttentes(id);
-//		gm.setMesChallengesJoues(metier.mesChallengesJou�s(id));
+
+		if(id != null){
+			System.out.println("l'id n'est pas null");
+			
+			model.addAttribute("moi", moi);
+		    model.addAttribute("penduModel", penduModel);
+		return "penduChallengeDico";
+		}
+		
 		List<PenduDicoChallenge> mesChallengesJoues = penduDao.mesDicoChallenges(id);
 //		mesChallengesJoues.addAll(penduDao.mesDicoChallenges(id));
 //		creation d'une map qui aura comme cl�f le code d'identificaion et comme valeur l'id de l'ami
@@ -203,8 +202,14 @@ public class PenduChallengeDicoControlleur {
 			taille = mesChallengesJoues.size();
 			System.out.println("la taille de mes jeux est "+taille);
 		}
-		List<PenduDicoChallenge> challengeAmisOrdreCoupe=challengeAmisOrdre.subList(0, taille-1);
-		
+		List<PenduDicoChallenge> challengeAmisOrdreCoupe = null;
+		if (taille ==0) {
+//			alors la personne n'a pas encore joue, donc la taille est 0
+			 challengeAmisOrdreCoupe=challengeAmisOrdre.subList(0, taille);
+		} else {
+//			pour eviter d'avoir un depassement de la taille de liste
+			challengeAmisOrdreCoupe=challengeAmisOrdre.subList(0, taille-1);
+		}		
 //		Mixage des deux listes pour faciliter l'affichage des duels dans le detail des challenges
 		List<PenduDicoChallenge> mixChallenge = new ArrayList<PenduDicoChallenge>();
 		if (mesChallengesJoues!=null) {
@@ -223,14 +228,10 @@ public class PenduChallengeDicoControlleur {
 	   List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(id);
 	    List<AbcSolo> mesSolos =  metier.getMesSolos(id);
 	    
-	    model.addAttribute("challengeAmisOrdreCoupe", challengeAmisOrdreCoupe);	  
-	    map.put("challengeAmisOrdreCoupe", challengeAmisOrdreCoupe);
-	    
+	    model.addAttribute("challengeAmisOrdreCoupe", challengeAmisOrdreCoupe);	  	    
 	    
 	    model.addAttribute("mesChallenges", mesChallenges);
-	    map.put("mesChallenges", mesChallenges);
 	    model.addAttribute("mesSolos", mesSolos);
-	    map.put("mesSolos", mesSolos);
 		
 //		System.out.println("mes challengesJou�s:la taille "+mesChallengesJoues.size());
 //		System.out.println("les challengesJou�sAmis: la taille "+challengesAmis.size());
@@ -242,15 +243,10 @@ public class PenduChallengeDicoControlleur {
 		model.addAttribute("mesChallengesJoues", mesChallengesJoues);
 		session.setAttribute("challengesAmis", challengesAmis);
 		model.addAttribute("penduModel", penduModel);
-	     map.put("penduModel", penduModel);
 		model.addAttribute("mesChallengesJoues", mesChallengesJoues);
-	     map.put("mesChallengesJoues", mesChallengesJoues);
 		model.addAttribute("challengesAmis", challengesAmis);
-	    map.put("challengesAmis", challengesAmis);
 		model.addAttribute("moi", moi);
-	    map.put("moi", moi);
 	    model.addAttribute("word", word);
-	    map.put(" leMot", word);
 	    model.addAttribute("penduModel", penduModel);
 		
 		return "penduChallengeDico";
@@ -272,48 +268,35 @@ public class PenduChallengeDicoControlleur {
 	}
 	
 	@RequestMapping(value="accepterDicoChallenge", method=RequestMethod.GET)
-	public String accepterDicoChallenge(Model model, PenduModel penduModel, HttpServletRequest request){
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
+	public String accepterDicoChallenge(Model model, PenduModel penduModel, HttpServletRequest request){		
 		HttpSession session = request.getSession();
 		Long id =  (Long) session.getAttribute("id");
 		
-//		recup�raiton de l'ami
 		Long idAmi= (long) Integer.parseInt(request.getParameter("idAmi"));
-//		metier.accepterChallenge(id, idAmi);
 		penduDao.acceptChallengeDico(id, idAmi);
 		
-//		gm.setMesChallengesRecus(metier.mesChallengesRecus(id));
 		penduModel.setMesChallengesDico(penduDao.mesDicoChallenges(id));
-//		gm.setMesChallengesEnvoyes(metier.mesChallengesEnvoyes(id));
 		penduModel.setMesChallengesDicoEnvoyes(penduDao.mesChallengesDicoEnvoyes(id));
-//		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));
 		penduModel.setMesChallengesDicoEnAttentes(penduDao.mesChallengesDicoAttentes(id));
-		
-		
-		
-		model.addAttribute("penduModel", penduModel);
-		map.put("penduModel", penduModel);
-		
+				
+		model.addAttribute("penduModel", penduModel);		
 		return "accepterDicoChallenge";
 		
 	}
 	@RequestMapping(value="penduChallengeDicoJeu", method=RequestMethod.GET)
-	public String penduChallengeDicoJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
+	public String penduChallengeDicoJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word, Long amiId){
 		word = new Word(request);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		HttpSession session = request.getSession();
-		Long id = 2L; 
-//				(Long) session.getAttribute("id");
+		Long id =(Long) session.getAttribute("id");
 //		le temps en fonction du nombre de r�sultats possibles
 		int temps =0;
 		
 //		recup�raiton de l'ami
-		Long idAmi= 1L;
-//				(long) Integer.parseInt(request.getParameter("idAmi"));
+		Long idAmi= 
+				(long) Integer.parseInt(request.getParameter("idAmi"));
 		session.setAttribute("idAmi", idAmi);
 		Friend ami= metier.getFriend(idAmi);
 		
@@ -538,5 +521,95 @@ public class PenduChallengeDicoControlleur {
 		model.addAttribute("longueurMot", longueurMot);
 		
 		return "penduChallengeDicoCorrection";
+	}
+	@RequestMapping(value="infosPenduDicoChallenge")
+	public String infosPenduDicoChallenge (Model model, PenduModel penduModel, HttpServletRequest req, Word word){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		Friend moi = metier.getFriend(id);	
+		
+		penduModel.setMesChallengesDicoRecus(penduDao.mesChallengesDicoRecus(id));
+		penduModel.setMesChallengesDico(penduDao.mesDicoChallenges(id));
+		penduModel.setMesChallengesDicoEnvoyes(penduDao.mesChallengesDicoEnvoyes(id));
+		penduModel.setMesChallengesDicoEnAttentes(penduDao.mesChallengesDicoAttentes(id));
+
+		
+		model.addAttribute("moi", moi);
+		return "infosPenduDicoChallenge";
+		
+	}
+	@RequestMapping(value="infosPenduDicoChallengeId")
+	public String infosPenduDicoChallengeId(Model model, PenduModel penduModel, HttpServletRequest req, Word word){
+		Long id = Long.parseLong(req.getParameter("idChallenge"));
+		PenduDicoChallenge challenge = penduDao.getDicoChallengeById(id);
+		
+		
+		model.addAttribute("penduModel", penduModel);
+		model.addAttribute("challenge", challenge);
+		return "infosPenduDicoChallengeId";
+		
+	}
+	@RequestMapping(value="accepterEtInfosChallengeDicoRecus")
+	public String accepterEtInfosChallengeDicoRecus (Model model, PenduModel penduModel, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long id =  (Long) session.getAttribute("id");
+		
+		Long idAmi= (long) Integer.parseInt(req.getParameter("idAmi"));
+		String action = req.getParameter("action");
+		
+//		penduDao.acceptChallengeDico(id, idAmi);
+		switch (action) {
+		case "accepter":
+			penduDao.acceptChallengeDico(id, idAmi);
+			System.out.println("action est acceptée");
+			break;
+		case "refuser":
+			penduDao.refuserChallengeDico(id, idAmi);
+			System.out.println("action est refusée");
+			break;
+		case "allerAuDuel":
+//			penduChallengeDicoJeu(model, penduModel, req, null, idAmi);
+			System.out.println("ON VA AU DUELLLL");
+			break;
+		case "annulerEnvoi":
+			penduDao.annulerEnvoiChallengeDico(id, idAmi);
+			break;
+
+		default:
+			 throw new IllegalArgumentException("aucune action n'est pas défini ");
+//			break;
+		}
+		
+		penduModel.setMesChallengesDico(penduDao.mesDicoChallenges(id));
+		penduModel.setMesChallengesDicoEnvoyes(penduDao.mesChallengesDicoEnvoyes(id));
+		penduModel.setMesChallengesDicoEnAttentes(penduDao.mesChallengesDicoAttentes(id));
+		model.addAttribute("penduModel", penduModel);	
+	
+		return "infosActionPenduDicoChallenge";
+		
+	}
+	@RequestMapping(value="publierDicoChallengeEtInfos")
+	public String publierDicoChallengeEtInfos (Model model, PenduModel penduModel, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		Long idJeu = (long) Integer.parseInt(req.getParameter("idChallenge"));
+		PenduDicoChallenge challenge = penduDao.getDicoChallengeById(idJeu);
+//		si le jeu n'avait été publié au par avant 
+		if(!challenge.isPublie()){
+			DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+			Date now = new Date();
+			String dateString = df.format(now);
+			String message = "le "+dateString+", j'ai joué à un PENUDICOCHALLENGE contre "+challenge.getMonFriend().getNom()+" "
+					+ ""+challenge.getMonFriend().getPrenom()+"\n"+", les ressultats sont de ce duel sont: "+"\n"+""
+							+ "POINTS: moi: "+challenge.getScore()+" lui: "+challenge.getScoreAmi()+"\n"+""
+									+ "LE MOT: "+challenge.getMot()+"\n"
+											+ "Temps Restant: moi "+challenge.getTempsRestantMoi()+" lui: "+challenge.getTempsRestantAmi();
+			System.out.println(message);
+			Post post = new Post(new Date(), message, true, TypePost.PENDUDICOCHALLENGE);
+			return "publierDicoChallengeEtInfos";
+		}
+		
+		return "publierDicoChallengeEtInfos";
+		
 	}
 }

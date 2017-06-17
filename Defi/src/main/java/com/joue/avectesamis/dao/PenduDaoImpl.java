@@ -113,22 +113,66 @@ public class PenduDaoImpl implements PenduDao {
 			Long m, Long a) {
 		Friend moi = em.find(Friend.class, m);
 		Friend ami = em.find(Friend.class, a);
-		String code = moi.getChallengeEnAttentesPenduDico().get(ami);		
+		String code = moi.getChallengeEnAttentesPenduDico().get(ami);	
+	
 		
+//		si l'ami a dejà joué, alors on recupère les informations de son jeu pour les rajouter dans le jeu qui me concerne
+//		puis on rajoute les informations de mon jeu dans son jeu
 		
-		challenge.setCodeIndentification(code);
-		challenge.setFriend(moi);
-		challenge.setMonFriend(ami);
-		em.persist(challenge);
-		
-		moi.getMesChallengesJouesPenduDico().add(challenge);
-		moi.getChallengeEnAttentesPenduDico().remove(ami);
-		
-		moi.getChallengeEnJouesPenduDico().put(ami, code);
-		
-		
-		em.merge(moi);
-		
+		String codeAttenteMoiAmi = moi.getChallengeEnAttentesPenduDico().get(ami);
+		String codeAttentAmiMoi = ami.getChallengeEnAttentesPenduDico().get(moi);
+		System.out.println("mon code d'indentification du jeux dans mes attentes : "+codeAttenteMoiAmi);
+		System.out.println("mon code d'indentification du jeux dans mes attentes de l'ami : "+codeAttentAmiMoi);
+		if (codeAttenteMoiAmi.equals(codeAttentAmiMoi)) {			
+			challenge.setCodeIndentification(code);
+			challenge.setFriend(moi);
+			challenge.setMonFriend(ami);
+			em.persist(challenge);
+			
+			moi.getMesChallengesJouesPenduDico().add(challenge);
+			moi.getChallengeEnAttentesPenduDico().remove(ami);
+			
+			moi.getChallengeEnJouesPenduDico().put(ami, code);
+			em.merge(moi);
+			
+		} else {
+//			ALORS IL A DEJA JOUE ---------------------------------------------
+			PenduDicoChallenge penduAmi;
+//			on fait une requete pour recuperer le challenge à partir du code d'identification ( mis a jour)
+			Query req = em.createQuery("select p from PenduDicoChallenge p  where p.codeIndentification='"+codeAttenteMoiAmi+"'");
+			System.out.println("après la requete");
+			penduAmi = (PenduDicoChallenge) req.getSingleResult();
+//			ajout des informations de mon jeu dans le jeu de mon ami
+			penduAmi.setScoreAmi(challenge.getScore());
+			penduAmi.setTimeOutAmi(challenge.isTimeOut());
+			penduAmi.setTempsRestantAmi(challenge.getTempsRestantMoi());
+			penduAmi.setDateStringAmi(challenge.getDateString());
+			penduAmi.setAideAmi(challenge.isAide());
+			System.out.println("le code d'indentification de l'ami dans ses joues : "+penduAmi.getCodeIndentification());
+			System.out.println("l'id du jeu de mon ami : "+penduAmi.getId());
+			
+//			ajout des informations du jeu de mon ami dans mon jeu
+			challenge.setScoreAmi(penduAmi.getScore());
+			challenge.setTimeOutAmi(penduAmi.isTimeOut());
+			challenge.setTempsRestantAmi(penduAmi.getTempsRestantMoi());
+			challenge.setDateStringAmi(penduAmi.getDateString());
+			challenge.setAideAmi(penduAmi.isAide());
+			
+//			enregistrement de l'ami
+			em.persist(penduAmi);
+			
+			challenge.setCodeIndentification(code);
+			challenge.setFriend(moi);
+			challenge.setMonFriend(ami);
+			em.persist(challenge);
+			
+			moi.getMesChallengesJouesPenduDico().add(challenge);
+			moi.getChallengeEnAttentesPenduDico().remove(ami);
+			
+			moi.getChallengeEnJouesPenduDico().put(ami, code);
+			em.merge(moi);
+			
+		}
 	}
 
 	@Override
@@ -243,8 +287,20 @@ public class PenduDaoImpl implements PenduDao {
 		while(it.hasNext()){
 			Entry<Friend, String> e = it.next();
 			mesChallenges.add(e.getKey());
+		}		
+		return mesChallenges;
+	}
+	@Override
+	public List<Friend> mesChallengesDicoRecus(Long m) {
+		Friend moi = em.find(Friend.class, m);
+//		recup�ration des amis dans la map pour les mettre dans une list
+		List<Friend> mesChallenges = new ArrayList<Friend>();
+		Set<Entry<Friend, String>> setF = moi.getChallengesRecusPenduDico().entrySet();
+		Iterator<Entry<Friend, String>> it = setF.iterator();
+		while(it.hasNext()){
+			Entry<Friend, String> e = it.next();
+			mesChallenges.add(e.getKey());
 		}
-		
 		
 		return mesChallenges;
 	}
@@ -259,9 +315,7 @@ public class PenduDaoImpl implements PenduDao {
 		while(it.hasNext()){
 			Entry<Friend, String> e = it.next();
 			mesChallenges.add(e.getKey());
-		}
-		
-		
+		}		
 		return mesChallenges;
 	}
 
@@ -275,9 +329,7 @@ public class PenduDaoImpl implements PenduDao {
 		while(it.hasNext()){
 			Entry<Friend, String> e = it.next();
 			mesChallenges.add(e.getKey());
-		}
-		
-		
+		}		
 		return mesChallenges;
 	}
 
@@ -424,6 +476,40 @@ public class PenduDaoImpl implements PenduDao {
 		PenduSujetsSolo solo = em.find(PenduSujetsSolo.class, id);
 		solo.setPublie(true);
 		em.merge(solo);
+		
+	}
+
+	@Override
+	public PenduDicoChallenge getDicoChallengeById(Long id) {
+		// TODO Auto-generated method stub
+		return em.find(PenduDicoChallenge.class, id);
+	}
+
+	@Override
+	public void refuserChallengeDico(Long id, Long idAmi) {
+		Friend moi = em.find(Friend.class, id);
+		Friend ami = em.find(Friend.class, idAmi);
+		
+		moi.getChallengesRecusPenduDico().remove(ami);
+		ami.getChallengesEnvoyesPenduDico().remove(moi);
+		
+		em.merge(moi);
+		em.merge(ami);
+		
+	}
+
+	@Override
+	public void annulerEnvoiChallengeDico(Long id, Long idAmi) {
+		
+		Friend moi = em.find(Friend.class, id);
+		Friend ami = em.find(Friend.class, idAmi);
+		
+		ami.getChallengesRecusPenduDico().remove(moi);
+		moi.getChallengesEnvoyesPenduDico().remove(ami);
+		
+		em.merge(moi);
+		em.merge(ami);
+
 		
 	}
 

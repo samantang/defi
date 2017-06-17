@@ -22,6 +22,7 @@ public interface PenduDao {
 	
 	public List<Friend> mesChallengesDicoEnvoyes(Long id);
 	public List<Friend> mesChallengesDicoAttentes(Long id);
+	public List<Friend> mesChallengesDicoRecus(Long m);
 	
 	public List<Friend> mesChallengesSujetsEnvoyes(Long id);
 	public List<Friend> mesChallengesSujetsAttentes(Long id);
@@ -40,6 +41,9 @@ public interface PenduDao {
 	public void acceptChallengeSujets(Long moi, Long ami);
 	public void savePenduDicoChallenge(PenduDicoChallenge dicoChallenge, Long moi, Long ami);
 	public void savePenduSujetChallenge (PenduSujetsChallenge sujetsChallenge, Long moi, Long ami);
+	public PenduDicoChallenge getDicoChallengeById(Long id);
+	public void refuserChallengeDico(Long id, Long idAmi);
+	public void annulerEnvoiChallengeDico(Long id, Long idAmi);
 	
 	public String getCodeAttenteMoiAmiDico(Long m, Long a);
 	public String getCodeAttenteAmiMoiDico(Long m, Long a);
@@ -58,5 +62,8 @@ public interface PenduDao {
 	public List<Pays_Capitale> challengeSujetPays(char c);
 	public List<Pays_Capitale> challengeSujetCapitale(char c);
 	public List<String> challengeSujetVilleF(char c);
+	
+	
+	
 	
 }
