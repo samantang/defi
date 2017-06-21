@@ -88,6 +88,46 @@ public class PenduSujetsChallenge implements Serializable{
 	private char lettreNobel;
 	private char lettrePresident;
 	
+	private String dateStringAmi;
+	private String tempsRestantAmi;
+	private boolean timeOutAmi;
+	private int imageIconJeuAmi;
+	private int scoreAmi;
+	private String paysSAmi;
+	private String capitaleSAmi;
+	private String nobelSAmi;
+	private String artisteSAmi;
+	private String presidentSAmi;
+	
+	private char lettrePaysAmi;
+	private char lettreCapitaleAmi;
+	private char lettreArtisteAmi;
+	private char lettreNobelAmi;
+	private char lettrePresidentAmi;
+	private int nbErreursAmi;
+	
+	private int nbErreurs;
+	private String tempsRestant;
+	
+	private boolean aideAmi;
+	
+	private int scorePays;
+	private int scoreCapitale;
+	private int scoreNobel;
+	private int scoreArtiste;
+	private int scorePresident;
+	
+	private int scoreMaxPays;
+	private int scoreMaxCapitale;
+	private int scoreMaxNobel;
+	private int scoreMaxArtiste;
+	private int scoreMaxPresident;
+	
+	private int scorePaysAmi;
+	private int scoreCapitaleAmi;
+	private int scoreNobelAmi;
+	private int scoreArtisteAmi;
+	private int scorePresidentAmi;
 	
 	
 	
@@ -95,6 +135,414 @@ public class PenduSujetsChallenge implements Serializable{
 	
 	
 	
+	/**
+	 * @return the scorePays
+	 */
+	public int getScorePays() {
+		return scorePays;
+	}
+	/**
+	 * @param scorePays the scorePays to set
+	 */
+	public void setScorePays(int scorePays) {
+		this.scorePays = scorePays;
+	}
+	/**
+	 * @return the scoreCapitale
+	 */
+	public int getScoreCapitale() {
+		return scoreCapitale;
+	}
+	/**
+	 * @param scoreCapitale the scoreCapitale to set
+	 */
+	public void setScoreCapitale(int scoreCapitale) {
+		this.scoreCapitale = scoreCapitale;
+	}
+	/**
+	 * @return the scoreNobel
+	 */
+	public int getScoreNobel() {
+		return scoreNobel;
+	}
+	/**
+	 * @param scoreNobel the scoreNobel to set
+	 */
+	public void setScoreNobel(int scoreNobel) {
+		this.scoreNobel = scoreNobel;
+	}
+	/**
+	 * @return the scoreArtiste
+	 */
+	public int getScoreArtiste() {
+		return scoreArtiste;
+	}
+	/**
+	 * @param scoreArtiste the scoreArtiste to set
+	 */
+	public void setScoreArtiste(int scoreArtiste) {
+		this.scoreArtiste = scoreArtiste;
+	}
+	/**
+	 * @return the scorePresident
+	 */
+	public int getScorePresident() {
+		return scorePresident;
+	}
+	/**
+	 * @param scorePresident the scorePresident to set
+	 */
+	public void setScorePresident(int scorePresident) {
+		this.scorePresident = scorePresident;
+	}
+	/**
+	 * @return the scoreMaxPays
+	 */
+	public int getScoreMaxPays() {
+		return scoreMaxPays;
+	}
+	/**
+	 * @param scoreMaxPays the scoreMaxPays to set
+	 */
+	public void setScoreMaxPays(int scoreMaxPays) {
+		this.scoreMaxPays = scoreMaxPays;
+	}
+	/**
+	 * @return the scoreMaxCapitale
+	 */
+	public int getScoreMaxCapitale() {
+		return scoreMaxCapitale;
+	}
+	/**
+	 * @param scoreMaxCapitale the scoreMaxCapitale to set
+	 */
+	public void setScoreMaxCapitale(int scoreMaxCapitale) {
+		this.scoreMaxCapitale = scoreMaxCapitale;
+	}
+	/**
+	 * @return the scoreMaxNobel
+	 */
+	public int getScoreMaxNobel() {
+		return scoreMaxNobel;
+	}
+	/**
+	 * @param scoreMaxNobel the scoreMaxNobel to set
+	 */
+	public void setScoreMaxNobel(int scoreMaxNobel) {
+		this.scoreMaxNobel = scoreMaxNobel;
+	}
+	/**
+	 * @return the scoreMaxArtiste
+	 */
+	public int getScoreMaxArtiste() {
+		return scoreMaxArtiste;
+	}
+	/**
+	 * @param scoreMaxArtiste the scoreMaxArtiste to set
+	 */
+	public void setScoreMaxArtiste(int scoreMaxArtiste) {
+		this.scoreMaxArtiste = scoreMaxArtiste;
+	}
+	/**
+	 * @return the scoreMaxPresident
+	 */
+	public int getScoreMaxPresident() {
+		return scoreMaxPresident;
+	}
+	/**
+	 * @param scoreMaxPresident the scoreMaxPresident to set
+	 */
+	public void setScoreMaxPresident(int scoreMaxPresident) {
+		this.scoreMaxPresident = scoreMaxPresident;
+	}
+	/**
+	 * @return the scorePaysAmi
+	 */
+	public int getScorePaysAmi() {
+		return scorePaysAmi;
+	}
+	/**
+	 * @param scorePaysAmi the scorePaysAmi to set
+	 */
+	public void setScorePaysAmi(int scorePaysAmi) {
+		this.scorePaysAmi = scorePaysAmi;
+	}
+	/**
+	 * @return the scoreCapitaleAmi
+	 */
+	public int getScoreCapitaleAmi() {
+		return scoreCapitaleAmi;
+	}
+	/**
+	 * @param scoreCapitaleAmi the scoreCapitaleAmi to set
+	 */
+	public void setScoreCapitaleAmi(int scoreCapitaleAmi) {
+		this.scoreCapitaleAmi = scoreCapitaleAmi;
+	}
+	/**
+	 * @return the scoreNobelAmi
+	 */
+	public int getScoreNobelAmi() {
+		return scoreNobelAmi;
+	}
+	/**
+	 * @param scoreNobelAmi the scoreNobelAmi to set
+	 */
+	public void setScoreNobelAmi(int scoreNobelAmi) {
+		this.scoreNobelAmi = scoreNobelAmi;
+	}
+	/**
+	 * @return the scoreArtisteAmi
+	 */
+	public int getScoreArtisteAmi() {
+		return scoreArtisteAmi;
+	}
+	/**
+	 * @param scoreArtisteAmi the scoreArtisteAmi to set
+	 */
+	public void setScoreArtisteAmi(int scoreArtisteAmi) {
+		this.scoreArtisteAmi = scoreArtisteAmi;
+	}
+	/**
+	 * @return the scorePresidentAmi
+	 */
+	public int getScorePresidentAmi() {
+		return scorePresidentAmi;
+	}
+	/**
+	 * @param scorePresidentAmi the scorePresidentAmi to set
+	 */
+	public void setScorePresidentAmi(int scorePresidentAmi) {
+		this.scorePresidentAmi = scorePresidentAmi;
+	}
+	/**
+	 * @return the aideAmi
+	 */
+	public boolean isAideAmi() {
+		return aideAmi;
+	}
+	/**
+	 * @param aideAmi the aideAmi to set
+	 */
+	public void setAideAmi(boolean aideAmi) {
+		this.aideAmi = aideAmi;
+	}
+	/**
+	 * @return the tempsRestant
+	 */
+	public String getTempsRestant() {
+		return tempsRestant;
+	}
+	/**
+	 * @param tempsRestant the tempsRestant to set
+	 */
+	public void setTempsRestant(String tempsRestant) {
+		this.tempsRestant = tempsRestant;
+	}
+	/**
+	 * @return the dateStringAmi
+	 */
+	public String getDateStringAmi() {
+		return dateStringAmi;
+	}
+	/**
+	 * @param dateStringAmi the dateStringAmi to set
+	 */
+	public void setDateStringAmi(String dateStringAmi) {
+		this.dateStringAmi = dateStringAmi;
+	}
+	/**
+	 * @return the tempsRestantAmi
+	 */
+	public String getTempsRestantAmi() {
+		return tempsRestantAmi;
+	}
+	/**
+	 * @param tempsRestantAmi the tempsRestantAmi to set
+	 */
+	public void setTempsRestantAmi(String tempsRestantAmi) {
+		this.tempsRestantAmi = tempsRestantAmi;
+	}
+	/**
+	 * @return the timeOutAmi
+	 */
+	public boolean isTimeOutAmi() {
+		return timeOutAmi;
+	}
+	/**
+	 * @param timeOutAmi the timeOutAmi to set
+	 */
+	public void setTimeOutAmi(boolean timeOutAmi) {
+		this.timeOutAmi = timeOutAmi;
+	}
+	/**
+	 * @return the imageIconJeuAmi
+	 */
+	public int getImageIconJeuAmi() {
+		return imageIconJeuAmi;
+	}
+	/**
+	 * @param imageIconJeuAmi the imageIconJeuAmi to set
+	 */
+	public void setImageIconJeuAmi(int imageIconJeuAmi) {
+		this.imageIconJeuAmi = imageIconJeuAmi;
+	}
+	/**
+	 * @return the scoreAmi
+	 */
+	public int getScoreAmi() {
+		return scoreAmi;
+	}
+	/**
+	 * @param scoreAmi the scoreAmi to set
+	 */
+	public void setScoreAmi(int scoreAmi) {
+		this.scoreAmi = scoreAmi;
+	}
+	/**
+	 * @return the paysSAmi
+	 */
+	public String getPaysSAmi() {
+		return paysSAmi;
+	}
+	/**
+	 * @param paysSAmi the paysSAmi to set
+	 */
+	public void setPaysSAmi(String paysSAmi) {
+		this.paysSAmi = paysSAmi;
+	}
+	/**
+	 * @return the capitaleSAmi
+	 */
+	public String getCapitaleSAmi() {
+		return capitaleSAmi;
+	}
+	/**
+	 * @param capitaleSAmi the capitaleSAmi to set
+	 */
+	public void setCapitaleSAmi(String capitaleSAmi) {
+		this.capitaleSAmi = capitaleSAmi;
+	}
+	/**
+	 * @return the nobelSAmi
+	 */
+	public String getNobelSAmi() {
+		return nobelSAmi;
+	}
+	/**
+	 * @param nobelSAmi the nobelSAmi to set
+	 */
+	public void setNobelSAmi(String nobelSAmi) {
+		this.nobelSAmi = nobelSAmi;
+	}
+	/**
+	 * @return the artisteSAmi
+	 */
+	public String getArtisteSAmi() {
+		return artisteSAmi;
+	}
+	/**
+	 * @param artisteSAmi the artisteSAmi to set
+	 */
+	public void setArtisteSAmi(String artisteSAmi) {
+		this.artisteSAmi = artisteSAmi;
+	}
+	/**
+	 * @return the presidentSAmi
+	 */
+	public String getPresidentSAmi() {
+		return presidentSAmi;
+	}
+	/**
+	 * @param presidentSAmi the presidentSAmi to set
+	 */
+	public void setPresidentSAmi(String presidentSAmi) {
+		this.presidentSAmi = presidentSAmi;
+	}
+	/**
+	 * @return the lettrePaysAmi
+	 */
+	public char getLettrePaysAmi() {
+		return lettrePaysAmi;
+	}
+	/**
+	 * @param lettrePaysAmi the lettrePaysAmi to set
+	 */
+	public void setLettrePaysAmi(char lettrePaysAmi) {
+		this.lettrePaysAmi = lettrePaysAmi;
+	}
+	/**
+	 * @return the lettreCapitaleAmi
+	 */
+	public char getLettreCapitaleAmi() {
+		return lettreCapitaleAmi;
+	}
+	/**
+	 * @param lettreCapitaleAmi the lettreCapitaleAmi to set
+	 */
+	public void setLettreCapitaleAmi(char lettreCapitaleAmi) {
+		this.lettreCapitaleAmi = lettreCapitaleAmi;
+	}
+	/**
+	 * @return the lettreArtisteAmi
+	 */
+	public char getLettreArtisteAmi() {
+		return lettreArtisteAmi;
+	}
+	/**
+	 * @param lettreArtisteAmi the lettreArtisteAmi to set
+	 */
+	public void setLettreArtisteAmi(char lettreArtisteAmi) {
+		this.lettreArtisteAmi = lettreArtisteAmi;
+	}
+	/**
+	 * @return the lettreNobelAmi
+	 */
+	public char getLettreNobelAmi() {
+		return lettreNobelAmi;
+	}
+	/**
+	 * @param lettreNobelAmi the lettreNobelAmi to set
+	 */
+	public void setLettreNobelAmi(char lettreNobelAmi) {
+		this.lettreNobelAmi = lettreNobelAmi;
+	}
+	/**
+	 * @return the lettrePresidentAmi
+	 */
+	public char getLettrePresidentAmi() {
+		return lettrePresidentAmi;
+	}
+	/**
+	 * @param lettrePresidentAmi the lettrePresidentAmi to set
+	 */
+	public void setLettrePresidentAmi(char lettrePresidentAmi) {
+		this.lettrePresidentAmi = lettrePresidentAmi;
+	}
+	/**
+	 * @return the nbErreursAmi
+	 */
+	public int getNbErreursAmi() {
+		return nbErreursAmi;
+	}
+	/**
+	 * @param nbErreursAmi the nbErreursAmi to set
+	 */
+	public void setNbErreursAmi(int nbErreursAmi) {
+		this.nbErreursAmi = nbErreursAmi;
+	}
+	/**
+	 * @return the nbErreurs
+	 */
+	public int getNbErreurs() {
+		return nbErreurs;
+	}
+	/**
+	 * @param nbErreurs the nbErreurs to set
+	 */
+	public void setNbErreurs(int nbErreurs) {
+		this.nbErreurs = nbErreurs;
+	}
 	/**
 	 * @param date
 	 * @param dateString

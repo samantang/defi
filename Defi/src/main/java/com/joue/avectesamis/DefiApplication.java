@@ -38,7 +38,7 @@ public class DefiApplication implements CommandLineRunner{
 	@Override
 	public void run(String... arg0) throws Exception {
 //		PenduDicoChallenge challenge = new PenduDicoChallenge(null, null, 0, true, null, 0, true, 0, null, 0, false, 0);
-		penduDao.sendChallengeDico(2L, 1L);
+//		penduDao.sendChallengeDico(2L, 1L);
 //		penduDao.acceptChallengeDico(4L, 3L);
 //		penduDao.savePenduDicoChallenge(challenge, 4L, 3L);
 		 
@@ -74,7 +74,7 @@ public class DefiApplication implements CommandLineRunner{
 //		penduDao.acceptChallengeDico(2L, 1L);
 //		penduDao.savePenduDicoChallenge(challengeb, 1L, 2L);
 //		
-//		penduDao.sedChallengeSujets(2L, 3L);
+		penduDao.sedChallengeSujets(2L, 1L);
 //		penduDao.acceptChallengeSujets(3L, 2L);
 		
 //		PenduSujetsChallenge penduSujetsChallenge = new PenduSujetsChallenge(new Date(), null, 3, "lePays", "laCapitale", "leNobel", "lartiste", "lePresident", 's', 'e', 'e', 'e', 'd');		

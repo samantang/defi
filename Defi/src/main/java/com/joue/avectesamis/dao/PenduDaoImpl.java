@@ -121,8 +121,8 @@ public class PenduDaoImpl implements PenduDao {
 		
 		String codeAttenteMoiAmi = moi.getChallengeEnAttentesPenduDico().get(ami);
 		String codeAttentAmiMoi = ami.getChallengeEnAttentesPenduDico().get(moi);
-		System.out.println("mon code d'indentification du jeux dans mes attentes : "+codeAttenteMoiAmi);
-		System.out.println("mon code d'indentification du jeux dans mes attentes de l'ami : "+codeAttentAmiMoi);
+		System.out.println("mon code d'indentification du jeu dans mes attentes : "+codeAttenteMoiAmi);
+		System.out.println("mon code d'indentification du jeu dans mes attentes de l'ami : "+codeAttentAmiMoi);
 		if (codeAttenteMoiAmi.equals(codeAttentAmiMoi)) {			
 			challenge.setCodeIndentification(code);
 			challenge.setFriend(moi);
@@ -140,7 +140,6 @@ public class PenduDaoImpl implements PenduDao {
 			PenduDicoChallenge penduAmi;
 //			on fait une requete pour recuperer le challenge à partir du code d'identification ( mis a jour)
 			Query req = em.createQuery("select p from PenduDicoChallenge p  where p.codeIndentification='"+codeAttenteMoiAmi+"'");
-			System.out.println("après la requete");
 			penduAmi = (PenduDicoChallenge) req.getSingleResult();
 //			ajout des informations de mon jeu dans le jeu de mon ami
 			penduAmi.setScoreAmi(challenge.getScore());
@@ -183,19 +182,72 @@ public class PenduDaoImpl implements PenduDao {
 		String code = moi.getChallengeEnAttentesPenduSujets().get(ami);		
 		
 		
-		challenge.setCodeIndentification(code);
-		challenge.setFriend(moi);
-		challenge.setMonFriend(ami);
-		em.persist(challenge);
+//		si l'ami a dejà joué, alors on recupère les informations de son jeu pour les rajouter dans le jeu qui me concerne
+//		puis on rajoute les informations de mon jeu dans son jeu
 		
-		moi.getMesChallengesJouesPenduSujets().add(challenge);
-		moi.getChallengeEnAttentesPenduSujets().remove(ami);
-		
-		moi.getChallengeEnJouesPenduSujets().put(ami, code);
-		
-		
-		em.merge(moi);
-		
+		String codeAttenteMoiAmi = moi.getChallengeEnAttentesPenduSujets().get(ami);
+		String codeAttentAmiMoi = ami.getChallengeEnAttentesPenduSujets().get(moi);
+		System.out.println("mon code d'indentification du jeu dans mes attentes : "+codeAttenteMoiAmi);
+		System.out.println("mon code d'indentification du jeu dans mes attentes de l'ami : "+codeAttentAmiMoi);
+		if (codeAttenteMoiAmi.equals(codeAttentAmiMoi)) {			
+			challenge.setCodeIndentification(code);
+			challenge.setFriend(moi);
+			challenge.setMonFriend(ami);
+			em.persist(challenge);
+			
+			moi.getMesChallengesJouesPenduSujets().add(challenge);
+			moi.getChallengeEnAttentesPenduSujets().remove(ami);
+			
+			moi.getChallengeEnJouesPenduSujets().put(ami, code);
+			em.merge(moi);
+			
+		} else {
+//			ALORS IL A DEJA JOUE ---------------------------------------------
+			PenduSujetsChallenge penduAmi;
+//			on fait une requete pour recuperer le challenge à partir du code d'identification ( mis a jour)
+			Query req = em.createQuery("select p from PenduSujetsChallenge p  where p.codeIndentification='"+codeAttenteMoiAmi+"'");
+			penduAmi = (PenduSujetsChallenge) req.getSingleResult();
+//			ajout des informations de mon jeu dans le jeu de mon ami
+			penduAmi.setScoreAmi(challenge.getScore());
+			penduAmi.setTimeOutAmi(challenge.isTimeOut());
+			penduAmi.setTempsRestantAmi(challenge.getTempsRestant());
+			penduAmi.setDateStringAmi(challenge.getDateString());
+			penduAmi.setAideAmi(challenge.isAide());
+			penduAmi.setScoreArtisteAmi(challenge.getScore());
+			penduAmi.setScorePaysAmi(challenge.getScorePays());
+			penduAmi.setScorePresidentAmi(challenge.getScorePresident());
+			penduAmi.setScoreNobelAmi(challenge.getScoreNobel());
+			penduAmi.setScoreCapitaleAmi(challenge.getScoreCapitale());
+			
+			System.out.println("le code d'indentification de l'ami dans ses joues : "+penduAmi.getCodeIndentification());
+			System.out.println("l'id du jeu de mon ami : "+penduAmi.getId());
+			
+//			ajout des informations du jeu de mon ami dans mon jeu
+			challenge.setScoreAmi(penduAmi.getScore());
+			challenge.setTimeOutAmi(penduAmi.isTimeOut());
+			challenge.setTempsRestantAmi(penduAmi.getTempsRestant());
+			challenge.setDateStringAmi(penduAmi.getDateString());
+			challenge.setAideAmi(penduAmi.isAide());
+			challenge.setScorePaysAmi(penduAmi.getScorePays());
+			challenge.setScoreCapitaleAmi(penduAmi.getScoreCapitale());
+			challenge.setScorePresidentAmi(penduAmi.getScorePresident());
+			challenge.setScoreNobelAmi(penduAmi.getScoreNobel());
+			challenge.setScoreArtisteAmi(penduAmi.getScoreArtiste());
+			
+//			enregistrement de l'ami
+			em.persist(penduAmi);
+			
+			challenge.setCodeIndentification(code);
+			challenge.setFriend(moi);
+			challenge.setMonFriend(ami);
+			em.persist(challenge);
+			
+			moi.getMesChallengesJouesPenduSujets().add(challenge);
+			moi.getChallengeEnAttentesPenduSujets().remove(ami);
+			
+			moi.getChallengeEnJouesPenduSujets().put(ami, code);
+			em.merge(moi);
+		}
 	}
 
 	@Override
@@ -249,6 +301,7 @@ public class PenduDaoImpl implements PenduDao {
 		Friend ami = em.find(Friend.class, a);
 		
 		String code = moi.getChallengesRecusPenduDico().get(ami);
+		System.out.println("le code est"+code);
 		moi.getChallengeEnAttentesPenduDico().put(ami, code);
 		ami.getChallengeEnAttentesPenduDico().put(moi, code);
 		
@@ -511,6 +564,47 @@ public class PenduDaoImpl implements PenduDao {
 		em.merge(ami);
 
 		
+	}
+
+	@Override
+	public List<Friend> mesChallengesSujetsRecus(Long id) {
+		Friend moi = em.find(Friend.class, id);
+//		recup�ration des amis dans la map pour les mettre dans une list
+		List<Friend> mesChallenges = new ArrayList<Friend>();
+		Set<Entry<Friend, String>> setF = moi.getChallengesRecusPenduSujets().entrySet();
+		Iterator<Entry<Friend, String>> it = setF.iterator();
+		while(it.hasNext()){
+			Entry<Friend, String> e = it.next();
+			mesChallenges.add(e.getKey());
+		}
+		
+		return mesChallenges;
+	}
+
+	@Override
+	public void refuserChallengeSujets(Long id, Long idAmi) {
+		Friend moi = em.find(Friend.class, id);
+		Friend ami = em.find(Friend.class, idAmi);
+		
+		moi.getChallengesRecusPenduSujets().remove(ami);
+		ami.getChallengesEnvoyesPenduSujets().remove(moi);
+		
+		em.merge(moi);
+		em.merge(ami);
+		
+	}
+
+	@Override
+	public void annulerEnvoiChallengeSujets(Long id, Long idAmi) {
+		
+		Friend moi = em.find(Friend.class, id);
+		Friend ami = em.find(Friend.class, idAmi);
+		
+		ami.getChallengesRecusPenduSujets().remove(moi);
+		moi.getChallengesEnvoyesPenduSujets().remove(ami);
+		
+		em.merge(moi);
+		em.merge(ami);
 	}
 
 }

@@ -65,13 +65,9 @@ public class PenduChallengeDicoControlleur {
 		List<Friend> mesEnvoyes = penduDao.mesChallengesDicoEnvoyes(id);
 		for (Friend friend : mesEnvoyes) {
 			System.out.println("le nom de l'ami "+friend.getNom());
-		}
-		
-		
+		}		
 		return "envoyerChallengeDico";
-		
 	}
-	
 	
 	@RequestMapping(value="penduChallengeDico", method=RequestMethod.GET)
 	public String penduChallengDico(Model model, HttpServletRequest req, PenduModel penduModel, Word word ){
@@ -372,30 +368,13 @@ public class PenduChallengeDicoControlleur {
 				}					
 			}
 		}
-		
-
-					
-//					map.put("mot", mot);
-//					map.put("word", word);
-//					model.addAttribute("word", word);
-//					model.addAttribute("penduModel", penduModel);
-				
-		
 		return "penduChallengeDicoJeu";
-		
 	}
-
-
 
 	@RequestMapping(value="penduChallengeDicoCorrection", method=RequestMethod.GET)
 	public String penduChallengeDicoCorrection(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
 		HttpSession session = request.getSession();
-		
-		
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		
+				
 //		recuperation du mot, nombre de coups, nombre d'erreurs, temps restant, points gagnés, pointsMax, du mot cache
 		String motComplet = (String) session.getAttribute("motComplet");
 		String motSecet = (String) session.getAttribute("motSecret");
@@ -576,7 +555,7 @@ public class PenduChallengeDicoControlleur {
 			break;
 
 		default:
-			 throw new IllegalArgumentException("aucune action n'est pas défini ");
+			 throw new IllegalArgumentException("aucune action n'est défini ");
 //			break;
 		}
 		

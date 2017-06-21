@@ -10,7 +10,7 @@ import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsChallenge;
 import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsSolo;
 
 public class PenduModel {
-
+	
 	private List<Friend> mesChallengesDicoRecus;
 	private List<Friend> mesChallengesDicoEnvoyes;
 	private List<Friend> mesChallengesDicoEnAttentes;
@@ -18,7 +18,7 @@ public class PenduModel {
 	private List<PenduDicoChallenge> challengesDicoAmis;
 	private Collection<PenduDicoChallenge> mesChallengesDico;
 	
-	private List<PenduSujetsChallenge> mesChallengesSujetsRecus;
+	private List<Friend> mesChallengesSujetsRecus;
 	private List<Friend> mesChallengesSujetsEnvoyes;
 	private List<Friend> mesChallengesSujetsEnAttentes;
 	private List<PenduSujetsChallenge> mesChallengesSujetsJoues;
@@ -203,14 +203,14 @@ public class PenduModel {
 	/**
 	 * @return the mesChallengesSujetsRecus
 	 */
-	public List<PenduSujetsChallenge> getMesChallengesSujetsRecus() {
+	public List<Friend> getMesChallengesSujetsRecus() {
 		return mesChallengesSujetsRecus;
 	}
 	/**
 	 * @param mesChallengesSujetsRecus the mesChallengesSujetsRecus to set
 	 */
 	public void setMesChallengesSujetsRecus(
-			List<PenduSujetsChallenge> mesChallengesSujetsRecus) {
+			List<Friend> mesChallengesSujetsRecus) {
 		this.mesChallengesSujetsRecus = mesChallengesSujetsRecus;
 	}
 	/**
