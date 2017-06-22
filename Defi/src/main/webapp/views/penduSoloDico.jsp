@@ -1,13 +1,15 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f" %>
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> --%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
 
 <style type="text/css">
 .menuGauche ul {
@@ -103,14 +105,14 @@
 				      </div>
 				</div>
 				<div>
-					<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">Vos dix derniers jeux</h2>
+					<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">VOS JEUX EN DICO SOLO</h2>
 				</div>
 				<div id="infoPublicationSolo">
 				</div>
 				<div>
-					<table class="table table-bordered table-striped table-condensed" style="text-align: center;">
+					<table id="tableauDataTable" class="table table-bordered table-striped table-condensed" style="text-align: center;">
 						<thead>
-								<tr>
+								<tr class="success">
 									<th>Date</th>
 									<th style="text-align: center;">Le Mot</th>
 									<th>Lettre</th>
@@ -121,7 +123,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${penduModel.mesDicoSolo }" var="solo" begin="0" end="9">
+								<c:forEach items="${penduModel.mesDicoSolo }" var="solo" >
 									<tr>
 										<td>${solo.dateString }</td>
 										<td>${solo.mot }</td>
@@ -156,9 +158,37 @@
 		var param = 'idSolo='+id+'';
 		$("#infoPublicationSolo").load("infoPublicationSolo", param);
 	};
+	$(document).ready(function() {
+	    $('#tableauDataTable').DataTable({
+	    	"language": {
+	    		"sProcessing": "Traitement en cours...",
+	    		"sSearch": "Rechercher&nbsp;:",
+	    		"sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+	    		"sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+	    		"sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+	    		"sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+	    		"sInfoPostFix": "",
+	    		"sLoadingRecords": "Chargement en cours...",
+	    		"sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+	    		"sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+	    		"oPaginate": {
+	    		"sFirst": "Premier",
+	    		"sPrevious": "Pr&eacute;c&eacute;dent",
+	    		"sNext": "Suivant",
+	    		"sLast": "Dernier"
+	    		},
+	    		"oAria": {
+	    		"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+	    		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+	    		}
+	    		}
+	    });
+	    
+	} );
 	</script>
 	
-
+	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 	
 	
 </body>

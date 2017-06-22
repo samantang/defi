@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
 <title>Mes Amis</title>
 <style type="text/css">
 	.menuGauche ul {
@@ -29,6 +31,9 @@
 	}
 	.menuGauche{
 		position: fixed;
+	}
+	td, th {
+	text-align: center;
 	}
 </style>
 </head>
@@ -60,67 +65,88 @@
 			</div>
 			<div class="col-md-6 col-lg-6">
 				<div align="center">
-					<strong>MES AMIS A QUI J'AI ENVOYE UN CHALLENGE ET QUI N'ONT PAS ENCORE ACCEPTE "annuler"</strong>
-					<c:forEach items="${amisAnnulerDemande }" var="ami">
-						<p>${ami.nom } ${ami.prenom } => <a href="annulerChallenge?id=${ami.id }"> Annuler Demande</a></p>
-					</c:forEach>
-				</div><hr>
-				<div align="center">
-					<strong>MES AMIS QUI M'ONT ENVOYE UN CHALLENGE ET QUE JE N'AI PAS ENCORE ACCEPTE "repondre"</strong>
-					<c:forEach items="${amisAccepterDemande }" var="ami">
-						<p> ${ami.nom } =>
-							<a href="accepterChallenge?id=${ami.id }">accepter</a> &nbsp;
-							<a href="refuserChallenge?id=${ami.id }">refuser</a>
-						</p>
-					</c:forEach>
-				</div><hr>
-				<div align="center">
-					<strong>MES AMIS QUI ATTENDENT QUE JE JOUE "jouer"</strong>
-					<c:forEach items="${amisJouerAvec }" var="ami">
-						<p>${ami.nom } ${ami.prenom } => <a href="AbcChallengeJeu?idAmi=${ami.id }">jouer contre lui</a></p>
-					</c:forEach>
-				</div><hr>
-				<div align="center">
-					<strong>MES AMIS A QUI JE PEUX ENVOYER UNE DEMANDE DE CHALLENGE "envoyer"</strong>
-					<c:forEach items="${amisEnvoyerDemande }" var="ami">
-						<p> ${ami.nom } ${ami.prenom } =>
-							<a href="challengerChallenge?id=${ami.id }">Envoyer challenge</a>
-						</p>
-					</c:forEach>
-				</div><hr>
-				<div style="text-align: center;">
-					<p> TOUS LES INSCRITS A QUI JE PEUX ENVOYER UNE DEMANDE</p>
-					<div>
-						<p> sur cette liste n'apparaitront pas toutes les personnes avec qui vous avez entamé
-							un processus de jeu, c'est à dire les personnes à qui vous avez par exemple envoyé une demande,
-							qui vous en ont envoyé ou ou bien si l'un d'entre vous attent que l'autre joue
-						</p>
-					</div>
-					<c:forEach items="${tousLesInscrits }" var="tous">
-						<%-- <p>
-							<c:out value="${tous.nom }"> &nbsp; &nbsp;</c:out><c:out value="${tous.prenom }"></c:out>
-							<a href="challengerInscrit?id=${tous.id }">jouer contre lui</a>
-						</p> --%>
-						<p>
-							<strong>${tous.nom} &nbsp; ${tous.prenom}</strong> 
-							<a href="challengerInscrit?id=${tous.id }">jouer contre lui</a>
-						</p>
-						
-						
-					</c:forEach>
-				</div><hr>
-				<%-- <div align="center">
-					<strong>TOUS MES AMIS</strong>
-	
-					<c:forEach items="${sm.mesAmis }" var="ami">
-						<p> ${ami.nom }
-							${ami.prenom }
-							<a href="supprimerAmi?id=${ami.id}">supprimer</a>
-						</p>
-					</c:forEach>
-
-				</div> --%>	
-			</div>
+					
+				<c:choose>
+					<c:when test=" ${empty amisJeuxModel }">
+						<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">VOUS N'AVEZ AUCUN AMI POUR L'INSTANT</h2>
+					</c:when>
+					<c:otherwise>
+						<div>
+							<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">VOS AMIS ET LES CHALLENGES</h2>
+							<table id="tableauDataTable" class="table table-bordered table-striped table-condensed" >
+								<thead>
+									<tr class="success">
+										<th style="text-align: center;">AMIS</th>
+										<th>ABC Challenge</th>
+										<th>DICO Challenge</th>
+										<th>SUJETS Challenge</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${amisJeuxModel }" var="ami">
+										<tr>
+											<td><a href="voirAmi?id=${ami.id }"><c:out value="${ami.nom }" /> &nbsp; <c:out value="${ami.prenom }" /></a></td>
+											<td>
+												<c:choose>
+													<c:when test="${ami.abcChallenger ==true }">
+														<button onclick="challengerABC(this, ${ami.id})" class="btn btn-primary" data-toggle="tooltip" title="envoyez lui une demande">challenger</button>
+													</c:when>
+													<c:when test="${ami.abcRefuser ==true }">
+														<button onclick="accepterABC(this, ${ami.id})" class="btn btn-success btn-xs" data-toggle="tooltip" title="accepter la demande">Accepter</button>
+														<button onclick="refuserABC(this, ${ami.id})" class="btn btn-danger btn-xs" data-toggle="tooltip" title="refuser la demande">Refuser</button>
+													</c:when>
+													<c:when test="${ami.abcAnnuler ==true }">
+														<button onclick="annulerEnvoiABC(this, ${ami.id})" class="btn btn-warning" data-toggle="tooltip" title="annulez la demande envoyée">Annuler</button>
+													</c:when>
+													<c:otherwise>
+														<button onclick="jouerABC(this, ${ami.id})" class="btn btn-info" data-toggle="tooltip" title="aller au duel contre lui">jouer</button>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td>
+												<c:choose>
+													<c:when test="${ami.dicoChallenger ==true }">
+														<button onclick="challengerDICO(this, ${ami.id})" class="btn btn-primary" data-toggle="tooltip" title="envoyez lui une demande">challenger</button>
+													</c:when>
+													<c:when test="${ami.dicoRefuser ==true }">
+														<button onclick="accepterDICO(this, ${ami.id})" class="btn btn-success btn-xs" data-toggle="tooltip" title="accepter la demande">Accepter</button>
+														<button onclick="refuserDICO(this, ${ami.id})" class="btn btn-danger btn-xs" data-toggle="tooltip" title="refuser la demande">Refuser</button>
+													</c:when>
+													<c:when test="${ami.dicoAnnuler ==true }">
+														<button onclick="annulerEnvoiDICO(this, ${ami.id})" class="btn btn-warning" data-toggle="tooltip" title="annuler la demande envoyée">Annuler</button>
+													</c:when>
+													<c:otherwise>
+														<button onclick="jouerDICO(this, ${ami.id})" class="btn btn-info" data-toggle="tooltip" title="aller au duel contre lui">jouer</button>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td>
+												<c:choose>
+													<c:when test="${ami.sujetsChallenger ==true }">
+														<button onclick="challengerSUJETS(this, ${ami.id})" class="btn btn-primary" data-toggle="tooltip" title="envoyez lui une demande">challenger</button>
+													</c:when>
+													<c:when test="${ami.sujetsRefuser ==true }">
+														<button onclick="accepterSUJETS(this, ${ami.id})" class="btn btn-success btn-xs" data-toggle="tooltip" title="accepter la demande">Accepter</button>
+														<button onclick="refuserSUJETS(this, ${ami.id})" class="btn btn-danger btn-xs" data-toggle="tooltip" title="refuser la demande">Refuser</button>
+													</c:when>
+													<c:when test="${ami.sujetsAnnuler ==true }">
+														<button onclick="annulerEnvoiSUJETS(this, ${ami.id})" class="btn btn-warning" data-toggle="tooltip" title="annuler la demande envoyée">Annuler</button>
+													</c:when>
+													<c:otherwise>
+														<button onclick="jouerSUJETS(this, ${ami.id})" class="btn btn-info" data-toggle="tooltip" title="aller au duel contre lui">jouer</button>
+													</c:otherwise>
+												</c:choose>
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</c:otherwise>
+				</c:choose>
+				
+				
+			</div></div>
 			<div class="col-md-3 col-lg-3">
 				<div>
 					<jsp:include page="menuDroit.jsp"></jsp:include>
@@ -129,5 +155,36 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $('#tableauDataTable').DataTable({
+	    	"language": {
+	    		"sProcessing": "Traitement en cours...",
+	    		"sSearch": "Rechercher&nbsp;:",
+	    		"sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+	    		"sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+	    		"sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+	    		"sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+	    		"sInfoPostFix": "",
+	    		"sLoadingRecords": "Chargement en cours...",
+	    		"sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+	    		"sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+	    		"oPaginate": {
+	    		"sFirst": "Premier",
+	    		"sPrevious": "Pr&eacute;c&eacute;dent",
+	    		"sNext": "Suivant",
+	    		"sLast": "Dernier"
+	    		},
+	    		"oAria": {
+	    		"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+	    		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+	    		}
+	    		}
+	    });
+	    
+	} );
+</script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

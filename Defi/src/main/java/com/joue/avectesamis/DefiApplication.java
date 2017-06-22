@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.joue.avectesamis.dao.ChallengeDao;
 import com.joue.avectesamis.dao.PenduDao;
 import com.joue.avectesamis.dao.repositories.FriendRepository;
 import com.joue.avectesamis.entites.AbcChallenge;
@@ -29,6 +30,8 @@ public class DefiApplication implements CommandLineRunner{
 	private FriendRepository friendRepository;
 	@Autowired
 	private PenduDao penduDao;
+	@Autowired
+	private ChallengeDao challengeDao;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DefiApplication.class, args);
@@ -37,6 +40,28 @@ public class DefiApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... arg0) throws Exception {
+		
+//		challengeDao.envoyerDemandeAmi(1L, 2L);
+//		challengeDao.accepterAmi(2L, 1L);
+//		
+//		challengeDao.envoyerDemandeAmi(1L, 4L);
+//		challengeDao.accepterAmi(4L, 1L);
+//		
+//		challengeDao.envoyerDemandeAmi(4L, 2L);
+//		challengeDao.accepterAmi(2L, 4L);
+//		
+//		challengeDao.envoyerDemandeAmi(1L, 3L);
+//		challengeDao.accepterAmi(3L, 1L);
+//		
+//		challengeDao.envoyerDemandeAmi(3L, 2L);
+//		challengeDao.accepterAmi(2L, 3L);
+		
+//		challengeDao.supprimerAmi(1L, 2L);
+//		challengeDao.supprimerAmi(1L, 3L);
+//		challengeDao.supprimerAmi(2L, 4L);
+//		challengeDao.supprimerAmi(3L, 2L);
+		
+		
 //		PenduDicoChallenge challenge = new PenduDicoChallenge(null, null, 0, true, null, 0, true, 0, null, 0, false, 0);
 //		penduDao.sendChallengeDico(2L, 1L);
 //		penduDao.acceptChallengeDico(4L, 3L);
@@ -74,7 +99,7 @@ public class DefiApplication implements CommandLineRunner{
 //		penduDao.acceptChallengeDico(2L, 1L);
 //		penduDao.savePenduDicoChallenge(challengeb, 1L, 2L);
 //		
-		penduDao.sedChallengeSujets(2L, 1L);
+//		penduDao.sedChallengeSujets(2L, 1L);
 //		penduDao.acceptChallengeSujets(3L, 2L);
 		
 //		PenduSujetsChallenge penduSujetsChallenge = new PenduSujetsChallenge(new Date(), null, 3, "lePays", "laCapitale", "leNobel", "lartiste", "lePresident", 's', 'e', 'e', 'e', 'd');		

@@ -33,6 +33,7 @@ import com.joue.avectesamis.entites.jeux.Pays_Capitale;
 import com.joue.avectesamis.entites.jeux.President;
 import com.joue.avectesamis.entites.jeux.VilleFrance;
 
+@Transactional
 @Repository
 public class ChallengeDaoImpl implements ChallengeDao {
 	
@@ -100,6 +101,8 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		Friend moi = em.find(Friend.class, m);
 		Friend ami = em.find(Friend.class, a);
 		
+		
+		
 		moi.getEnvoyees().add(ami);
 		ami.getRecues().add(moi);
 		
@@ -108,6 +111,16 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		em.persist(ami);
 		System.out.println( "les amis de friend avec id "+m+" "+moi.getFriends());
 
+	}
+	@Override
+	public boolean estAmiAvec(Long m, Long a){
+		Friend moi = em.find(Friend.class, m);
+		Friend ami = em.find(Friend.class, a);
+		if (moi.getFriends().contains(ami)) {
+			return true;
+		}
+		return false;
+		
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +37,7 @@ import com.joue.avectesamis.entites.Friend;
 import com.joue.avectesamis.entites.Post;
 import com.joue.avectesamis.metier.ChallengeMetier;
 import com.joue.avectesamis.models.Inscription;
+import com.joue.avectesamis.models.MesAmisJeuxModel;
 import com.joue.avectesamis.models.SocialModel;
 
 
@@ -60,9 +62,7 @@ public class SocialController {
 		
 	}
 	@RequestMapping(value="inscription")
-	public String inscription (Model model , HttpServletRequest request, @Valid Inscription inscription){
-		
-		
+	public String inscription (Model model , HttpServletRequest request, @Valid Inscription inscription){		
 	
 		String sexe = (String) request.getAttribute("sex");
 		String nom = (String) request.getAttribute("firstName");
@@ -382,11 +382,65 @@ public class SocialController {
 		Friend moi = metier.getFriend(id);
 		sm.setMesAmis((List<Friend>) moi.getFriends());
 		
-//		TEST POUR METHODES
-//		metier.annulerEnvoiChallenge(1L, 2L);
+//		recuperation des mes amis
+		Collection<Friend> mesAmis = moi.getFriends();
 		
-//		FIN TEST POUR METHODES
-		
+//		creation de l'objet (le model) qui representera le tableau à afficher dans la vue: la liste de mes amis 
+//		et les actions à faire par raport aux jeux
+		List<MesAmisJeuxModel> amisJeuxModel = new ArrayList<MesAmisJeuxModel>();
+		MesAmisJeuxModel ami ;
+		for (Friend friend : mesAmis) {
+			ami= new MesAmisJeuxModel();
+			ami.setId(friend.getId());
+			ami.setNom(" "+friend.getNom()+" ");
+			ami.setPrenom(friend.getPrenom()+" ");
+//			Pour le jeu ABC
+			if (moi.getChallengeenvoiyes().contains(friend)) {
+				ami.setAbcAnnuler(true);
+			}else if (moi.getChallengerecus().contains(friend)) {
+				ami.setAbcRefuser(true);
+			}else if (moi.getChallengeEnAttentes().containsKey(friend)) {
+				ami.setAbcAttente(true);
+			}else {
+				ami.setAbcChallenger(true);
+			}
+//			pour le jeu DICO
+			if (moi.getChallengesEnvoyesPenduDico().containsKey(friend)) {
+				ami.setDicoAnnuler(true);
+			}else if (moi.getChallengesRecusPenduDico().containsKey(friend)) {
+				ami.setDicoRefuser(true);
+			}else if (moi.getChallengeEnAttentesPenduDico().containsKey(friend)) {
+				ami.setDicoAttente(true);
+			}else {
+				ami.setDicoChallenger(true);
+			}
+//			Pour le jeu SUJETS
+			if (moi.getChallengesEnvoyesPenduSujets().containsKey(friend)) {
+				ami.setSujetsAnnuler(true);
+			}else if (moi.getChallengesRecusPenduSujets().containsKey(friend)) {
+				ami.setSujetsRefuser(true);
+			}else if (moi.getChallengeEnAttentesPenduSujets().containsKey(friend)) {
+				ami.setSujetsRefuser(true);
+			}else {
+				ami.setSujetsChallenger(true);
+			}
+			amisJeuxModel.add(ami);
+//			for (MesAmisJeuxModel mesAmisJeuxModel : amisJeuxModel) {
+//				System.out.println("mon ami est "+mesAmisJeuxModel.getId()+""+mesAmisJeuxModel.getNom()+""
+//						+mesAmisJeuxModel.getAbcAnnuler()+" "+mesAmisJeuxModel.getAbcChallenger()+" "+mesAmisJeuxModel.getAbcRefuser()+" "
+//						+mesAmisJeuxModel.getDicoAnnuler()+" "+mesAmisJeuxModel.getDicoChallenger()+" "+mesAmisJeuxModel.getDicoRefuser()+" "
+//						+mesAmisJeuxModel.getSujetsAnnuler()+" "+mesAmisJeuxModel.getSujetsChallenger()+" "+mesAmisJeuxModel.getSujetsRefuser());
+//				System.out.println("\n");
+//			}
+		}
+		for (MesAmisJeuxModel mesAmisJeuxModel : amisJeuxModel) {
+			System.out.println("mon ami est: "+mesAmisJeuxModel.getId()+""+mesAmisJeuxModel.getNom()+""
+					+mesAmisJeuxModel.isAbcAnnuler()+" "+mesAmisJeuxModel.isAbcChallenger()+" "+mesAmisJeuxModel.isAbcRefuser()+" "
+					+mesAmisJeuxModel.isDicoAnnuler()+" "+mesAmisJeuxModel.isDicoChallenger()+" "+mesAmisJeuxModel.isDicoRefuser()+" "
+					+mesAmisJeuxModel.isSujetsAnnuler()+" "+mesAmisJeuxModel.isSujetsChallenger()+" "+mesAmisJeuxModel.isSujetsRefuser());
+			System.out.println("\n");
+		}
+		model.addAttribute("amisJeuxModel", amisJeuxModel);
 		
 //		les amis pour lesquels Annuler la demande
 		List<Friend> amisAnnulerDemande = metier.amisAnnulerDemande(id);
@@ -401,7 +455,7 @@ public class SocialController {
 		List<Friend> tousLesInscrits = new ArrayList<Friend>();
 		tousLesInscrits = metier.tousLesInscrits();
 //		les personnes a qui je peux envoyer une demande
-//		v�rification dans la liste de tousLesInscrits, suppression de la liste des personnes avec qui j'ai d�j� commenc� une procedure de jeu
+//		verification dans la liste de tousLesInscrits, suppression de la liste des personnes avec qui j'ai d�j� commenc� une procedure de jeu
 //		suppression de liste de moi, car je ne dois pas m'envoyer � moi une demande
 		
 		for (int i = 0; i < tousLesInscrits.size(); i++) {
@@ -431,15 +485,20 @@ public class SocialController {
 				}
 			}
 		}
-		for (int i = 0; i < tousLesInscrits.size(); i++) {
-			Iterator<Friend> amisIterator = amisEnvoyerDemande.iterator();
-			while (amisIterator.hasNext()) {
-				Friend friend = (Friend) amisIterator.next();
-				if (friend.getId().equals(tousLesInscrits.get(i).getId()) ) {
-					tousLesInscrits.remove(i);
-				}
-			}
-		}
+//		for (int i = 0; i < tousLesInscrits.size(); i++) {
+//			Iterator<Friend> amisIterator = amisEnvoyerDemande.iterator();
+//			while (amisIterator.hasNext()) {
+//				Friend friend = (Friend) amisIterator.next();
+//				if (friend.getId().equals(tousLesInscrits.get(i).getId()) ) {
+//					tousLesInscrits.remove(i);
+//				}
+//			}
+//		}
+		
+		
+		
+		
+		
 //		pour la suppression de moi dans tousLesInscrits		
 //		for (int i = 0; i < tousLesInscrits.size()+1; i++) {
 //			Iterator<Friend> tousIterator = tousLesInscrits.iterator();
@@ -498,7 +557,7 @@ public class SocialController {
 		return "mesamis";
 		
 	}
-	// ================================================================d�but des methodes pour les posts ======================================
+	// ================================================================debut des methodes pour les posts ======================================
 	
 	@RequestMapping(value="posterPost")
 	public String posterPost(Model model, SocialModel sm, HttpServletRequest req){

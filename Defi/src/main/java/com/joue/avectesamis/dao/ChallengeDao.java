@@ -42,6 +42,8 @@ public interface ChallengeDao {
 	public int nombreDemandeAmiRecues(Long moi);
 	public List<Friend> demandesRecues (Long moi);
 	public List<Friend> mesAmis (Long moi);
+//	savoir si deux personnes sont amis
+	public boolean estAmiAvec(Long moi, Long ami);
 	
 	public void posterPost(Long moi, String messagePost);
 	public void posterPost(Post p);

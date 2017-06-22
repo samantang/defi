@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -56,7 +57,6 @@ public class Friend implements Serializable{
 	private Reglages reglage;
 	
 	@OneToMany(mappedBy="friend", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-//	@IndexColumn(name="IDEX_COL")
 	@Fetch(FetchMode.SUBSELECT)
 	private Collection<AbcSolo> abcsolo;
 	@JsonIgnore
@@ -64,13 +64,13 @@ public class Friend implements Serializable{
 	@JoinTable(name="mesamis")
 	private Collection<Friend> friends;
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="envoyee")                       
-	private Collection<Friend> envoyees;
+	private Set<Friend> envoyees;
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="recue")
-	private Collection<Friend> recues;
+	private Set<Friend> recues;
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name="meschallengesevoi")
@@ -1000,7 +1000,7 @@ public class Friend implements Serializable{
 	/**
 	 * @param recues the recues to set
 	 */
-	public void setRecues(Collection<Friend> recues) {
+	public void setRecues(Set<Friend> recues) {
 		this.recues = recues;
 	}
 
@@ -1018,7 +1018,7 @@ public class Friend implements Serializable{
 	/**
 	 * @param envoyees the envoyees to set
 	 */
-	public void setEnvoyees(Collection<Friend> envoyees) {
+	public void setEnvoyees(Set<Friend> envoyees) {
 		this.envoyees = envoyees;
 	}
 
