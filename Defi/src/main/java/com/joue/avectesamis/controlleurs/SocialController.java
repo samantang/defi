@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.joue.avectesamis.connexion.DbConnection;
+import com.joue.avectesamis.dao.PenduDao;
 import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.AbcSolo;
 import com.joue.avectesamis.entites.Friend;
@@ -47,6 +48,8 @@ public class SocialController {
 	
 	@Autowired
 	private ChallengeMetier metier;
+	@Autowired
+	private PenduDao penduDao;
 	
 	
 	@RequestMapping(value="/index")
@@ -219,7 +222,7 @@ public class SocialController {
 		    List<AbcSolo> mesSolos =  metier.getMesSolos(id);
 		    
 		    int tailleSolos = mesSolos.size();
-		    int tailleChallenges = mesChallenges.size();
+		    int tailleChallenges = mesChallenges.size();		    
 		    
 		    model.addAttribute("tailleSolos", tailleSolos);
 		    model.addAttribute("tailleChallenges", tailleChallenges);
@@ -230,6 +233,57 @@ public class SocialController {
 		model.addAttribute("model", sm);
 		model.addAttribute("id", id);
 		model.addAttribute("moi", moi);
+		
+//		ajout des traitements pour les reglages -------------------------------------------------------------
+		
+		sm.setMoi(metier.monProfil(id));
+		// si des checks avaient dejà été  cochés au par avant pour la visibilité des infos, alors il va falloir les cocher à nouveau
+		 boolean emailTous = false, emailAmis=false, emailMoi=false, mobileTous=false, mobileAmis=false, mobileMoi=false, photoTous=false, photoAmis=false, photoMoi=false ;
+		 String emailCoche=null, mobileCoche=null, photoCoche=null;
+//		 Friend moi = metier.getFriend(id);
+		  emailCoche = moi.getEmailVisible();
+		  mobileCoche = moi.getMobileVisible();
+		  photoCoche = moi.getPhotoVisible();
+		 if(emailCoche !=null){
+			 if(emailCoche.equals("tous")) emailTous = true;
+			 if(emailCoche.equals("amis")) emailAmis= true;
+			 if(emailCoche.equals("moi")) emailMoi = true;		 
+		 }
+		 if(mobileCoche != null){
+			 if(mobileCoche.equals("tous")) mobileTous = true;
+			 if(mobileCoche.equals("amis")) mobileAmis = true;
+			 if(mobileCoche.equals("moi")) mobileMoi = true;
+		 }
+		 if(photoCoche != null){
+			 if(photoCoche.equals("tous")) photoTous = true;
+			 if(photoCoche.equals("amis")) photoAmis = true;
+			 if(photoCoche.equals("moi")) photoMoi = true;			 
+		 }
+//		    recupération des derniers jeux
+//		   List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(id);
+//		   List<AbcSolo> mesSolos =  metier.getMesSolos(id);
+		    
+		    model.addAttribute("mesChallenges", mesChallenges);
+		    model.addAttribute("mesSolos", mesSolos);
+		 
+		 model.addAttribute("emailTous", emailTous);
+		 model.addAttribute("emailAmis", emailAmis);
+		 model.addAttribute("emailMoi", emailMoi);
+		 
+		 model.addAttribute("mobileTous", mobileTous);
+		 model.addAttribute("mobileAmis", mobileAmis);
+		 model.addAttribute("mobileMoi", mobileMoi);
+		 
+		 model.addAttribute("photoTous", photoTous);
+		 model.addAttribute("photoAmis", photoAmis);
+		 model.addAttribute("photoMoi", photoMoi);
+	
+		 model.addAttribute("moi", moi);
+		 model.addAttribute("emailAmis", emailAmis);
+		 model.addAttribute("mobileCoche", mobileCoche);
+		 model.addAttribute("emailCoche", emailCoche);
+		model.addAttribute("sm", sm);
+		
 		return "user_profile";
 		
 	}
@@ -254,7 +308,7 @@ public class SocialController {
 		HttpSession session = req.getSession();
 		Long id =  (Long) session.getAttribute("id");
 		 sm.setMoi(metier.monProfil(id));
-		// si des checks avaient dej� �t� coch�s au par avant pour la visibilit� des infos, alors il va falloir les cocher � nouveau
+		// si des checks avaient dejà été  cochés au par avant pour la visibilité des infos, alors il va falloir les cocher à nouveau
 		 boolean emailTous = false, emailAmis=false, emailMoi=false, mobileTous=false, mobileAmis=false, mobileMoi=false, photoTous=false, photoAmis=false, photoMoi=false ;
 		 String emailCoche=null, mobileCoche=null, photoCoche=null;
 		 Friend moi = metier.getFriend(id);
@@ -276,7 +330,7 @@ public class SocialController {
 			 if(photoCoche.equals("amis")) photoAmis = true;
 			 if(photoCoche.equals("moi")) photoMoi = true;			 
 		 }
-//		    recup�ration des derniers jeux
+//		    recupération des derniers jeux
 		   List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(id);
 		   List<AbcSolo> mesSolos =  metier.getMesSolos(id);
 		    
@@ -371,7 +425,7 @@ public class SocialController {
 //		===============================================================================fin du code ========================================================
 		
 		model.addAttribute("sm", sm);
-		return "reglages";
+		return "user_profile";
 		
 	}
 	
@@ -821,6 +875,7 @@ public class SocialController {
 		model.addAttribute("amisJouerAvec", amisJouerAvec);
 //		model.addAttribute("amisEnvoyerDemande", amisEnvoyerDemande);
 //		model.addAttribute("amisJouerAvec", amisJouerAvec);
+		model.addAttribute("sm", sm);
 		model.addAttribute("nAmisJouerAvec", nAmisJouerAvec);
 		
 		return "challengesAJouer";
@@ -841,6 +896,7 @@ public class SocialController {
 		metier.ajouterPhot(id, sm.getPhoto(), sm.getNomPhoto());
 		
 		model.addAttribute("id", id);
+		model.addAttribute("sm", sm);
 		return "user_profile";
 		
 	}
@@ -853,7 +909,7 @@ public class SocialController {
 		Long id =  (Long) session.getAttribute("id");
 		
 		metier.challengerChallenge(id, idAmi);
-		
+		model.addAttribute("sm", sm);
 		return "mesAmis";
 		
 	}

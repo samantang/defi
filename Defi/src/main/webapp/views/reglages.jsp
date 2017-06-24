@@ -59,64 +59,64 @@
 			</div>
 			<div class="col-md-6 col-lg-6">
 				<div align="center">
-						<f:form method="post" modelAttribute="sm" action="validationReglageMdp">
-				<table align="center" border="0">
-					<tr>
-						<td>Actuel mot de passe</td>
-						<td><f:input path="mdp"/></td>
-					</tr>
-					<tr>
-						<td>Nouveau mot de passe</td>
-						<td><f:input path="mdpnouveau"/></td>
-					</tr>
-					<tr>
-						<td>Confirmer Nouveau mot de passe</td>
-						<td><f:input path="mdpnouveauconfirme"/></td>
-					</tr>
-				</table>
-				<input type="submit" value="valider" align="center"/>
-	</f:form>
-	<f:form method="post" modelAttribute="sm" action="validationReglageVisibilite" >
-			    <table  border="0" align="center" >
-                  <tr>
-                    <td ><div align="right" class="style11">Qui peut voir votre Email</div>
-                    </td>
-                    <td >
-	                   <f:radiobutton path="remail" value="tous" class="${emailTous }"/>
-	                    Tout le mode<br />
-	                    <f:radiobutton path="remail" value="amis" class="${emailAmis }"/>
-	                    Amis<br />
-	                    <f:radiobutton path="remail" value="moi" class="${emailMoi }"/>
-	                    Moi seul
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><div align="right" class="style11">Qui peut voir votre <br />
-                    Numéro mobile </div></td>
-                    <td>
-	                    <f:radiobutton path="rmobile" value="tous" class="${mobileTous}"/>
-	                    tout le monde<br />
-	                    <f:radiobutton path="rmobile" value="amis" class="${mobileAmis}"/>
-	                    amis<br />
-	                    <f:radiobutton path="rmobile" value="moi" class="${mobileMoi}"/>
-                    	moi seul        
-                    </td>
-                  </tr>
-                  <tr>
-	                 <td><div align="right" class="style11">qui peut voir vos Photos</div>
-	                 </td>
-	                 <td>
-	                    <f:radiobutton path="rphotos" value="tous" class="${photoTous}"/>
-	                    tout le monde<br />
-	                    <f:radiobutton path="rphotos" value="amis" class="${photoAmis}"/>
-	                    amis<br />
-	                    <f:radiobutton path="rphotos" value="moi" class="${photoMoi}"/>
-	                    moi seul
-                  	</td>
-                  </tr> 
-              </table>  
-               <input type="submit" value="valider" align="center"/>
-     </f:form>         
+				<f:form method="post" modelAttribute="sm" action="validationReglageMdp">
+						<table align="center" border="0">
+							<tr>
+								<td>Actuel mot de passe</td>
+								<td><f:input path="mdp"/></td>
+							</tr>
+							<tr>
+								<td>Nouveau mot de passe</td>
+								<td><f:input path="mdpnouveau"/></td>
+							</tr>
+							<tr>
+								<td>Confirmer Nouveau mot de passe</td>
+								<td><f:input path="mdpnouveauconfirme"/></td>
+							</tr>
+						</table><br>
+						<input type="submit" value="valider" align="center"/>
+				</f:form>
+				<f:form method="post" modelAttribute="sm" action="validationReglageVisibilite" >
+				    <table  border="0" align="center" >
+	                  <tr>
+	                    <td ><div align="right" class="style11">Qui peut voir votre Email</div>
+	                    </td>
+	                    <td >
+		                   <f:radiobutton path="remail" value="tous" class="${emailTous }"/>
+		                    Tout le mode<br />
+		                    <f:radiobutton path="remail" value="amis" class="${emailAmis }"/>
+		                    Amis<br />
+		                    <f:radiobutton path="remail" value="moi" class="${emailMoi }"/>
+		                    Moi seul
+	                    </td>
+	                  </tr>
+	                  <tr>
+	                    <td><div align="right" class="style11">Qui peut voir votre <br />
+	                    Numéro mobile </div></td>
+	                    <td>
+		                    <f:radiobutton path="rmobile" value="tous" class="${mobileTous}"/>
+		                    tout le monde<br />
+		                    <f:radiobutton path="rmobile" value="amis" class="${mobileAmis}"/>
+		                    amis<br />
+		                    <f:radiobutton path="rmobile" value="moi" class="${mobileMoi}"/>
+	                    	moi seul        
+	                    </td>
+	                  </tr>
+	                  <tr>
+		                 <td><div align="right" class="style11">qui peut voir vos Photos</div>
+		                 </td>
+		                 <td>
+		                    <f:radiobutton path="rphotos" value="tous" class="${photoTous}"/>
+		                    tout le monde<br />
+		                    <f:radiobutton path="rphotos" value="amis" class="${photoAmis}"/>
+		                    amis<br />
+		                    <f:radiobutton path="rphotos" value="moi" class="${photoMoi}"/>
+		                    moi seul
+	                  	</td>
+	                  </tr> 
+	              </table><br>  
+               		<input type="submit" value="valider" align="center"/>
+     		</f:form>         
 
 
 				</div>	

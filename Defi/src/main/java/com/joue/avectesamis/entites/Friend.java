@@ -129,7 +129,6 @@ public class Friend implements Serializable{
 	@Fetch(FetchMode.SUBSELECT)
 	private List<AbcChallenge> mesChallengesJoues;
 	private String pseudo;
-	@Column(length=255)
 	private byte [] photo;
 	private String nomPhoto;
 
