@@ -33,6 +33,11 @@
 .menuGauche{
 	position: fixed;
 }
+td, th, input {
+	text-align: center;
+}
+/* .panel-body {
+background:#D3D3D3;} */
 </style>
 </head>
 
@@ -60,50 +65,58 @@
 						<c:import url="menuGauche.jsp"></c:import>
 					</div>
 			</div>
-			<div class="col-md-9 col-lg-9">
-				<p style="text-align: center;">vous avez obtenu un score de <strong>${score}</strong>  sur <strong>${scorePossible}</strong> possible
+			<div class="col-md-1 col-lg-1"></div>
+			<div class="col-md-6 col-lg-6">
+				<h2 style="text-align: center; color: navy; text-shadow: 2px 2px 4px #000000;  ">RESULTAT DE VOTRE JEU ABC SOLO</h2>
+				<h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #000000; ">vous avez obtenu un score de <span style="color: green;"><strong>${score}</strong></span>  sur <span style="color: green;"><strong>${scorePossible}</strong></span> possible</h3>
 	
-				<form  action="abcGame">
+					<form  action="abcGame" method="post">
 						 		<div class="row">
 								 	<c:if test="${not empty listePays }">
-								 		<c:if test="${empty paysTest}"> vous n'avez pas essayé de trouver les pays</c:if><br />
+								 		<c:if test="${empty paysTest}"><h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #000000; " >vous n'avez pas essayé de trouver les pays</h3></c:if><br />
 								 		<c:if test="${not empty paysTest }"> 
-								 		<div class="col-md-3 col-lg-3">
-									 			<table class="table table-bordered table-striped table-condensed">
-									 				<caption><h3>Vos Propositions de Pays</h3></caption>
-									 				<tr>
-									 					<th style="border: 1px solid black;">PAYS</th>
-									 				</tr>
-									 					<c:forEach items="${paysTest}" var="e">
-									 				<tr>
-									 					<c:if test="${not empty e }">
-									 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-									 					</c:if>
-									 				</tr>
-									 				</c:forEach>
-									 			</table>
-								 		</div>	
-								 		<div class="col-md-3 col-lg-3">	
-								 			<c:if test="${not empty paysRestants}">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Les Pays Restants</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">PAYS</th>
-								 				</tr>
-								 					<c:forEach items="${paysRestants}" var="e">
-										 				<tr>
-										 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-										 				</tr>
-								 					</c:forEach>
-								 			</table>
-								 			</c:if>
-								 		</div>	
-								 			<c:if test="${empty paysRestants }">
-								 				<div class="col-md-6">
-								 					<p>Bravo !!!! vous avez trouvez tous les pays  </p>
-								 				</div>
-								 			</c:if>
-								 			
+								 			<div class="row">
+								 				<div class="panel panel-default">
+												<div class="panel-heading"><strong>RESULTATS DES PAYS</strong></div>
+													<div class="panel-body">
+													 		<div class="col-md-6 col-lg-6">
+														 			<table class="table table-bordered table-striped table-condensed">
+														 				<caption><h5>Vos Propositions</h5></caption>
+														 				<tr>
+														 					<th style="border: 1px solid black;">PAYS</th>
+														 				</tr>
+														 					<c:forEach items="${paysTest}" var="e">
+														 				<tr>
+														 					<c:if test="${not empty e }">
+														 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+														 					</c:if>
+														 				</tr>
+														 				</c:forEach>
+														 			</table>
+													 		</div>	
+													 		<div class="col-md-6 col-lg-6">	
+													 			<c:if test="${not empty paysRestants}">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Les Pays Restants</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;">PAYS</th>
+													 				</tr>
+													 					<c:forEach items="${paysRestants}" var="e">
+															 				<tr>
+															 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+															 				</tr>
+													 					</c:forEach>
+													 			</table>
+													 			</c:if>
+													 		</div>	
+													 		<c:if test="${empty paysRestants }">
+													 				<div class="col-md-12">
+													 					<h2 style="text-align: center; color:green text-shadow: 2px 2px 4px #000000; "> Bravo !!!! vous avez trouvez tous les pays  </h2>
+													 				</div>
+													 	   </c:if>
+													  </div>
+												</div>
+								 			</div>
 								 		</c:if>
 								 		<c:if test="${not empty form.getPays}">
 								 				<p><strong>les pays </strong></p>
@@ -118,47 +131,54 @@
 								 				</tr>
 								 					</c:forEach>
 								 			</table>
-								 			</c:if>
+								 		</c:if>
 								 	</c:if>	
 								<!-- ----------------------------------------------capitales------------------------------------------------------------------------------- -->	
 								 	<c:if test="${not empty listeCapitales }">
-								 		<c:if test="${empty choixCapitales}"> vous n'avez pas choisit de capitale</c:if><br />
+								 		<c:if test="${empty choixCapitales}"> <h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #000000; " >vous n'avez pas essayé de trouver les Capitales</h3></c:if><br />
 								 		<c:if test="${not empty choixCapitales }">
-								 			<div class="col-md-3 col-lg-3"> 
-									 			<table class="table table-bordered table-striped table-condensed">
-									 				<caption><h3>Vos Propostions de Capitales</h3></caption>
-									 				<tr>
-									 					<th style="border: 1px solid black;">CAPITALES</th>
-									 				</tr>
-									 					<c:forEach items="${choixCapitales}" var="e">
-									 				<tr>
-									 					<c:if test="${not empty e }">
-									 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-									 					</c:if>
-									 				</tr>
-									 				</c:forEach>
-									 			</table>
-								 			</div>
-								 			<div class="col-md-3 col-lg-3"> 
-									 			<c:if test="${not empty capitalesRestantes}">
-										 			<table class="table table-bordered table-striped table-condensed">
-										 				<caption><h3>Les Capitales Restantes</h3></caption>
-										 				<tr>
-										 					<th style="border: 1px solid black;">CAPITALES</th>
-										 				</tr>
-										 					<c:forEach items="${capitalesRestantes}" var="e">
-										 				<tr>
-										 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-										 				</tr>
-										 					</c:forEach>
-										 			</table>
-									 			</c:if>
-								 			</div>
-								 			<c:if test="${empty capitalesRestantes}">
-								 					<div class="col-md-6">
-								 				<p>Bravo!!! vous avez trouvé toutes les capitales</p>
-								 				</div>
-								 			</c:if>
+								 			<div class="row">
+								 				<div class="panel panel-default">
+												<div class="panel-heading"><strong>RESULTATS DES CAPITALES</strong></div>
+													<div class="panel-body">
+													 			<div class="col-md-6 col-lg-6"> 
+														 			<table class="table table-bordered table-striped table-condensed">
+														 				<caption><h5>Vos Propostions</h5></caption>
+														 				<tr>
+														 					<th style="border: 1px solid black;">CAPITALES</th>
+														 				</tr>
+														 					<c:forEach items="${choixCapitales}" var="e">
+														 				<tr>
+														 					<c:if test="${not empty e }">
+														 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+														 					</c:if>
+														 				</tr>
+														 				</c:forEach>
+														 			</table>
+													 			</div>
+													 			<div class="col-md-6 col-lg-6"> 
+														 			<c:if test="${not empty capitalesRestantes}">
+															 			<table class="table table-bordered table-striped table-condensed">
+															 				<caption><h5>Les Capitales Restantes</h5></caption>
+															 				<tr>
+															 					<th style="border: 1px solid black;">CAPITALES</th>
+															 				</tr>
+															 					<c:forEach items="${capitalesRestantes}" var="e">
+															 				<tr>
+															 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+															 				</tr>
+															 					</c:forEach>
+															 			</table>
+														 			</c:if>
+													 			</div>
+													 			<c:if test="${empty capitalesRestantes}">
+													 					<div class="col-md-12 col-lg-12">
+													 				<h2 style="text-align: center; color:green text-shadow: 2px 2px 4px #000000; "> Bravo !!!! vous avez trouvez toutes les Capitales  </h2>
+													 				</div>
+													 			</c:if>
+													 </div>
+												</div>
+											</div>
 								 		</c:if>
 								 		<c:if test="${not empty form.getCapitale}">
 								 				<p>les capitales </p>
@@ -232,44 +252,51 @@
 								 	</c:if>	
 								<!-- --------------------------------------------------------NOBELS--------------------------------------------------------------------- -->
 								 	<c:if test="${not empty listeNobels }">
-								 		<c:if test="${empty choixNobels}"> vous n'avez pas choisit de prix nobel</c:if><br />
+								 		<c:if test="${empty choixNobels}"> <h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #000000; " >vous n'avez pas choisit de prix nobels</h3> </c:if><br />
 								 		<c:if test="${not empty choixNobels }"> 
-								 		<div class="col-md-3 col-lg-3">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Vos Propositions de Nobels</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">P Nobels</th>
-								 				</tr>
-								 					<c:forEach items="${choixNobels}" var="e">
-								 				<tr>
-								 					<c:if test="${not empty e }">
-								 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 					</c:if>
-								 				</tr>
-								 				</c:forEach>
-								 			</table>
-								 		</div>
-								 		
-								 		<div class="col-md-3 col-lg-3">
-								 			<c:if test="${not empty nobelsRestants}">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Les Nobels Restants</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">NOBELS</th>
-								 				</tr>
-								 					<c:forEach items="${nobelsRestants}" var="e">
-								 				<tr>
-								 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 				</tr>
-								 					</c:forEach>
-								 			</table>
-								 			</c:if>
-								 		</div>	
-								 			<c:if test="${empty nobelsRestants}">
-								 				<div class="col-md-6">
-								 					<p>Bravo!!! vous avez trouvé tous les Nobels</p>
-								 				</div>
-								 			</c:if>
+								 			<div class="row">
+								 				<div class="panel panel-default">
+												<div class="panel-heading"><strong>RESULTATS DES NOBELS</strong></div>
+													<div class="panel-body">
+													 		<div class="col-md-6 col-lg-6">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Vos Propositions</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;"> Nobels</th>
+													 				</tr>
+													 					<c:forEach items="${choixNobels}" var="e">
+													 				<tr>
+													 					<c:if test="${not empty e }">
+													 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+													 					</c:if>
+													 				</tr>
+													 				</c:forEach>
+													 			</table>
+													 		</div>
+													 		
+													 		<div class="col-md-6 col-lg-6">
+													 			<c:if test="${not empty nobelsRestants}">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Les Nobels Restants</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;">NOBELS</th>
+													 				</tr>
+													 					<c:forEach items="${nobelsRestants}" var="e">
+													 				<tr>
+													 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+													 				</tr>
+													 					</c:forEach>
+													 			</table>
+													 			</c:if>
+													 		</div>	
+													 		<c:if test="${empty nobelsRestants}">
+													 				<div class="col-md-12 col-lg-12">
+													 					<h2 style="text-align: center; color:green text-shadow: 2px 2px 4px #000000; ">Bravo!!! vous avez trouvé tous les Nobels</h2>
+													 				</div>
+													 		</c:if>
+													 </div>
+												 </div>
+											</div>
 								 		</c:if>
 								 		<c:if test="${not empty form.getNobel}">
 								 				<p>les Nobels </p>
@@ -287,45 +314,52 @@
 								 	</c:if>	
 								<!-- -----------------------------------------------------PRESIDENTS------------------------------------------------------------------------ -->
 								 	<c:if test="${not empty listePresidentsA }">
-								 		<c:if test="${empty choixPresidents}"> vous n'avez pas choisit de presidents</c:if><br />
+								 		<c:if test="${empty choixPresidents}"> <h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #00000;">vous n'avez pas choisit de prix Présidents</h3> </c:if><br />
 								 		<c:if test="${not empty choixPresidents }"> 
-								 		<div class="col-md-3 col-lg-3">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Vos propositions de Présidents</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">PRESIDENTS</th>
-								 				</tr>
-								 					<c:forEach items="${choixPresidents}" var="e">
-								 				<tr>
-								 					<c:if test="${not empty e }">
-								 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 					</c:if>
-								 				</tr>
-								 				</c:forEach>
-								 			</table>
-								 		</div>	
-								 		<div class="col-md-3 col-lg-3">	
-								 			<c:if test="${not empty presidentsRestants}">
-								 				<p>les presidents restants</p>
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Les Présidents Restants</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">PRESIDENTS</th>
-								 				</tr>
-								 					<c:forEach items="${presidentsRestants}" var="e">
-								 				<tr>
-								 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 				</tr>
-								 					</c:forEach>
-								 			</table>
-								 			</c:if>
-								 		</div>
-								 			
-								 			<c:if test="${empty presidentsRestants}">
-								 				<div class="col-md-6">
-								 					<p>Bravo!!! vous avez trouvez tous les présidents</p>
-								 				</div>
-								 			</c:if>
+								 			<div class="row">
+								 				<div class="panel panel-default">
+												<div class="panel-heading"><strong>RESULTATS DES PRESIDENTS</strong></div>
+													<div class="panel-body">
+													 	<div class="col-md-6 col-lg-6">
+												 			<table class="table table-bordered table-striped table-condensed">
+												 				<caption><h5>Vos propositions</h5></caption>
+												 				<tr>
+												 					<th style="border: 1px solid black;">PRESIDENTS</th>
+												 				</tr>
+												 					<c:forEach items="${choixPresidents}" var="e">
+												 				<tr>
+												 					<c:if test="${not empty e }">
+												 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+												 					</c:if>
+												 				</tr>
+												 				</c:forEach>
+												 			</table>
+												 		</div>	
+												 		<div class="col-md-6 col-lg-6">	
+												 			<c:if test="${not empty presidentsRestants}">
+												 				<p>les presidents restants</p>
+												 			<table class="table table-bordered table-striped table-condensed">
+												 				<caption><h5>Les Présidents Restants</h5></caption>
+												 				<tr>
+												 					<th style="border: 1px solid black;">PRESIDENTS</th>
+												 				</tr>
+												 					<c:forEach items="${presidentsRestants}" var="e">
+												 				<tr>
+												 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+												 				</tr>
+												 					</c:forEach>
+												 			</table>
+												 			</c:if>
+												 		</div>
+												 			
+												 			<c:if test="${empty presidentsRestants}">
+												 				<div class="col-md-12 col-lg-12">
+												 					<h2 style="text-align: center; color:green text-shadow: 2px 2px 4px #000000; ">Bravo!!! vous avez trouvé tous les Président</h2>
+												 				</div>
+												 			</c:if>
+												 		</div>
+												 	</div>
+												 </div>			
 								 		</c:if>
 								 		<c:if test="${not empty form.getPays}">
 								 				<p>les presidents </p>
@@ -343,45 +377,52 @@
 								 	</c:if>	
 								<!-- --------------------------------------------------------ANCIENS P--------------------------------------------------------------------- -->
 								 	<c:if test="${not empty listeAPresidents }">
-								 		<c:if test="${empty choixAPresidents}"> vous n'avez pas choisit d'ancien P</c:if><br />
+								 		<c:if test="${empty choixAPresidents}"> <h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #00000;">vous n'avez pas choisit de prix Présidents</h3> </c:if><br />
 								 		<c:if test="${not empty choixAPresidents }"> 
-								 		<div class="col-md-3 col-lg-3">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Vos propositions d'anciens Prési</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">Ancien</th>
-								 				</tr>
-								 					<c:forEach items="${choixAPresidents}" var="e">
-								 				<tr>
-								 					<c:if test="${not empty e }">
-								 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 					</c:if>
-								 				</tr>
-								 				</c:forEach>
-								 			</table>
-								 		</div>
-								 		
-								 		<div class="col-md-3 col-lg-3">	
-								 			<c:if test="${not empty ApresidentsRestants}">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Les A Présidents Restants</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">ANCIENS P</th>
-								 				</tr>
-								 					<c:forEach items="${ApresidentsRestants}" var="e">
-								 				<tr>
-								 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 				</tr>
-								 					</c:forEach>
-								 			</table>
-								 		</c:if>
-								 		</div>
-								 		
-								 			<c:if test="${empty ApresidentsRestants}">
-								 				<div class="col-md-6">
-								 					<p>Bravo!!! Vous avez trouvé tous les anciens Prési</p>
-								 				</div>	
-								 			</c:if>
+								 			<div class="row">
+								 				<div class="panel panel-default">
+												<div class="panel-heading"><strong>RESULTATS DES PRESIDENTS</strong></div>
+													<div class="panel-body">
+													 		<div class="col-md-6 col-lg-6">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Vos propositions</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;">Ancien</th>
+													 				</tr>
+													 					<c:forEach items="${choixAPresidents}" var="e">
+													 				<tr>
+													 					<c:if test="${not empty e }">
+													 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+													 					</c:if>
+													 				</tr>
+													 				</c:forEach>
+													 			</table>
+													 		</div>
+													 		
+													 		<div class="col-md-6 col-lg-6">	
+													 			<c:if test="${not empty ApresidentsRestants}">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Les A Présidents Restants</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;">ANCIENS P</th>
+													 				</tr>
+													 					<c:forEach items="${ApresidentsRestants}" var="e">
+													 				<tr>
+													 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+													 				</tr>
+													 					</c:forEach>
+													 			</table>
+													 		</c:if>
+													 		</div>
+													 		
+													 			<c:if test="${empty ApresidentsRestants}">
+													 				<div class="col-md-12 col-lg-12">
+													 					<h2 style="text-align: center; color:green text-shadow: 2px 2px 4px #000000; ">Bravo!!! vous avez trouvé tous les anciens Président</h2>
+													 				</div>	
+													 			</c:if>
+												 		</div>
+												 	</div>
+												</div>			
 								 		</c:if>
 								 		<c:if test="${not empty form.getanciensP}">
 								 				<p>les anciens P </p>
@@ -512,45 +553,52 @@
 								<!-- --------------------------------------------------------------ARTISTES--------------------------------------------------------------- -->
 								 <div class="paysCorrection">
 								 	<c:if test="${not empty listeChanteurs }">
-								 		<c:if test="${empty choixArtistes}"> vous n'avez pas choisit d'artiste</c:if><br />
+								 		<c:if test="${empty choixArtistes}"> <h3 style="text-align: center; color: menu; text-shadow: 2px 2px 4px #000000; " >vous n'avez pas essayé de trouver les artistes</h3></c:if><br />
 								 		<c:if test="${not empty choixArtistes }"> 
-								 		<div class="col-md-3 col-lg-3">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Vos propositions d'artistes</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">ARTISTES</th>
-								 				</tr>
-								 					<c:forEach items="${choixArtistes}" var="e">
-								 				<tr>
-								 					<c:if test="${not empty e }">
-								 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 					</c:if>
-								 				</tr>
-								 				</c:forEach>
-								 			</table>
-								 		</div>
-								 			
-								 		<div class="col-md-3 col-lg-3">	
-								 			<c:if test="${not empty ArtistesRestants}">
-								 			<table class="table table-bordered table-striped table-condensed">
-								 				<caption><h3>Les Artistes Restants</h3></caption>
-								 				<tr>
-								 					<th style="border: 1px solid black;">ARTISTES</th>
-								 				</tr>
-								 					<c:forEach items="${ArtistesRestants}" var="e">
-								 				<tr>
-								 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
-								 				</tr>
-								 					</c:forEach>
-								 			</table>
-								 			</c:if>
-								 		</div>	
-								 			
-								 			<c:if test="${empty ArtistesRestants}">
-								 				<div class="col-md-6">
-								 					<p>Bravo!!! vous avez trouvé tous les artistes</p>
-								 				</div>
-								 			</c:if>
+								 			<div class="row">
+								 				<div class="panel panel-default">
+												<div class="panel-heading"><strong>RESULTATS DES ARTISTES</strong></div>
+													<div class="panel-body">
+													 		<div class="col-md-6 col-lg-6">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Vos propositions d'artistes</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;">ARTISTES</th>
+													 				</tr>
+													 					<c:forEach items="${choixArtistes}" var="e">
+													 				<tr>
+													 					<c:if test="${not empty e }">
+													 						<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+													 					</c:if>
+													 				</tr>
+													 				</c:forEach>
+													 			</table>
+													 		</div>
+													 			
+													 		<div class="col-md-6 col-lg-6">	
+													 			<c:if test="${not empty ArtistesRestants}">
+													 			<table class="table table-bordered table-striped table-condensed">
+													 				<caption><h5>Les Artistes Restants</h5></caption>
+													 				<tr>
+													 					<th style="border: 1px solid black;">ARTISTES</th>
+													 				</tr>
+													 					<c:forEach items="${ArtistesRestants}" var="e">
+													 				<tr>
+													 					<td style="border: 1px solid black;"><c:out value="${e}"></c:out></td>
+													 				</tr>
+													 					</c:forEach>
+													 			</table>
+													 			</c:if>
+													 		</div>	
+													 			
+													 			<c:if test="${empty ArtistesRestants}">
+													 				<div class="col-md-12 col-lg-12">
+													 					<h2 style="text-align: center; color:green text-shadow: 2px 2px 4px #000000; "> Bravo !!!! vous avez trouvez tous les Artistes  </h2>
+													 				</div>
+													 			</c:if>
+													 	</div>
+													 </div>
+												</div>	 	
 								 		</c:if>
 								 		<c:if test="${not empty form.getArtistes}">
 								 				<p>les artistes </p>
@@ -567,8 +615,8 @@
 								 			</c:if>
 								 	</c:if>	
 								</div>
-								</div>	
-							</form>
+							</div>	
+						</form>
 					</div>		
 		</div>
 	</div>

@@ -32,6 +32,8 @@ public class DefiApplication implements CommandLineRunner{
 	private PenduDao penduDao;
 	@Autowired
 	private ChallengeDao challengeDao;
+	@Autowired
+	private ChallengeMetier metier;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DefiApplication.class, args);
@@ -40,6 +42,12 @@ public class DefiApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... arg0) throws Exception {
+		
+		
+//		AbcChallenge abc = new AbcChallenge(null, null, null, 0, null, 'l', 0, null, null, null, null, null, null, null, null, null, null, 0, null, null);
+//		metier.envoyerChallenge(4L, 3L); 
+//		metier.accepterChallenge(3L, 4L);
+		
 		
 //		challengeDao.envoyerDemandeAmi(1L, 2L);
 //		challengeDao.accepterAmi(2L, 1L);

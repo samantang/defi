@@ -1,8 +1,11 @@
 package com.joue.avectesamis.controlleurs;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +33,12 @@ import com.joue.avectesamis.entites.jeux.Nobels;
 import com.joue.avectesamis.entites.jeux.Pays_Capitale;
 import com.joue.avectesamis.entites.jeux.President;
 import com.joue.avectesamis.entites.jeux.VilleFrance;
+import com.joue.avectesamis.entites.jeux.pendu.PenduDicoChallenge;
 import com.joue.avectesamis.metier.ChallengeMetier;
 import com.joue.avectesamis.models.GameModel;
+import com.joue.avectesamis.models.PenduModel;
+import com.joue.avectesamis.models.SocialModel;
+import com.joue.avectesamis.models.Word;
 
 
 
@@ -55,142 +63,11 @@ public class ChallengeAbcController {
 		gm.setMesChallengesRecus(metier.mesChallengesRecus(id));
 		gm.setMesChallengesEnvoyes(metier.mesChallengesEnvoyes(id));
 		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));
-//		gm.setMesChallengesJoues(metier.mesChallengesJou�s(id));
 		List<AbcChallenge> mesChallengesJoues = new ArrayList<AbcChallenge>();
-		mesChallengesJoues.addAll(metier.mesChallengesJoues(id, id));
-//		creation d'une map qui aura comme cl�f le code d'identificaion et comme valeur l'id de l'ami
-		Map<String, Long> codeAmi = new HashMap<String, Long>();
-//		pour les id des amis avec qui j'ai jou�
-//		List<Long> idAmisJoues = new ArrayList<Long>();
-//		pour les codes d'identificaions
-//		List<String> codesInd = new ArrayList<String>();
-		
-//		les challenges de mes amis
-		List<AbcChallenge> challengesAmis = new ArrayList<AbcChallenge>();
-		AbcChallenge challenge = new AbcChallenge();
-		Map<Friend, String> attentesAmi = new HashMap<Friend, String>();
-
-		
-		
-//		AbcChallenge cha = new AbcChallenge();
-		for(AbcChallenge c: mesChallengesJoues){
-			System.out.println("les elements du challengeJoue: "+c.getCodeIndentification()+" "+c.getMonFriend().getId()+" "+c.getLettre()); 
-//			recup�ration de l'id de l'ami associc� au jeu et du code d'identification pour les stocker dans une map
-//			ensuite pour chaque id on recup�re l'ami correspondant 
-//			
-			codeAmi.put(c.getCodeIndentification(), c.getMonFriend().getId());
-		}
-//		recup�ration des ids dans la map pour cr�er les friends, puis comparer le code d'identification de la map avec les codes d'identifcation qui se trouvent 
-//		dans les jeux d�j� jou�s de l'ami: s'il s'y trouvent alors l'ami a jou� donc r�cup�ration du jeu: si non alors il n'a pas encore jou�
-		
-		Friend ami= null;
-		Set<Entry<String, Long>> setAmi = codeAmi.entrySet();
-		Iterator<Entry<String, Long>> it = setAmi.iterator();
-		while(it.hasNext()){
-			Entry<String, Long> e = it.next();
-//			recup�ration de l'ami par rappport � l'id
-			 ami = new Friend();
-			ami=metier.getFriend(e.getValue());
-			System.out.println("l'id de l'ami pour qui j'ai jou� le challenge ..."+ami.getId());
-//			les challenges jou�s de l'ami
-			List<AbcChallenge> challengesAmi= ami.getMesChallengesJoues();
-//			parcourt des challenges jou�s par l'ami
-			for(AbcChallenge c:challengesAmi){
-//				si on trouve un code d'identification dans ses challenges jou�s qui �quivaut au mien, recup�ration de tout le jeu de l'ami en rapport avec ce code
-				System.out.println("le code indentification ami=="+c.getCodeIndentification()+" le getKey de chez moi== "+e.getKey());
-				if(c.getCodeIndentification().equals(e.getKey())){
-//					l'ami a d�j� jou� => recup�ration du jeu en question
-//					challenge = new AbcChallenge(c.getEmail(), c.getScore(), c.getDate(), c.getLettre(), c.getTime(), c.getHelp(), c.getAgglo(), c.getaPresident(), c.getPresident(), c.getAnimal(), c.getArtiste(), c.getCapitale(), c.getPays(), c.getNobel(), c.getVille(), c.getTimeOut());					
-//					challenge = new AbcChallenge(c.getId(), c.getEmail(), c.getScore(), c.getDate(), c.getLettre(), c.getTime(), c.getHelp(), c.getAgglo(), c.getaPresident(), c.getPresident(), c.getAnimal(), c.getArtiste(), c.getCapitale(), c.getPays(), c.getNobel(), c.getVille(), c.getTimeOut());					
-//					challenge = new AbcChallenge(c.getId(),c.getCodeIndentification(), c.getEmail(), c.getScore(), c.getDate(), c.getLettre(), c.getTime(), c.getHelp(), c.getAgglo(), c.getaPresident(), c.getPresident(), c.getAnimal(), c.getArtiste(), c.getCapitale(), c.getPays(), c.getNobel(), c.getVille(), c.getTimeOut());
-					challenge = new AbcChallenge(c.getId(),c.getCodeIndentification(), c.getEmail(), c.getScore(), c.getDate(), c.getLettre(), c.getTime(), c.getHelp(), c.getAgglo(), c.getaPresident(), c.getPresident(), c.getAnimal(), c.getArtiste(), c.getCapitale(), c.getPays(), c.getNobel(), c.getVille(), c.getTimeOut(), c.getMonFriend(), c.getFriend());
-					challengesAmis.add(challenge);
-				}
-				else{
-//					parcourt des jeux en attente chez l'ami, si on retrouve le code d'indtification dans les jeux en attentes alors il n'a pas encore jou�
-//					
-					attentesAmi=ami.getChallengeEnAttentes();
-					Set<Entry<Friend, String>> setAttenteAmi = attentesAmi.entrySet();
-					Iterator<Entry<Friend, String>> itAttenteAmi = setAttenteAmi.iterator();
-					while(itAttenteAmi.hasNext()){
-						Entry<Friend, String> entryAmi = itAttenteAmi.next();
-						System.out.println("e.getKey() dans attente == "+e.getKey());
-						System.out.println("code d'identification attente ===="+entryAmi.getValue());
-						if(e.getKey().equals(entryAmi.getValue())){
-							challenge = new AbcChallenge(null, "xxx", null, 0, null, '?', 0, null, null, null, null, null, null, null, null, null, null, 0);
-							challengesAmis.add(challenge);
-							System.out.println("l'ami n'a pas encore jou� ---------------");
-						}
-					}
-				}
-			}
-		}
-		
-		
-		System.out.println("\n");
-//		comme l'affichage de des challenges jou�s par les amis ne se fait pas dans l'ordre souhait� (pour �a on PEUT utlitiser l'interface QUEUE), mais ici
-//		on parcourt mes challenges jou�s et on recup�re le code d'identification qu'on compare � celui des jeux de mes amis
-//		on remplit une autre liste de challengesAmisOrdre dans laquelle on insere � l'indice correspondant � celui de mes jeux (par rapport au code d'indentification)
-//		comme �a dans les deux listes (mes jeux et les jeux de mes amis), les jeux qui ont le meme code d'indentification ont le le m�me index, ce qui facilite l'affichage
-//		En fin on va couper la nouvelle liste qui aura la m�me longuer que la liste de mes jeux car tous mes jeux qui ont aussi �t� jou�s par un amis sont d�j� dans la nouvelle
-//		liste en fonction de l'index
-//		Deque<AbcChallenge> challengeAmiQueue = new ArrayDeque<AbcChallenge>();
-		List<AbcChallenge> challengeAmisOrdre = new ArrayList<AbcChallenge>();
-		AbcChallenge challengea = null;
-		List<String> listeCodeAmi = new ArrayList<String>();
-		for(AbcChallenge abcMoi: mesChallengesJoues){
-			for(AbcChallenge abcAmi: challengesAmis){
-				listeCodeAmi.add(abcAmi.getCodeIndentification());
-				if(abcMoi.getCodeIndentification().equals(abcAmi.getCodeIndentification())){
-//					challengeAmiQueue.offerLast(abcAmi);
-					challengeAmisOrdre.add(mesChallengesJoues.indexOf(abcMoi), abcAmi);
-					
-				}else{
-					challengea = new AbcChallenge(null, "xxx", null, 0, null, 'd', 0, null, null, null, null, null, null, null, null, null, null, 0);
-//					challengeAmiQueue.offerLast(challengea);
-					challengeAmisOrdre.add(challengea);
-
-				}
-			}
-		}
-//		la taille de mes jeux
-		int taille = mesChallengesJoues.size();
-		List<AbcChallenge> challengeAmisOrdreCoupe=challengeAmisOrdre.subList(0, taille);
-		
-//		Mixage des deux listes pour faciliter l'affichage des duels dans le detail des challenges
-		List<AbcChallenge> mixChallenge = new ArrayList<AbcChallenge>();
-		mixChallenge = mixageList(mesChallengesJoues, challengeAmisOrdreCoupe);
-//		mise du mixchallenge en session pour l'affichage des details des duels
-		session.setAttribute("mixChallenge", mixChallenge);
-		
-		for(AbcChallenge c: mixChallenge){
-			System.out.println("LES CODE D'IDENTIFICATIONS DANS LE MIXCHALLENGE SONT "+c.getCodeIndentification());
-		}
-		
-		gm.setChallengeAmisOrdreCoupe(challengeAmisOrdreCoupe);
-		gm.setMesChallengesJoues(mesChallengesJoues);
-//	    recup�ration des derniers jeux
-	   List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(id);
-	    List<AbcSolo> mesSolos =  metier.getMesSolos(id);
-	    
-	    model.addAttribute("challengeAmisOrdreCoupe", challengeAmisOrdreCoupe);	    
-	    
-	    model.addAttribute("mesChallenges", mesChallenges);
-	    model.addAttribute("mesSolos", mesSolos);
-		
-		System.out.println("mes challengesJou�s:la taille "+mesChallengesJoues.size());
-		System.out.println("les challengesJou�sAmis: la taille "+challengesAmis.size());
-		gm.setMesChallengesJoues(mesChallengesJoues);
-		gm.setChallengesAmis(challengesAmis);
-		session.setAttribute("mesChallengesJoues", mesChallengesJoues);
-		session.setAttribute("challengesAmis", challengesAmis);
+		mesChallengesJoues.addAll(metier.mesChallengesJoues(id));
+		gm.setMesChallengesJoues(metier.mesChallengesJoues(id));
 		model.addAttribute("gm", gm);
-		model.addAttribute("mesChallengesJoues", mesChallengesJoues);
-		model.addAttribute("challengesAmis", challengesAmis);
-		model.addAttribute("moi", moi);
-		
-		return "abcChallengeHome";
-		
+		return "abcChallengeHome";		
 	}
 //	Methode qui permet de mixer deux ArrayList
 	public List<AbcChallenge> mixageList(List<AbcChallenge> a, List<AbcChallenge>b ){
@@ -200,9 +77,7 @@ public class ChallengeAbcController {
 		for (int i = 0; i < size; i++) {
 	        if (i < a.size()) resultat.add(a.get(i));
 	        if (i < b.size()) resultat.add(b.get(i));
-	    }
-
-		
+	    }	
 		return resultat;
 		
 	}
@@ -219,23 +94,20 @@ public class ChallengeAbcController {
 		
 		gm.setMesChallengesRecus(metier.mesChallengesRecus(id));
 		gm.setMesChallengesEnvoyes(metier.mesChallengesEnvoyes(id));
-		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));
-		
-		
+		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));		
 		
 		model.addAttribute("gm", gm);
 		
 		return "abcChallengeHome";
 		
 	}
-	
-	
+		
 	@RequestMapping(value="AbcChallengeJeu")
 	public String AbcChallengeJeu(Model model, GameModel gm, HttpServletRequest request){
 		
 		HttpSession session = request.getSession();
 		Long id =  (Long) session.getAttribute("id");
-//		le temps en fonction du nombre de r�sultats possibles
+//		le temps en fonction du nombre de resultats possibles
 		int temps =0;
 		
 //		recup�raiton de l'ami
@@ -261,15 +133,16 @@ public class ChallengeAbcController {
 		
 		if(codeAttenteMoi.equals(codeAttenteAmi)){
 			lettre = (char) (r.nextInt(26)+'a');
+			System.out.println("il n'a pas encore joue");
+			System.out.println("la lettre tiree au sort est: "+lettre);
 		}else{
+			System.out.println("oui, il l'a deja fait");
 			for(AbcChallenge c:ami.getMesChallengesJoues()){
 				if(c.getCodeIndentification().equals(codeAttenteMoi))
 					lettre = c.getLettre();
 			}
 		}
-		
-//		==================================================
-		
+				
 		// liste des checksboxs coch�s pour les intitul�s
 				List<String> checkList = new ArrayList<String>();
 				
@@ -284,6 +157,11 @@ public class ChallengeAbcController {
 				List<Agglo>listeAglo = new ArrayList<Agglo>();
 				List<Artistes>listeChanteurs = new ArrayList<Artistes>();
 				List<Nobels>listeNobels = new ArrayList<Nobels>();
+				
+//				la lettre a joue avec en majuscule pour l'affichage a la vue
+				String lettreString = String.valueOf(lettre);
+				String lettreMajuscule = lettreString.toUpperCase();
+				session.setAttribute("lettreMajuscule", lettreMajuscule);
 				
 //				recup�ration dans la base de donn�es des informations concernant les intitul�s en fonction de la lettre avec laquelles on va jouer
 					listPays.addAll(metier.getPays(lettre));
@@ -303,6 +181,15 @@ public class ChallengeAbcController {
 				
 					listeChanteurs.addAll(metier.getArtistes(lettre));
 					checkList.add("chanteurs");
+					
+//					pour les premières lettres des nobels en cas de demande d'aide
+					List<String> lettresArtistes = new ArrayList<String>();
+					for (Artistes astiste : listeChanteurs) {
+						lettresArtistes.add(astiste.getNom().substring(0, 3));
+					}
+					
+					model.addAttribute("lettresArtistes", lettresArtistes);
+					
 				
 					listeAnimaux.addAll(metier.getAnimaux(lettre));
 					checkList.add("animaux");
@@ -357,42 +244,28 @@ public class ChallengeAbcController {
 		gm = new GameModel();
 		HttpSession session = request.getSession();
 		Long id =  (Long) session.getAttribute("id");
-		Friend moi = metier.getFriend(id);
-		
-		
-		
+		Friend moi = metier.getFriend(id);	
 		
 		// recup�ration des objets en session
 		String email = (String) session.getAttribute("email");
 		char lettre =  (Character) session.getAttribute("lettre");
-		String date = null;
 		int time =0; // le temps qu'a dur� le jeux
 		String help = "no"; // si l'utlisateur a demand� de l'aide
 		int score = 0;
-//		 // pour savoir ce qu'on doit inserer dans les colonnes des intitul�s
-//		 String pays = "no";
-//		 String capitale = "no";
-//		 String president = "no";
-//		 String APresident = "no";
-//		 String ville = "no";
-//		 String nobel = "no";
-//		 String chanteur = "no";
-//		 String agglo = "no";
-//		 String animaux ="no";
-		
+		DateFormat df = new SimpleDateFormat("dd/MM/yy");
+		Date now = new Date();
+		String dateString = df.format(now);
 		/*
 		 * POUR LE PAYS =====================================================================================================================================
 		 */
 		// liste de tous les pays concern�s 
 		List<String> listePays = (List<String>) session.getAttribute("listPays");
 		// liste des choix faits par l'utilisateur 
-		List <String> choixPays = new ArrayList<String>();
+		Set <String> choixPays = new HashSet<String>();
 		// liste des pays restants (s'il en reste)
 		List<String> paysRestants = new ArrayList<String>();
 		// recup�ration des contenus dans les input
 		String [] reponses = null;
-//		List<String> reponses = new ArrayList<String>();
-//			reponses.addAll(request.getParameterValues("pays"));
 		if(request.getParameterValues("pays")!=null){
 			reponses = request.getParameterValues("pays");
 			for(String s: reponses){
@@ -402,14 +275,14 @@ public class ChallengeAbcController {
 		// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 		// donc il gagne des points
 		if(choixPays.containsAll(listePays)){
-			score = score +1;
+			score = score +listePays.size();
+		}else {
+			if (choixPays!=null) {
+				score = score + choixPays.size();
+			}
 		}
 		paysRestants.addAll(listePays);		
 		paysRestants.removeAll(choixPays);
-	
-		 if(request.getParameter("pays")!=null){
-//			 pays ="selectioned";
-		 }
 		 
 		 /*
 			 * POUR LES CAPITALES =====================================================================================================================================
@@ -417,7 +290,7 @@ public class ChallengeAbcController {
 		// liste de tous les pays concern�s 
 			List<String> listeCapitales = (List<String>) session.getAttribute("listeCapitales");
 			// liste des choix faits par l'utilisateur 
-			List <String> choixCapitales = new ArrayList<String>();
+			Set <String> choixCapitales = new HashSet<String>();
 			// liste des pays restants (s'il en reste)
 			List<String> capitalesRestantes = new ArrayList<String>();
 		 if(request.getParameter("capitale")!=null){
@@ -430,13 +303,14 @@ public class ChallengeAbcController {
 				// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 				// donc il gagne des points
 				if(choixCapitales.containsAll(listeCapitales)){
-					score = score +1;
+					score = score +listeCapitales.size();
+				}else {
+					if (choixCapitales!=null) {
+						score = score+choixCapitales.size();
+					}
 				}
 				capitalesRestantes.addAll(listeCapitales);		
-				capitalesRestantes.removeAll(choixCapitales);
-			
-				 
-//				 capitale ="selectioned";
+				capitalesRestantes.removeAll(choixCapitales);							 
 			 }
 			 
 			 /*
@@ -445,12 +319,10 @@ public class ChallengeAbcController {
 		// liste de tous les pays concern�s 
 			List<String> listeVillesFrance = (List<String>) session.getAttribute("listeVillesFrance");
 			// liste des choix faits par l'utilisateur 
-			List <String> choixVilles = new ArrayList<String>();
+			Set <String> choixVilles = new HashSet<String>();
 			// liste des pays restants (s'il en reste)
 			List<String> villesRestantes = new ArrayList<String>();
-			 if(request.getParameter("ville")!=null){
-				
-				
+			 if(request.getParameter("ville")!=null){				
 				String [] reponsesVilles = request.getParameterValues("ville");
 				for(String s: reponsesVilles){
 					if(!s.equals("ville")) choixVilles.add(s);
@@ -458,13 +330,14 @@ public class ChallengeAbcController {
 				// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 				// donc il gagne des points
 				if(choixVilles.containsAll(listeVillesFrance)){
-					score = score +1;
+					score = score +listeVillesFrance.size();
+				}else {
+					if (choixVilles!=null) {
+						score= score+choixVilles.size();
+					}
 				}
 				villesRestantes.addAll(listeVillesFrance);		
-				villesRestantes.removeAll(choixVilles);
-			
-				 
-//					 ville ="selectioned";
+				villesRestantes.removeAll(choixVilles);				
 				 }
 				 
 				 /*
@@ -473,7 +346,7 @@ public class ChallengeAbcController {
 			// liste de tous les pays concern�s 
 				List<String> listeNobels = (List<String>) session.getAttribute("listeNobels");
 				// liste des choix faits par l'utilisateur 
-				List <String> choixNobels= new ArrayList<String>();
+				Set <String> choixNobels= new HashSet<String>();
 				// liste des pays restants (s'il en reste)
 				List<String> nobelsRestants = new ArrayList<String>();
 				 if(request.getParameter("nobel")!=null){
@@ -486,13 +359,15 @@ public class ChallengeAbcController {
 					// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 					// donc il gagne des points
 					if(choixNobels.containsAll(listeNobels)){
-						score = score +1;
+						score = score +listeNobels.size();
+					}else {
+						if (choixNobels!=null) {
+							score = score+choixNobels.size();
+						}
 					}
 					nobelsRestants.addAll(listeNobels);		
 					nobelsRestants.removeAll(choixNobels);
-				
-					 
-//						 nobel ="selectioned";
+									 
 					 }
 				 
 				 /*
@@ -501,11 +376,10 @@ public class ChallengeAbcController {
 				// liste de tous les pays concern�s 
 					List<String> listeAnimaux = (List<String>) session.getAttribute("listeAnimaux");
 					// liste des choix faits par l'utilisateur 
-					List <String> choixAnimaux = new ArrayList<String>();
+					Set <String> choixAnimaux = new HashSet<String>();
 					// liste des pays restants (s'il en reste)
 					List<String> animauxRestants = new ArrayList<String>();
 				 if(request.getParameter("animaux")!=null){
-						
 						
 						String [] reponsesAnimaux = request.getParameterValues("animaux");
 						for(String s: reponsesAnimaux){
@@ -514,22 +388,22 @@ public class ChallengeAbcController {
 						// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 						// donc il gagne des points
 						if(choixAnimaux.containsAll(listeAnimaux)){
-							score = score +1;
+							score = score +listeAnimaux.size();
+						}else {
+							if (choixAnimaux!=null) {
+								score = score+choixAnimaux.size();
+							}
 						}
 						animauxRestants.addAll(listeAnimaux);		
-						animauxRestants.removeAll(choixAnimaux);
-					
-						 
-//						 animaux ="selectioned";
+						animauxRestants.removeAll(choixAnimaux);						 
 					 }
-				 
 				 /*
 					 * POUR LES PRESIDENTS =====================================================================================================================================
 					 */
 				// liste de tous les pays concern�s 
 					List<String> listePresidentsA = (List<String>) session.getAttribute("listePresidentsA");
 					// liste des choix faits par l'utilisateur 
-					List <String> choixPresidents = new ArrayList<String>();
+					Set <String> choixPresidents = new HashSet<String>();
 					// liste des pays restants (s'il en reste)
 					List<String> presidentsRestants = new ArrayList<String>();
 
@@ -542,22 +416,22 @@ public class ChallengeAbcController {
 						// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 						// donc il gagne des points
 						if(choixPresidents.containsAll(listePresidentsA)){
-							score = score +1;
+							score = score +listePresidentsA.size();
+						}else {
+							if (choixPresidents!=null) {
+								score=score+choixPresidents.size();
+							}
 						}
 						presidentsRestants.addAll(listePresidentsA);		
-						presidentsRestants.removeAll(choixPresidents);
-					
-						 
-//						 president ="selectioned";
+						presidentsRestants.removeAll(choixPresidents);						 
 					 }
 				 
 				 /*
 					 * POUR LES ANCIENS PRESIDENTS =====================================================================================================================================
 					 */
-				// liste de tous les pays concern�s 
 					List<String> listeAPresidents = (List<String>) session.getAttribute("listeAPresidents");
 					// liste des choix faits par l'utilisateur 
-					List <String> choixAPresidents = new ArrayList<String>();
+					Set <String> choixAPresidents = new HashSet<String>();
 					// liste des pays restants (s'il en reste)
 					List<String> ApresidentsRestants = new ArrayList<String>();
 				 if(request.getParameter("ancienP")!=null){
@@ -570,13 +444,14 @@ public class ChallengeAbcController {
 						// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 						// donc il gagne des points
 						if(choixAPresidents.containsAll(listeAPresidents)){
-							score = score +1;
+							score = score +listeAPresidents.size();
+						}else {
+							if (choixAPresidents!=null) {
+								score = score+choixAPresidents.size();
+							}
 						}
 						ApresidentsRestants.addAll(listeAPresidents);		
-						ApresidentsRestants.removeAll(choixAPresidents);
-					
-						 
-//						 APresident ="selectioned";
+						ApresidentsRestants.removeAll(choixAPresidents);						 
 					 }
 				 /*
 					 * POUR LES AGGOLOMERATIONS =====================================================================================================================================
@@ -584,11 +459,11 @@ public class ChallengeAbcController {
 				// liste de tous les pays concern�s 
 					List<String> listeAglo = (List<String>) session.getAttribute("listeAglo");
 					// liste des choix faits par l'utilisateur 
-					List <String> choixAgglo = new ArrayList<String>();
+					Set <String> choixAgglo = new HashSet<String>();
 					// liste des pays restants (s'il en reste)
 					List<String> AggloRestantes = new ArrayList<String>();
 
-				 if(request.getParameter("agglo")!=null){
+					if(request.getParameter("agglo")!=null){
 												
 						String [] reponsesAgglo = request.getParameterValues("agglo");
 						for(String s: reponsesAgglo){
@@ -597,13 +472,14 @@ public class ChallengeAbcController {
 						// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 						// donc il gagne des points
 						if(choixAgglo.containsAll(listeAglo)){
-							score = score +1;
+							score = score + listeAglo.size();
+						}else {
+							if (choixAgglo!=null) {
+								score = score + choixAgglo.size();
+							}
 						}
 						AggloRestantes.addAll(listeAglo);		
-						AggloRestantes.removeAll(choixAgglo);
-					
-						 
-//						 agglo ="selectioned";
+						AggloRestantes.removeAll(choixAgglo);						 
 					 }
 				 /*
 					 * POUR LES ARSTISTES CHANTEURS =====================================================================================================================================
@@ -611,12 +487,10 @@ public class ChallengeAbcController {
 				// liste de tous les pays concern�s 
 					List<String> listeChanteurs = (List<String>) session.getAttribute("listeChanteurs");
 					// liste des choix faits par l'utilisateur 
-					List <String> choixArtistes = new ArrayList<String>();
+					Set <String> choixArtistes = new HashSet<String>();
 					// liste des pays restants (s'il en reste)
 					List<String> ArtistesRestants = new ArrayList<String>();
-				 if(request.getParameter("artiste")!=null){
-						
-						
+					if(request.getParameter("artiste")!=null){						
 						String [] reponsesArtistes= request.getParameterValues("artiste");
 						for(String s: reponsesArtistes){
 							if(!s.equals("artiste")) choixArtistes.add(s);
@@ -624,39 +498,32 @@ public class ChallengeAbcController {
 						// si on retrouve tous les pays concern�s dans la liste des pays choisis alors l'utilisateur a trouv�
 						// donc il gagne des points
 						if(choixArtistes.containsAll(listeChanteurs)){
-							score = score +1;
+							score = score +listeChanteurs.size();
+						}else {
+							if (choixArtistes!=null) {
+								score = score + choixArtistes.size();
+							}
 						}
 						ArtistesRestants.addAll(listeChanteurs);		
-						ArtistesRestants.removeAll(choixArtistes);
-					
-						 
-//						 chanteur ="selectioned";
+						ArtistesRestants.removeAll(choixArtistes);					
 					 }
-				 
-//				 pour savoir si l'utilisateur a demand� de l'aide
-			if(request.getParameter("aidePaysNo")=="oui") help="oui";	 
-
-//			insertion dans la base de donn�es =========================
-//			AbcSoloJeux solojeu = new AbcSoloJeux(email, score, new Date(), null, time, help, choixAgglo, choixAPresidents, choixPresidents, choixAnimaux, choixArtistes,
-//					choixCapitales, choixPays, choixNobels, choixVilles, time);
-//			AbcSolo solo= new AbcSolo();
+//			recupération des inputs hidden pour le tempsRestant et la valeur de l'aide sur le jeu	 			
+			String tempsRestant = request.getParameter("tempsRestant");
+			String demandeAide = request.getParameter("valeuraidepays");
+			boolean aide = false;
+			if (demandeAide.equals("oui")) {
+				aide = true;
+			} 
+			int scoreMax = listeAglo.size()+listeAnimaux.size()+listeAPresidents.size()+listeCapitales.size()+listeChanteurs.size()+
+					listeNobels.size()+listePays.size()+listePresidentsA.size()+listePresidentsA.size();
 			
-			AbcChallenge challenge = new AbcChallenge(null, score, new Date(), lettre, 0, help, choixAgglo, choixAPresidents, choixPresidents, choixAnimaux, choixArtistes, choixCapitales, choixPays, choixNobels, choixVilles, 0);
+//			creation de l'objet jeu qui sera enregistré
+			AbcChallenge challenge = new AbcChallenge(score, new Date(), lettre, scoreMax, choixAgglo, choixAPresidents, choixPresidents, choixAnimaux, choixArtistes, choixCapitales, choixPays, choixNobels, choixVilles, dateString, aide, tempsRestant);
 			
-//			recup�ration de l'id de l'utilisateur
+//			recuperation de l'id de l'utilisateur puis enregistrement dans la BDD
 			Long idAmi=(Long) session.getAttribute("idAmi");
-//			mon id
-//			Long id =  (Long) session.getAttribute("id");
 			metier.saveChallenge(id, idAmi, challenge);
-			
-			
-//			Friend moi = new Friend();
-//			moi=metier.getFriendByEmail(email);
-//			Long id = moi.getId(); // c'est celui-ci qu'on doit mettre dans la m�thode qui suit quand les inscriptions seront bien faites
-//			metier.saveAbcSolo(1l, solo, solojeu);
-			
-			
-			
+						
 			model.addAttribute("moi", moi);
 			
 			model.addAttribute("listePays", listePays);
@@ -698,19 +565,13 @@ public class ChallengeAbcController {
 			model.addAttribute("gm", gm);
 			model.addAttribute("sm", gm);
 
-		
 		return "abcChallengeCorrection";
 		
 	}
 	@RequestMapping(value="infoJeuChallenge")
 	public String infoJeuChallenge(Model model, GameModel gm, HttpServletRequest request){
-//		gm  = new GameModel();
 		HttpSession session = request.getSession();
-//		if(gm.getMesChallengesJoues().isEmpty()){
-//			System.out.println("la liste de mes challlenges jou�s est vide");
-//		}
 		List<AbcChallenge> mixChallenge = (List<AbcChallenge>) session.getAttribute("mixChallenge");
-//		List<AbcChallenge> challengesAmis = (List<AbcChallenge>) session.getAttribute("challengesAmis");
 		
 		model.addAttribute("mixChallenge", mixChallenge);
 		model.addAttribute("gm", gm);
@@ -723,8 +584,79 @@ public class ChallengeAbcController {
 		
 		model.addAttribute("gm", gm);
 		return "infoJeuChallengeDuel";
+	}
+	@RequestMapping(value="accepterEtInfosChallengesRecus")
+	public String accepterEtInfosChallengeSujetsRecus (Model model, GameModel gm, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long id =  (Long) session.getAttribute("id");
+		
+		Long idAmi= (long) Integer.parseInt(req.getParameter("idAmi"));
+		String action = req.getParameter("action");
+		
+		switch (action) {
+		case "accepter":
+			metier.accepterChallenge(id, idAmi);
+			break;
+		case "refuser":
+			metier.refuserChallenge(id, idAmi);
+			break;
+		case "allerAuDuel":
+			break;
+		case "annulerEnvoi":
+			metier.annulerEnvoiChallenge(id, idAmi);
+			break;
+
+		default:
+			 throw new IllegalArgumentException("aucune action n'est défini ");
+//			break;
+		}
+		
+		gm.setMesChallengesRecus(metier.mesChallengesRecus(id));
+		gm.setMesChallengesEnvoyes(metier.mesChallengesEnvoyes(id));
+		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));
+		model.addAttribute("penduModel", gm);	
+	 
+		return "infosActionPenduDicoChallenge";
+	}
+	@RequestMapping(value="envoyerChallengeAbc")
+	public String envoyerChallengeAbc(HttpServletRequest req, Model model, SocialModel sm){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		Long idAmi= (long) Integer.parseInt(req.getParameter("idAmi"));
+		
+		metier.envoyerChallenge(id, idAmi);
+		SocialController social = new SocialController();
+		social.mesamis(model, sm, req);
+		return "userhome";
 		
 	}
-	
+	@RequestMapping(value="infosDetailsChallenge")
+	public String infosDetailsChallenge (Model model, GameModel gm, HttpServletRequest req, Word word){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		Friend moi = metier.getFriend(id);	
+		
+		gm.setMesChallengesRecus(metier.mesChallengesRecus(id));
+		gm.setMesChallengesEnvoyes(metier.mesChallengesEnvoyes(id));
+		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));
+		List<AbcChallenge> mesChallengesJoues = new ArrayList<AbcChallenge>();
+		mesChallengesJoues.addAll(metier.mesChallengesJoues(id));
+		gm.setMesChallengesJoues(metier.mesChallengesJoues(id));
+		model.addAttribute("gm", gm);
+
+		return "infosDetailsChallenge";
+		
+	}
+	@RequestMapping(value="infosDetailChallengeId")
+	public String infosDetailChallengeId(Model model, GameModel gm, HttpServletRequest req, Word word){
+		Long id = Long.parseLong(req.getParameter("idChallenge"));
+		AbcChallenge challenge = metier.getAbcChallengeById(id);
+		
+		
+		model.addAttribute("gm", gm);
+		model.addAttribute("challenge", challenge);
+		return "infosDetailChallengeId";
+		
+	}
 	
 }

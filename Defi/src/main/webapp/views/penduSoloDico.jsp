@@ -89,7 +89,7 @@
 						      <div class="media-body">
 						        <h4 class="media-heading">Pendu Dico Solo</h4>
 						        <p>Jouer avec les mots du dictionnaire, vous en avez plus de 36 000,
-						    le mot avec lequel vous allez jouer est tiré au sort et une littre vous ai indiqué dans le mot pour vous guider.</p>
+						    		le mot avec lequel vous allez jouer est tiré au sort et une littre vous ai indiqué dans le mot pour vous guider.</p>
 						      </div>  
 						   </li>
 						 </ul>

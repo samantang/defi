@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ import com.joue.avectesamis.entites.jeux.Nobels;
 import com.joue.avectesamis.entites.jeux.Pays_Capitale;
 import com.joue.avectesamis.entites.jeux.President;
 import com.joue.avectesamis.entites.jeux.VilleFrance;
+import com.joue.avectesamis.entites.jeux.pendu.PenduDicoChallenge;
 
 @Transactional
 @Repository
@@ -549,29 +551,153 @@ public class ChallengeDaoImpl implements ChallengeDao {
 
 	@Override
 	public void saveChallenge(Long m, Long a, AbcChallenge challenge) {
-		// TODO Auto-generated method stub
 		Friend moi = em.find(Friend.class, m);
 		Friend ami = em.find(Friend.class, a);
 		String code = moi.getChallengeEnAttentes().get(ami);		
 		
+//		si l'ami a dejà joué, alors on recupère les informations de son jeu pour les rajouter dans le jeu qui me concerne
+//		puis on rajoute les informations de mon jeu dans son jeu
 		
-		challenge.setCodeIndentification(code);
-		challenge.setFriend(moi);
-		challenge.setMonFriend(ami);
-		em.persist(challenge);
+		String codeAttenteMoiAmi = moi.getChallengeEnAttentes().get(ami);
+		String codeAttenteAmiMoi = ami.getChallengeEnAttentes().get(moi);
+		if (codeAttenteMoiAmi.equals(codeAttenteAmiMoi)) {
+//			alors il n'a pas encore joue
+			challenge.setCodeIndentification(code);
+			challenge.setFriend(moi);
+			challenge.setMonFriend(ami);
+			em.persist(challenge);
+			
+			moi.getMesChallengesJoues().add(challenge);
+			moi.getChallengeEnAttentes().remove(ami);
+			
+			moi.getChallengeEnJoues().put(ami, code);
+			em.merge(moi);
+			
+		} else {
+//			alors il a deja joue
+			AbcChallenge challengeAmi;
+			Set<String> elements;
+//			on fait une requete pour recuperer le challenge à partir du code d'identification ( mis a jour)
+			Query req = em.createQuery("select p from AbcChallenge p  where p.codeIndentification='"+codeAttenteMoiAmi+"'");
+			challengeAmi = (AbcChallenge) req.getSingleResult();
+//			ajout des informations de mon jeu dans le jeu de mon ami ===================================================
+			challengeAmi.setScoreAmi(challenge.getScore());
+			challengeAmi.setTimeOutAmi(challenge.isTimeOutMoi());
+			challengeAmi.setTempsRestantAmi(challenge.getTempsRestant());
+			challengeAmi.setDateStringAmi(challenge.getDateString());
+			challengeAmi.setAideAmi(challenge.isAide());
+			challengeAmi.setAmiJoue(true);
+			
+			if (!challenge.getPays().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getPays());
+				challengeAmi.setPaysAmi(elements);
+//				challengeAmi.getPaysAmi().addAll(challenge.getPays());
+			}
+			if (!challenge.getCapitale().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getCapitale());
+				challengeAmi.setCapitaleAmi(elements);
+//				challengeAmi.getCapitaleAmi().addAll(challenge.getCapitale());
+			}
+			if (!challenge.getNobel().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getNobel());
+				challengeAmi.setNobelAmi(elements);
+//				challengeAmi.getNobelAmi().addAll(challenge.getNobel());
+			}
+			if (!challenge.getPresident().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getPresident());
+				challengeAmi.setPresidentAmi(elements);
+//				challengeAmi.getPresidentAmi().addAll(challenge.getPresident());
+			}
+			if (!challenge.getArtiste().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getArtiste());
+				challengeAmi.setArtisteAmi(elements);
+//				challengeAmi.getArtisteAmi().addAll(challenge.getArtiste());
+			}
+			if (!challenge.getAgglo().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getAgglo());
+				challengeAmi.setAggloAmi(elements);
+//				challengeAmi.getAggloAmi().addAll(challenge.getAgglo());
+			}
+			if (!challenge.getAnimal().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challenge.getAnimal());
+				challengeAmi.setAnimalAmi(elements);
+			}
+			
+//			enregistrement du challenge de l'ami
+			em.merge(challengeAmi);
+			
+//			ajout des informations du jeu de mon ami dans mon jeu =========================================================
+			challenge.setScoreAmi(challengeAmi.getScore());
+			challenge.setTimeOutAmi(challengeAmi.isTimeOutMoi());
+			challenge.setTempsRestantAmi(challengeAmi.getTempsRestant());
+			challenge.setDateStringAmi(challengeAmi.getDateString());
+			challenge.setAideAmi(challengeAmi.isAide());
+			challenge.setAmiJoue(true);
+			
+			
+			if (!challengeAmi.getPays().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getPays());
+//				challenge.getPaysAmi().addAll(challengeAmi.getPays());
+				challenge.setPaysAmi(elements);
+			}
+			if (!challengeAmi.getCapitale().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getCapitale());
+//				challenge.getCapitaleAmi().addAll(challengeAmi.getCapitale());
+				challenge.setCapitaleAmi(elements);
+			}
+			if (!challengeAmi.getNobel().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getPays());
+//				challenge.getNobelAmi().addAll(challengeAmi.getNobel());
+				challenge.setNobelAmi(elements);
+			}
+			if (!challengeAmi.getPresident().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getPresident());
+//				challenge.getPresidentAmi().addAll(challengeAmi.getPresident());
+				challenge.setPresidentAmi(elements);
+			}
+			if (!challengeAmi.getArtiste().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getArtiste());
+//				challenge.getArtisteAmi().addAll(challengeAmi.getArtiste());
+				challenge.setArtisteAmi(elements);
+			}
+			if (!challengeAmi.getAgglo().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getAgglo());
+//				challenge.getAggloAmi().addAll(challengeAmi.getAgglo());
+				challenge.setAggloAmi(elements);
+			}
+			if (!challengeAmi.getAnimal().equals(null)) {
+				elements = new HashSet<String>();
+				elements.addAll(challengeAmi.getAnimal());
+//				challenge.getAnimalAmi().addAll(challengeAmi.getAnimal());
+				challenge.setAggloAmi(elements);
+			}
+			
+			challenge.setCodeIndentification(code);
+			challenge.setFriend(moi);
+			challenge.setMonFriend(ami);
+			em.persist(challenge);
+			
+			moi.getMesChallengesJoues().add(challenge);
+			moi.getChallengeEnAttentes().remove(ami);
+			
+			moi.getChallengeEnJoues().put(ami, code);
+			em.merge(moi);
+		}
 		
-		moi.getMesChallengesJoues().add(challenge);
-		moi.getChallengeEnAttentes().remove(ami);
-		
-		moi.getChallengeEnJoues().put(ami, code);
-		
-		
-		em.merge(moi);
-		
-//		moi.getChallengesEnvoyes().put(random, ami);
-//		moi.getChallengesEnvoyes().
-//		challenge.setFriend(ami);
-//		moi.getm
+//		em.merge(moi);
 		
 	}
 	@Override
@@ -715,14 +841,7 @@ public class ChallengeDaoImpl implements ChallengeDao {
 
 
 	@Override
-	public List<Friend> mesChallengesJoues(Long m) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public List<AbcChallenge> mesChallengesJoues(Long m, Long ami) {
+	public List<AbcChallenge> mesChallengesJoues(Long m) {
 		// TODO Auto-generated method stub
 		Friend moi = em.find(Friend.class, m);
 		moi.getMesChallengesJoues();
@@ -836,48 +955,24 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		Friend moi = em.find(Friend.class, m);
 		Friend ami = em.find(Friend.class, a);
 		
-//		recup�ration de mon envoi pour l'ami ==> recuperation de tous mes envois - recup�ration de l'id de l'ami, puis l'ami lui m�me
+		moi.getChallengesEnvoyes().remove(ami);
+		ami.getChallengesRecus().remove(moi);
 		
-//		recup�ration des amis dans la map pour les mettre dans une list
-		List<Friend> mesChallenges = new ArrayList<Friend>();
-//		List<String> valeurs = new ArrayList<String>();
-		Set<Entry<Friend, String>> setF = moi.getChallengesEnvoyes().entrySet();
-		Iterator<Entry<Friend, String>> it = setF.iterator();
-		while(it.hasNext()){
-			Entry<Friend, String> e = it.next();
-			mesChallenges.add(e.getKey());
-//			valeurs.add(e.getValue());
-		}
-//		recup�ration de l'id de l'ami dans la liste de mes envois puis suppression
-		for(Friend f: mesChallenges){
-			if(f.getId()==a){
-				System.out.println(" l'id de mon ami que je dois supprimer dans liste de mes envois est "+f.getId()+" et son nom "+f.getNom());
-			}
-		}
+		em.merge(moi);
+		em.merge(ami);
 	}
 
 
 	@Override
 	public void refuserChallenge(Long m, Long a) {
-		// TODO Auto-generated method stub
-//		recup�ration des mes challenges recus, puis de l'ami dans ces challenges pour en fin le supprimer
 		Friend moi = em.find(Friend.class, m);
-//		recup�ration des amis dans la map pour les mettre dans une list
-		List<Friend> mesChallenges = new ArrayList<Friend>();
-//		List<String> valeurs = new ArrayList<String>();
-		Set<Entry<Friend, String>> setF = moi.getChallengesRecus().entrySet();
-		Iterator<Entry<Friend, String>> it = setF.iterator();
-		while(it.hasNext()){
-			Entry<Friend, String> e = it.next();
-			mesChallenges.add(e.getKey());
-//			valeurs.add(e.getValue());
-		}
-//		recup�ration de l'id de l'ami dans la liste de mes envois
-		for(Friend f: mesChallenges){
-			if(f.getId()==a){
-				System.out.println(" l'id de mon ami que je dois supprimer dans liste de mes envois est "+f.getId()+" et son nom "+f.getNom());
-			}
-		}
+		Friend ami = em.find(Friend.class, a);
+		
+		moi.getChallengesRecus().remove(ami);
+		ami.getChallengesEnvoyes().remove(moi);
+		
+		em.merge(moi);
+		em.merge(ami);
 	}
 		
 
@@ -910,6 +1005,13 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		moi.setPhoto(photo);
 		moi.setNomPhoto(nomPhoto);
 		em.merge(moi);
+	}
+
+
+	@Override
+	public AbcChallenge getAbcChallengeById(Long id) {
+		// TODO Auto-generated method stub
+		return em.find(AbcChallenge.class, id);
 	}
 
 }

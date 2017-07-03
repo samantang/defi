@@ -476,13 +476,12 @@ public class PenduChallengeDicoControlleur {
 			System.out.println("le temps est fini ================= INSERTION DES DONNEES EN FONCTION ...");
 			return "penduChallengeDicoCorrection";
 		}
-		
 			
 		int points =0;
 		int nbFoisLettreDansMot =0;
 		int pointsMax =0;
 		
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
 		String dateString = df.format(now);
 			
@@ -495,7 +494,6 @@ public class PenduChallengeDicoControlleur {
 		model.addAttribute("pointsMax", pointsMax);
 
 
-		
 		int longueurMot = 10000000;
 		model.addAttribute("longueurMot", longueurMot);
 		
@@ -536,7 +534,6 @@ public class PenduChallengeDicoControlleur {
 		Long idAmi= (long) Integer.parseInt(req.getParameter("idAmi"));
 		String action = req.getParameter("action");
 		
-//		penduDao.acceptChallengeDico(id, idAmi);
 		switch (action) {
 		case "accepter":
 			penduDao.acceptChallengeDico(id, idAmi);

@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Abc Challenge</title>
+<title>Penu Challenge</title>
 <style type="text/css">
 .menuGauche ul {
     background: #CCCCFF;
@@ -81,7 +81,7 @@
 						    	<ul>
 						    		<li>
 						    			<c:choose>
-											<c:when test="${moi.nomPhoto == null}">
+											<c:when test="${ami.nomPhoto == null}">
 												<img height="20px" width="20px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
 											</c:when>
 											<c:otherwise>
@@ -102,7 +102,7 @@
 						    	<ul>
 						    		<li>
 						    			<c:choose>
-											<c:when test="${moi.nomPhoto == null}">
+											<c:when test="${ami.nomPhoto == null}">
 												<img height="20px" width="20px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
 											</c:when>
 											<c:otherwise>
@@ -122,7 +122,7 @@
 						    	<ul>
 						    		<li>
 						    			<c:choose>
-											<c:when test="${moi.nomPhoto == null}">
+											<c:when test="${ami.nomPhoto == null}">
 												<img height="20px" width="20px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
 											</c:when>
 											<c:otherwise>

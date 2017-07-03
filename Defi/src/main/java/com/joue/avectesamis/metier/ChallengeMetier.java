@@ -2,6 +2,7 @@ package com.joue.avectesamis.metier;
 
 import java.util.Collection;
 import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.joue.avectesamis.entites.AbcChallenge;
@@ -57,7 +58,7 @@ public interface ChallengeMetier {
 	
 //	public Collection<AbcChallenge> mesChallengesJou�s(Long moi);
 	public List<AbcChallenge> mesDerniersChallenges(Long moi);
-	public List<AbcChallenge> mesChallengesJoues(Long moi, Long ami);
+	public List<AbcChallenge> mesChallengesJoues(Long moi);
 	public void envoyerChallenge(Long moi, Long ami);
 	public List<Friend> demandesChallengesRecus(Long m);
 //	public void enregistrerChallenge(Long moi, Long ami, Abc_Challenge c);
@@ -106,4 +107,5 @@ public interface ChallengeMetier {
 	public void supprimerSolo(Long id);
 	public void pubierSolo(Long idjeu, Long m);
 	public AbcSolo detailsSolo(Long id);
+	public AbcChallenge getAbcChallengeById(Long id);
 }

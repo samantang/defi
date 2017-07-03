@@ -2,6 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f" %>
 <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,15 +29,16 @@
 </head>
 <body>
 		<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal">&times;</button>
-  <h1>Les Détails de vos jeux</h1>
+  <button type="button" class="close quitterInfosDicoSolo" data-dismiss="modal">&times;</button>
+  <h2 style="text-align: center; color: navy; text-shadow: 2px 2px 4px #000000;  ">DETAILS DE VOS JEUX ABC SOLO</h2>
+  <button class="btn-success quitterInfosDicoSolo">QUITTER</button>
   
 </div>
 <div class="modal-body">
   <div>
-						<table class="table table-bordered table-striped table-condensed">
+						<table id="tableauDataTable" class="table table-bordered table-striped table-condensed">
 							<thead>
-								<tr>
+								<tr class="success">
 									<th>Date</th>
 									<th>Lettre</th>
 									<th>Aide</th>
@@ -57,11 +59,11 @@
 							<tbody>
 								<c:forEach items="${gm.mesSolos }" var="solo">
 									<tr>
-										<td>${solo.date }</td>
-										<td>${solo.lettre }</td>
-										<td>${solo.help }</td>
+										<td>${solo.abcsolojeux.datestring }</td>
+										<td>${solo.abcsolojeux.lettrechar }</td>
+										<td>${solo.abcsolojeux.help }</td>
 										<td>${solo.time }</td>
-										<td>${solo.score }</td>
+										<td>${solo.abcsolojeux.score}/${solo.abcsolojeux.scoreMax}</td>
 										<td><a href="publierSolo?id=${solo.id}">pub</a></td>
 										<td><a href="suprimerSolo?id=${solo.id}">sup</a></td>
 										<td>
@@ -111,5 +113,41 @@
 						</table>
 					</div>
 </div>
+<script type="text/javascript">
+$(function (){
+	$('.quitterInfosDicoSolo').click(function(){
+		location = 'http://localhost:8080/abcSoloHome';
+	})
+});
+$(document).ready(function() {
+    $('#tableauDataTable').DataTable({
+    	"language": {
+    		"sProcessing": "Traitement en cours...",
+    		"sSearch": "Rechercher&nbsp;:",
+    		"sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+    		"sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+    		"sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+    		"sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+    		"sInfoPostFix": "",
+    		"sLoadingRecords": "Chargement en cours...",
+    		"sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+    		"sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+    		"oPaginate": {
+    		"sFirst": "Premier",
+    		"sPrevious": "Pr&eacute;c&eacute;dent",
+    		"sNext": "Suivant",
+    		"sLast": "Dernier"
+    		},
+    		"oAria": {
+    		"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+    		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+    		}
+    		}
+    });
+    
+} );
+</script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

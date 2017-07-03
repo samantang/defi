@@ -95,8 +95,7 @@ public interface ChallengeDao {
 	public List<Friend>	mesChallengesRecus(Long moi);
 	public List<Friend>	mesChallengesEnvoyes(Long moi);
 	public List<Friend>	mesChallengesEnAttentes(Long moi);
-	public List<Friend> mesChallengesJoues(Long m);
-	public List<AbcChallenge> mesChallengesJoues(Long moi, Long ami);
+	public List<AbcChallenge> mesChallengesJoues(Long m);
 //	les amis pour lesquels Annuler la demande
 	public List<Friend> amisAnnulerDemande(Long moi);
 //	les amis pour lesquels Accepter la demande
@@ -110,6 +109,7 @@ public interface ChallengeDao {
 	public void refuserChallenge (Long moi, Long ami);
 	public void jouerChallenge (Long moi, Long ami);
 	public void challengerChallenge (Long moi, Long ami);
+	public AbcChallenge getAbcChallengeById(Long id);
 	
 	
 	
@@ -117,5 +117,6 @@ public interface ChallengeDao {
 	public String getCodeAttenteMoiAmi(Long moi, Long ami);
 	public String getCodeAttenteAmiMoi(Long moi, Long ami);
 	public String getCodeJoueAmiMoi(Long moi, Long ami);
+	
 
 }

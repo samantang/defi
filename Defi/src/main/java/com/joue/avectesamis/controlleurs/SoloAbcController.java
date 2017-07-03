@@ -60,10 +60,9 @@ public class SoloAbcController {
 		
 	}
 	@RequestMapping(value="abcSoloJeu")
-	public String abcSoloChoix (Model model, GameModel gm, HttpServletRequest request){
+	public String abcSoloJeu (Model model, GameModel gm, HttpServletRequest request){
 		System.out.println("nous sommes dans abcsolojeu ====");
 		gm = new GameModel();
-		
 				
 		HttpSession session = request.getSession();
 		Long id = (Long) session.getAttribute("id");
@@ -71,7 +70,6 @@ public class SoloAbcController {
 		Random r = new Random();
 		char lettre = (char) (r.nextInt(26)+'a');
 		session.setAttribute("lettre", lettre);
-		
 		
 		int temps =0;
 		
@@ -101,7 +99,7 @@ public class SoloAbcController {
 				List<String> tousLesChanteurs = new ArrayList<String>();
 				List<String> tousLesNobels = new ArrayList<String>();
 				
-				
+
 				
 				gm = new GameModel();
 				// LES PAYS
@@ -167,6 +165,16 @@ public class SoloAbcController {
 					}
 					checkList.add("animaux");
 				}
+				String lettreString = String.valueOf(lettre);
+				
+				
+//				pour les premières lettres des nobels en cas de demande d'aide
+				List<String> lettresArtistes = new ArrayList<String>();
+				for (String astiste : tousLesChanteurs) {
+					lettresArtistes.add(astiste.substring(0, 3));
+				}
+				
+				model.addAttribute("lettresArtistes", lettresArtistes);
 				
 				// �������������������������������������������������������������������������������������
 				int taillePays = listPays.size();
@@ -192,6 +200,7 @@ public class SoloAbcController {
 				session.setAttribute("listeChanteurs", tousLesChanteurs);
 				request.setAttribute("temps", temps);
 				session.setAttribute("lettre", lettre);
+				session.setAttribute("lettreMajuscule", lettreString.toUpperCase());
 				session.setAttribute("checkList", checkList);
 				
 				model.addAttribute("moi", moi);
@@ -551,6 +560,7 @@ public class SoloAbcController {
 //					Friend moi = new Friend();
 //					moi=metier.getFriendByEmail(email);
 //					Long id = moi.getId(); // c'est celui-ci qu'on doit mettre dans la m�thode qui suit quand les inscriptions seront bien faites
+					
 					metier.saveAbcSolo(id, solo, solojeu);
 					
 					model.addAttribute("id", id);

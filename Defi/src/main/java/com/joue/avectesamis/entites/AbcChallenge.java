@@ -2,6 +2,7 @@ package com.joue.avectesamis.entites;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -32,40 +33,310 @@ public class AbcChallenge {
 	private int scoreMax;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>agglo ;
+	private Set<String>agglo ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>aPresident ;
+	private Set<String>aPresident ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>president ;
+	private Set<String>president ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>animal ;
+	private Set<String>animal ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>artiste ;
+	private Set<String>artiste ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>capitale ;
+	private Set<String>capitale ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>pays ;
+	private Set<String>pays ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>nobel ;
+	private Set<String>nobel ;
 	@ElementCollection(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<String>ville ;
+	private Set<String>ville ;
 	private int timeOut ;
 	@OneToOne
 	private Friend friend;
 	@OneToOne
 	private Friend monFriend;
+//	les infos de mon ami en challenge
+	private int scoreAmi;
+	private boolean timeOutAmi;
+	private String tempsRestantAmi;
+	private String dateStringAmi;
+	private boolean aideAmi;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>aggloAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>aPresidentAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>presidentAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>animalAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>artisteAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>capitaleAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>paysAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>nobelAmi ;
+	@ElementCollection(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<String>villeAmi ;
+//	mes ifos qui manquaient
+	private String dateString;
+	private boolean timeOutMoi;
+	private boolean aide;
+	private String tempsRestant;
+	
+//	si l'ami a joué
+	private boolean amiJoue;
 	
 	
 	
 	
+	
+	/**
+	 * @return the amiJoue
+	 */
+	public boolean isAmiJoue() {
+		return amiJoue;
+	}
+	/**
+	 * @param amiJoue the amiJoue to set
+	 */
+	public void setAmiJoue(boolean amiJoue) {
+		this.amiJoue = amiJoue;
+	}
+	/**
+	 * @return the dateString
+	 */
+	public String getDateString() {
+		return dateString;
+	}
+	/**
+	 * @param dateString the dateString to set
+	 */
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+	/**
+	 * @return the timeOutMoi
+	 */
+	public boolean isTimeOutMoi() {
+		return timeOutMoi;
+	}
+	/**
+	 * @param timeOutMoi the timeOutMoi to set
+	 */
+	public void setTimeOutMoi(boolean timeOutMoi) {
+		this.timeOutMoi = timeOutMoi;
+	}
+	/**
+	 * @return the aide
+	 */
+	public boolean isAide() {
+		return aide;
+	}
+	/**
+	 * @param aide the aide to set
+	 */
+	public void setAide(boolean aide) {
+		this.aide = aide;
+	}
+	/**
+	 * @return the tempsRestant
+	 */
+	public String getTempsRestant() {
+		return tempsRestant;
+	}
+	/**
+	 * @param tempsRestant the tempsRestant to set
+	 */
+	public void setTempsRestant(String tempsRestant) {
+		this.tempsRestant = tempsRestant;
+	}
+	/**
+	 * @return the scoreAmi
+	 */
+	public int getScoreAmi() {
+		return scoreAmi;
+	}
+	/**
+	 * @param scoreAmi the scoreAmi to set
+	 */
+	public void setScoreAmi(int scoreAmi) {
+		this.scoreAmi = scoreAmi;
+	}
+	/**
+	 * @return the timeOutAmi
+	 */
+	public boolean isTimeOutAmi() {
+		return timeOutAmi;
+	}
+	/**
+	 * @param timeOutAmi the timeOutAmi to set
+	 */
+	public void setTimeOutAmi(boolean timeOutAmi) {
+		this.timeOutAmi = timeOutAmi;
+	}
+	/**
+	 * @return the tempsRestantAmi
+	 */
+	public String getTempsRestantAmi() {
+		return tempsRestantAmi;
+	}
+	/**
+	 * @param tempsRestantAmi the tempsRestantAmi to set
+	 */
+	public void setTempsRestantAmi(String tempsRestantAmi) {
+		this.tempsRestantAmi = tempsRestantAmi;
+	}
+	/**
+	 * @return the dateStringAmi
+	 */
+	public String getDateStringAmi() {
+		return dateStringAmi;
+	}
+	/**
+	 * @param dateStringAmi the dateStringAmi to set
+	 */
+	public void setDateStringAmi(String dateStringAmi) {
+		this.dateStringAmi = dateStringAmi;
+	}
+	/**
+	 * @return the aideAmi
+	 */
+	public boolean isAideAmi() {
+		return aideAmi;
+	}
+	/**
+	 * @param aideAmi the aideAmi to set
+	 */
+	public void setAideAmi(boolean aideAmi) {
+		this.aideAmi = aideAmi;
+	}
+	/**
+	 * @return the aggloAmi
+	 */
+	public Set<String> getAggloAmi() {
+		return aggloAmi;
+	}
+	/**
+	 * @param aggloAmi the aggloAmi to set
+	 */
+	public void setAggloAmi(Set<String> aggloAmi) {
+		this.aggloAmi = aggloAmi;
+	}
+	/**
+	 * @return the aPresidentAmi
+	 */
+	public Set<String> getaPresidentAmi() {
+		return aPresidentAmi;
+	}
+	/**
+	 * @param aPresidentAmi the aPresidentAmi to set
+	 */
+	public void setaPresidentAmi(Set<String> aPresidentAmi) {
+		this.aPresidentAmi = aPresidentAmi;
+	}
+	/**
+	 * @return the presidentAmi
+	 */
+	public Set<String> getPresidentAmi() {
+		return presidentAmi;
+	}
+	/**
+	 * @param presidentAmi the presidentAmi to set
+	 */
+	public void setPresidentAmi(Set<String> presidentAmi) {
+		this.presidentAmi = presidentAmi;
+	}
+	/**
+	 * @return the animalAmi
+	 */
+	public Set<String> getAnimalAmi() {
+		return animalAmi;
+	}
+	/**
+	 * @param animalAmi the animalAmi to set
+	 */
+	public void setAnimalAmi(Set<String> animalAmi) {
+		this.animalAmi = animalAmi;
+	}
+	/**
+	 * @return the artisteAmi
+	 */
+	public Set<String> getArtisteAmi() {
+		return artisteAmi;
+	}
+	/**
+	 * @param artisteAmi the artisteAmi to set
+	 */
+	public void setArtisteAmi(Set<String> artisteAmi) {
+		this.artisteAmi = artisteAmi;
+	}
+	/**
+	 * @return the capitaleAmi
+	 */
+	public Set<String> getCapitaleAmi() {
+		return capitaleAmi;
+	}
+	/**
+	 * @param capitaleAmi the capitaleAmi to set
+	 */
+	public void setCapitaleAmi(Set<String> capitaleAmi) {
+		this.capitaleAmi = capitaleAmi;
+	}
+	/**
+	 * @return the paysAmi
+	 */
+	public Set<String> getPaysAmi() {
+		return paysAmi;
+	}
+	/**
+	 * @param paysAmi the paysAmi to set
+	 */
+	public void setPaysAmi(Set<String> paysAmi) {
+		this.paysAmi = paysAmi;
+	}
+	/**
+	 * @return the nobelAmi
+	 */
+	public Set<String> getNobelAmi() {
+		return nobelAmi;
+	}
+	/**
+	 * @param nobelAmi the nobelAmi to set
+	 */
+	public void setNobelAmi(Set<String> nobelAmi) {
+		this.nobelAmi = nobelAmi;
+	}
+	/**
+	 * @return the villeAmi
+	 */
+	public Set<String> getVilleAmi() {
+		return villeAmi;
+	}
+	/**
+	 * @param villeAmi the villeAmi to set
+	 */
+	public void setVilleAmi(Set<String> villeAmi) {
+		this.villeAmi = villeAmi;
+	}
 	/**
 	 * @return the monFriend
 	 */
@@ -215,109 +486,109 @@ public class AbcChallenge {
 	/**
 	 * @return the agglo
 	 */
-	public List<String> getAgglo() {
+	public Set<String> getAgglo() {
 		return agglo;
 	}
 	/**
 	 * @param agglo the agglo to set
 	 */
-	public void setAgglo(List<String> agglo) {
+	public void setAgglo(Set<String> agglo) {
 		this.agglo = agglo;
 	}
 	/**
 	 * @return the aPresident
 	 */
-	public List<String> getaPresident() {
+	public Set<String> getaPresident() {
 		return aPresident;
 	}
 	/**
 	 * @param aPresident the aPresident to set
 	 */
-	public void setaPresident(List<String> aPresident) {
+	public void setaPresident(Set<String> aPresident) {
 		this.aPresident = aPresident;
 	}
 	/**
 	 * @return the president
 	 */
-	public List<String> getPresident() {
+	public Set<String> getPresident() {
 		return president;
 	}
 	/**
 	 * @param president the president to set
 	 */
-	public void setPresident(List<String> president) {
+	public void setPresident(Set<String> president) {
 		this.president = president;
 	}
 	/**
 	 * @return the animal
 	 */
-	public List<String> getAnimal() {
+	public Set<String> getAnimal() {
 		return animal;
 	}
 	/**
 	 * @param animal the animal to set
 	 */
-	public void setAnimal(List<String> animal) {
+	public void setAnimal(Set<String> animal) {
 		this.animal = animal;
 	}
 	/**
 	 * @return the artiste
 	 */
-	public List<String> getArtiste() {
+	public Set<String> getArtiste() {
 		return artiste;
 	}
 	/**
 	 * @param artiste the artiste to set
 	 */
-	public void setArtiste(List<String> artiste) {
+	public void setArtiste(Set<String> artiste) {
 		this.artiste = artiste;
 	}
 	/**
 	 * @return the capitale
 	 */
-	public List<String> getCapitale() {
+	public Set<String> getCapitale() {
 		return capitale;
 	}
 	/**
 	 * @param capitale the capitale to set
 	 */
-	public void setCapitale(List<String> capitale) {
+	public void setCapitale(Set<String> capitale) {
 		this.capitale = capitale;
 	}
 	/**
 	 * @return the pays
 	 */
-	public List<String> getPays() {
+	public Set<String> getPays() {
 		return pays;
 	}
 	/**
 	 * @param pays the pays to set
 	 */
-	public void setPays(List<String> pays) {
+	public void setPays(Set<String> pays) {
 		this.pays = pays;
 	}
 	/**
 	 * @return the nobel
 	 */
-	public List<String> getNobel() {
+	public Set<String> getNobel() {
 		return nobel;
 	}
 	/**
 	 * @param nobel the nobel to set
 	 */
-	public void setNobel(List<String> nobel) {
+	public void setNobel(Set<String> nobel) {
 		this.nobel = nobel;
 	}
 	/**
 	 * @return the ville
 	 */
-	public List<String> getVille() {
+	public Set<String> getVille() {
 		return ville;
 	}
 	/**
 	 * @param ville the ville to set
 	 */
-	public void setVille(List<String> ville) {
+	public void setVille(Set<String> ville) {
 		this.ville = ville;
 	}
 	/**
@@ -351,13 +622,12 @@ public class AbcChallenge {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 /**
- * @param email
  * @param score
  * @param date
  * @param lettre
- * @param time
- * @param help
+ * @param scoreMax
  * @param agglo
  * @param aPresident
  * @param president
@@ -367,20 +637,20 @@ public class AbcChallenge {
  * @param pays
  * @param nobel
  * @param ville
- * @param timeOut
+ * @param dateString
+ * @param aide
+ * @param tempsRestant
  */
-public AbcChallenge(String email, int score, Date date, char lettre,
-		int time, String help, List<String> agglo, List<String> aPresident,
-		List<String> president, List<String> animal, List<String> artiste,
-		List<String> capitale, List<String> pays, List<String> nobel,
-		List<String> ville, int timeOut) {
+public AbcChallenge(int score, Date date, char lettre, int scoreMax,
+		Set<String> agglo, Set<String> aPresident, Set<String> president,
+		Set<String> animal, Set<String> artiste, Set<String> capitale,
+		Set<String> pays, Set<String> nobel, Set<String> ville,
+		String dateString, boolean aide, String tempsRestant) {
 	super();
-	this.email = email;
 	this.score = score;
 	this.date = date;
 	this.lettre = lettre;
-	this.time = time;
-	this.help = help;
+	this.scoreMax = scoreMax;
 	this.agglo = agglo;
 	this.aPresident = aPresident;
 	this.president = president;
@@ -390,124 +660,9 @@ public AbcChallenge(String email, int score, Date date, char lettre,
 	this.pays = pays;
 	this.nobel = nobel;
 	this.ville = ville;
-	this.timeOut = timeOut;
-}
-/**
- * @param id
- * @param email
- * @param score
- * @param date
- * @param lettre
- * @param time
- * @param help
- * @param agglo
- * @param aPresident
- * @param president
- * @param animal
- * @param artiste
- * @param capitale
- * @param pays
- * @param nobel
- * @param ville
- * @param timeOut
- */
-public AbcChallenge(Long id, String email, int score, Date date, char lettre,
-		int time, String help, List<String> agglo, List<String> aPresident,
-		List<String> president, List<String> animal, List<String> artiste,
-		List<String> capitale, List<String> pays, List<String> nobel,
-		List<String> ville, int timeOut) {
-	super();
-	this.id = id;
-	this.email = email;
-	this.score = score;
-	this.date = date;
-	this.lettre = lettre;
-	this.time = time;
-	this.help = help;
-	this.agglo = agglo;
-	this.aPresident = aPresident;
-	this.president = president;
-	this.animal = animal;
-	this.artiste = artiste;
-	this.capitale = capitale;
-	this.pays = pays;
-	this.nobel = nobel;
-	this.ville = ville;
-	this.timeOut = timeOut;
-}
-/**
- * @param id
- * @param codeIndentification
- * @param email
- * @param score
- * @param date
- * @param lettre
- * @param time
- * @param help
- * @param agglo
- * @param aPresident
- * @param president
- * @param animal
- * @param artiste
- * @param capitale
- * @param pays
- * @param nobel
- * @param ville
- * @param timeOut
- */
-public AbcChallenge(Long id, String codeIndentification, String email, int score, Date date, char lettre,
-		int time, String help, List<String> agglo, List<String> aPresident,
-		List<String> president, List<String> animal, List<String> artiste,
-		List<String> capitale, List<String> pays, List<String> nobel,
-		List<String> ville, int timeOut) {
-	super();
-	this.id = id;
-	this.codeIndentification = codeIndentification;
-	this.email = email;
-	this.score = score;
-	this.date = date;
-	this.lettre = lettre;
-	this.time = time;
-	this.help = help;
-	this.agglo = agglo;
-	this.aPresident = aPresident;
-	this.president = president;
-	this.animal = animal;
-	this.artiste = artiste;
-	this.capitale = capitale;
-	this.pays = pays;
-	this.nobel = nobel;
-	this.ville = ville;
-	this.timeOut = timeOut;
-}
-public AbcChallenge(Long id2, String codeIndentification2, String email2,
-		int score2, Date date2, char lettre2, int time2, String help2,
-		List<String> agglo2, List<String> getaPresident,
-		List<String> president2, List<String> animal2, List<String> artiste2,
-		List<String> capitale2, List<String> pays2, List<String> nobel2,
-		List<String> ville2, int timeOut2, Friend monFriend2, Friend friend) {
-	// TODO Auto-generated constructor stub
-	super();
-	this.id = id2;
-	this.codeIndentification = codeIndentification2;
-	this.email = email2;
-	this.score = score2;
-	this.date = date2;
-	this.lettre = lettre2;
-	this.time = time2;
-	this.help = help2;
-	this.agglo = agglo2;
-	this.aPresident = getaPresident;
-	this.president = president2;
-	this.animal = animal2;
-	this.artiste = artiste2;
-	this.capitale = capitale2;
-	this.pays = pays2;
-	this.nobel = nobel2;
-	this.ville = ville2;
-	this.timeOut = timeOut2;
-	this.monFriend= monFriend2;
-	this.friend = friend;
+	this.dateString = dateString;
+	this.aide = aide;
+	this.tempsRestant = tempsRestant;
 }
 	
 	

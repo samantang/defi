@@ -25,20 +25,10 @@ public class GameModel {
 	private List<Friend> mesChallengesRecus;
 	private List<Friend> mesChallengesEnvoyes;
 	private List<Friend> mesChallengesEnAttentes;
-	private Collection<AbcChallenge> mesChallengesJoues;
+	private List<AbcChallenge> mesChallengesJoues;
 	private int nombreDeChallengesRecus;
 	private List<AbcChallenge> challengesAmis;
 	private List <AbcChallenge> challengeAmisOrdreCoupe;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * @return the challengeAmisOrdreCoupe
@@ -86,14 +76,14 @@ public class GameModel {
 	/**
 	 * @return the mesChallengesJoues
 	 */
-	public Collection<AbcChallenge> getMesChallengesJoues() {
+	public List<AbcChallenge> getMesChallengesJoues() {
 		return mesChallengesJoues;
 	}
 
 	/**
 	 * @param mesChallengesJoues the mesChallengesJoues to set
 	 */
-	public void setMesChallengesJoues(Collection<AbcChallenge> mesChallengesJoues) {
+	public void setMesChallengesJoues(List<AbcChallenge> mesChallengesJoues) {
 		this.mesChallengesJoues = mesChallengesJoues;
 	}
 

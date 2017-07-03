@@ -28,15 +28,15 @@
 </head>
 <body>
 		<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal">&times;</button>
-  <h1>Les détails du jeu</h1>
-  
+  <button type="button" class="close quitterInfosDicoSolo" data-dismiss="modal">&times;</button>
+    <h2 style="text-align: center; color: navy; text-shadow: 2px 2px 4px #000000;  ">DETAILS DE VOTRE JEU ABC SOLO</h2>
+  	<button class="btn-success quitterInfosDicoSolo">QUITTER</button>
 </div>
 <div class="modal-body">
   <div>
 						<table class="table table-bordered table-striped table-condensed">
 							<thead>
-								<tr>
+								<tr class="success">
 									<th>Date</th>
 									<th>Lettre</th>
 									<th>Aide</th>
@@ -126,6 +126,13 @@
 							</tbody>
 						</table>
 					</div>
-</div>
+				</div>
+				<script type="text/javascript">
+				$(function (){
+					$('.quitterInfosDicoSolo').click(function(){
+						location = 'http://localhost:8080/abcSoloHome';
+					})
+				}); 
+				</script>
 </body>
 </html>

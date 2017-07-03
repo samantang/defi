@@ -391,9 +391,9 @@ public class ChallengeMetierImpl implements ChallengeMetier{
 	}
 
 	@Override
-	public List<AbcChallenge> mesChallengesJoues(Long moi, Long ami) {
+	public List<AbcChallenge> mesChallengesJoues(Long moi) {
 		// TODO Auto-generated method stub
-		return dao.mesChallengesJoues(moi, ami);
+		return dao.mesChallengesJoues(moi);
 	}
 
 	@Override
@@ -476,6 +476,12 @@ public class ChallengeMetierImpl implements ChallengeMetier{
 	public List<Friend> tousLesInscrits() {
 		// TODO Auto-generated method stub
 		return dao.tousLesInscrits();
+	}
+
+	@Override
+	public AbcChallenge getAbcChallengeById(Long id) {
+		// TODO Auto-generated method stub
+		return dao.getAbcChallengeById(id);
 	}
 
 	

@@ -260,14 +260,12 @@ public class PenduChallengeSujetsControlleur {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		HttpSession session = request.getSession();
-		Long id = 2L; 
-//				(Long) session.getAttribute("id");
+		Long id = (Long) session.getAttribute("id");
 //		le temps en fonction du nombre de r�sultats possibles 
 		int temps =0;
 		
 //		recup�raiton de l'ami
-		Long idAmi= 3L;
-//				(long) Integer.parseInt(request.getParameter("idAmi"));
+		Long idAmi= (long) Integer.parseInt(request.getParameter("idAmi"));
 		session.setAttribute("idAmi", idAmi);
 		Friend ami= metier.getFriend(idAmi);
 		
@@ -910,7 +908,7 @@ public class PenduChallengeSujetsControlleur {
 	}
 	
 	@RequestMapping(value="accepterEtInfosChallengeSujetsRecus")
-	public String accepterEtInfosChallengeDicoRecus (Model model, PenduModel penduModel, HttpServletRequest req){
+	public String accepterEtInfosChallengeSujetsRecus (Model model, PenduModel penduModel, HttpServletRequest req){
 		HttpSession session = req.getSession();
 		Long id =  (Long) session.getAttribute("id");
 		
