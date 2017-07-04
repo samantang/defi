@@ -1014,4 +1014,12 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		return em.find(AbcChallenge.class, id);
 	}
 
+
+	@Override
+	public AbcChallenge getMonChallenge(Long id, Long idJeu) {
+		// TODO Auto-generated method stub
+		AbcChallenge challenge = em.find(AbcChallenge.class, idJeu);
+		return challenge;
+	}
+
 }

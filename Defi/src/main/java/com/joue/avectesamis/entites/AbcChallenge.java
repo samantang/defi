@@ -104,11 +104,25 @@ public class AbcChallenge {
 	
 //	si l'ami a joué
 	private boolean amiJoue;
+//	si le jeu est publie ou pas
+	private boolean publie;
 	
 	
 	
 	
 	
+	/**
+	 * @return the publie
+	 */
+	public boolean isPublie() {
+		return publie;
+	}
+	/**
+	 * @param publie the publie to set
+	 */
+	public void setPublie(boolean publie) {
+		this.publie = publie;
+	}
 	/**
 	 * @return the amiJoue
 	 */

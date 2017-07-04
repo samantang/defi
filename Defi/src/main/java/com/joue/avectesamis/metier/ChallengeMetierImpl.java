@@ -484,6 +484,12 @@ public class ChallengeMetierImpl implements ChallengeMetier{
 		return dao.getAbcChallengeById(id);
 	}
 
+	@Override
+	public AbcChallenge getMonChallenge(Long id, Long idJeu) {
+		// TODO Auto-generated method stub
+		return dao.getMonChallenge(id, idJeu);
+	}
+
 	
 	
 

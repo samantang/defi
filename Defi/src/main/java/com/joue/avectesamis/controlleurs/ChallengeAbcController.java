@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.AbcSolo;
 import com.joue.avectesamis.entites.Friend;
+import com.joue.avectesamis.entites.Post;
+import com.joue.avectesamis.entites.TypePost;
 import com.joue.avectesamis.entites.jeux.APresident;
 import com.joue.avectesamis.entites.jeux.Agglo;
 import com.joue.avectesamis.entites.jeux.Animaux;
@@ -648,14 +650,39 @@ public class ChallengeAbcController {
 		
 	}
 	@RequestMapping(value="infosDetailChallengeId")
-	public String infosDetailChallengeId(Model model, GameModel gm, HttpServletRequest req, Word word){
-		Long id = Long.parseLong(req.getParameter("idChallenge"));
+	public String infosDetailChallengeId(Model model, GameModel gm, HttpServletRequest req){
+		Long id = Long.valueOf(req.getParameter("idChallenge"));
 		AbcChallenge challenge = metier.getAbcChallengeById(id);
 		
 		
 		model.addAttribute("gm", gm);
 		model.addAttribute("challenge", challenge);
 		return "infosDetailChallengeId";
+	}
+	@RequestMapping(value="infoPublicationSoloAbcChallenge")
+	public String infoPublicationSoloAbcChallenge(Model model, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long idJeu = Long.valueOf(req.getParameter("idJeu"));
+		Long id = (Long) session.getAttribute("id");
+		AbcChallenge challenge = new AbcChallenge();
+		challenge = metier.getMonChallenge(id, idJeu);
+				
+//		si le jeu n'avait été publié au par avant 
+		if(!challenge.isPublie()){
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			Date now = new Date();
+			String dateString = df.format(now);
+			String message = "le "+dateString+", j'ai joué à un ABC-CHALLENGE contre "+challenge.getMonFriend().getNom()+" "
+					+ ""+challenge.getMonFriend().getPrenom()+"\n"+", les ressultats sont de ce duel sont: "+"\n"+""
+							+ "POINTS: moi: "+challenge.getScore()+" lui: "+challenge.getScoreAmi()+"\n"+""
+									+ "LA LETTRE: "+challenge.getLettre()+"\n"
+											+ "Temps Restant: moi "+challenge.getTempsRestant()+" lui: "+challenge.getTempsRestantAmi();
+			System.out.println(message);
+			Post post = new Post(new Date(), message, true, TypePost.ABCCHALLENGE);
+			metier.posterPost(id, message);
+//			return "infoPublicationSoloAbcChallenge";
+		}
+		return "infoPublicationSoloAbcChallenge";
 		
 	}
 	

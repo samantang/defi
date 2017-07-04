@@ -85,6 +85,7 @@ public interface ChallengeMetier {
 	public void refuserChallenge (Long moi, Long ami);
 	public void jouerChallenge (Long moi, Long ami);
 	public void challengerChallenge (Long moi, Long ami);
+	public AbcChallenge getMonChallenge(Long id, Long idJeu);
 	
 	
 	public void creerAlbum(Long m);
@@ -108,4 +109,5 @@ public interface ChallengeMetier {
 	public void pubierSolo(Long idjeu, Long m);
 	public AbcSolo detailsSolo(Long id);
 	public AbcChallenge getAbcChallengeById(Long id);
+	
 }

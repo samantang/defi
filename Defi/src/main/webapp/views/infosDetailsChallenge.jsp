@@ -64,6 +64,7 @@ table td.resizing {
 		  <button type="button" class="close quitterInfosChallengeAbc" data-dismiss="modal">&times;</button>
 		  <h2>LES DETAILS DE VOS JEUX EN ABC CHALLENGE</h2>
 		  <button class="btn-success quitterInfosChallengeAbc">QUITTER</button><br>
+		  <div id="infoPublicationAbcChalleng"></div>
 		</div>
 		<div id="infoPublicationChallenge">
 		</div>
@@ -201,7 +202,18 @@ table td.resizing {
 															</c:forEach>
 														</div>	
 													</td>
-													<td>PUB</td>
+													<td>
+														<c:choose>
+															<c:when test="${cha.publie == true }">
+																publié
+															</c:when>
+															<c:otherwise>
+																<button id="${cha.id}" onclick="publierAbcChallenge(this,${cha.id} )"  class="btn btn-primary" >
+													        		<span class="glyphicon glyphicon-share"></span>
+													        	</button>
+															</c:otherwise>
+														</c:choose>
+													</td>
 												</c:when>
 												<c:otherwise>
 													<td colspan="10">IL N'A PAS JOUE ENCORE</td>
@@ -222,11 +234,10 @@ table td.resizing {
 			 location = "http://localhost:8080/abcChallengeHome";
 		})
 	});
-	function publierUnSoloSujet(lui, id){
+	function publierAbcChallenge(lui, id){
 		lui.disabled='true';
-		var param = 'idSolo='+id+'';
-	//	alert(id);
-		$("#infoPublicationSoloSujet").load("infoPublicationSoloSujet", param);
+		var param = 'idJeu='+id+'';
+		 $("#infoPublicationAbcChalleng").load("infoPublicationSoloAbcChallenge", param);
 	}
 	 /* pour le resize de la table =========== */
 		$(function() {

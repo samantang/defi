@@ -110,6 +110,7 @@ public interface ChallengeDao {
 	public void jouerChallenge (Long moi, Long ami);
 	public void challengerChallenge (Long moi, Long ami);
 	public AbcChallenge getAbcChallengeById(Long id);
+	public AbcChallenge getMonChallenge(Long id, Long idJeu);
 	
 	
 	
