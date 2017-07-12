@@ -70,7 +70,7 @@ table td.resizing {
 		</div>
 			<div class="modal-body">
  				 <div>
-						<table id="tableauDataTable" class="table table-bordered table-striped table-condensed" style="text-align: center;">
+						<table id="tableauDataTable" class="table table-bordered table-striped table-condensed">
 								<thead>
 									<tr class="success">
 										<th>Le Jeu</th>
@@ -216,7 +216,16 @@ table td.resizing {
 													</td>
 												</c:when>
 												<c:otherwise>
-													<td colspan="10">IL N'A PAS JOUE ENCORE</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
+													<td style="color: orange;" colspan="1">pas enc</td>
 												</c:otherwise>
 											</c:choose>											
 											

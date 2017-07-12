@@ -73,7 +73,7 @@ tr, th, td{
 				<div>
 					<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">ABC CHALLENGE</h2>
 				</div><br>
-						<div id="onglets">
+					<div id="onglets">
 						  <ul>
 						    <li><a href="#onglet-1">challenges recus</a></li>
 						    <li><a href="#onglet-2">challenges à jouer</a></li>
@@ -140,7 +140,18 @@ tr, th, td{
 						    	</ul>
 						    </c:forEach>
 						  </div>
-						</div>
+					</div><br><br>
+					<div>
+						<ul class="list-group">
+						  <a href="#" class="list-group-item ">
+						    <h4 class="list-group-item-heading">COMMENT CA MARCHE</h4>
+						    <p  class="list-group-item-text pull-right"><i><b> 
+						    La lettre avec laquelle vous devez jouer est tirée automatiquement si vous êtes le premier à jouer (si votre ami a joué avant vous alors jouerez avec la lettre avec laquelle il a joué) et le temps est calculé en fonction du nombre
+							de réponses possibles (<span style="color: aqua;">18 secondes</span> par réponse): exemple: s'il y a <span style="color: lime;">10</span> réponses possibles => <span style="color: lime;">10</span> * <span style="color: aqua;">18</span>  = 180 secondes = 3 minutes</b></i></p>
+						    <img src="<%=request.getContextPath()%>/resources/images/user.png" height="50px" width="50px">
+						  </a>
+						 </ul> 
+					</div>
 					<div>
 					<c:choose>
 						<c:when test="${empty gm.mesChallengesJoues}">
@@ -185,14 +196,7 @@ tr, th, td{
 											<td><c:out value="${cha.score }"></c:out>/<c:out value="${cha.scoreMax }"></c:out></td>
 											<td><a href="voirAmi?id=${cha.monFriend.id }"><c:out value="${cha.monFriend.nom }"></c:out></a></td>
 											<!-- si l'ami a joué on affiche son score, sinon on affiche qu'il n'a pas encore joué -->
-											<c:choose>
-												<c:when test="${cha.amiJoue == true }">
-													<td><c:out value="${cha.scoreAmi }"></c:out>/<c:out value="${cha.scoreMax }"></c:out></td>
-												</c:when>
-												<c:otherwise>
-													<td>Pas encore</td>
-												</c:otherwise>
-											</c:choose>
+											<td><c:out value="${cha.scoreAmi }"></c:out>/<c:out value="${cha.scoreMax }"></c:out></td>
 											<td>
 												<button data-toggle="modal" href="infosDetailChallengeId?idChallenge=${cha.id }" data-target="#infos"  class="btn btn-primary" >
 									        	<span class="glyphicon glyphicon-eye-open"></span>

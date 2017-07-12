@@ -64,16 +64,15 @@
 			<div class="col-md-6 col-lg-6">
 				<div align="center" >
 					 <div id="infosTempsRestant" class="infosTempsRestant">Votre temps restant est de  <span id="time"></span> minutes!</div><br> 
-					 
 					<div id="resultat"></div>
 					<div>
 					
-						<c:out value="${motComplet }"></c:out><br>
+						<%-- <c:out value="${motComplet }"></c:out><br> --%>
 						<%-- <c:out value="${word.secretWord }"></c:out><br>
 						<input id="valeurMotCache" type="text" value="${word.secretWord }" ><br> --%>
-						<p> Nombre d'erreurs: &nbsp; <span id="nbErreur">0</span></p>
-						<p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouves">0</span> </p>
-						<div id="valeurMotCache">${word.secretWord }</div><br>
+						<p style="color: orange;"> Nombre d'erreurs: &nbsp; <span id="nbErreur">0</span></p>
+						<!-- <p> Nombre de mots trouvés: &nbsp; <span id="nbMotsTrouves">0</span> </p> -->
+						<div id="valeurMotCache">${motSecet}</div><br>
 						<%-- <c:out value="${word.nbreCoup }"></c:out> --%>
 						<div id="linge1boutons" class="btn-group">
 							<a id="A" class="btn btn-info commun" href="#" style="margin: 2px;">A</a>
@@ -128,7 +127,7 @@
 		    $('#${lettreDevoilee}').removeClass('btn-info').addClass('btn-warning'); 
 			$('#${lettreDevoilee}').attr('disabled','disabled'); 
 		    var mot = "${motComplet }";
-			var motSecret = "${word.secretWord }";
+			var motSecret = "${motSecret}";
 			var motContientLettre = 0;
 			for(var i=0; i<mot.length; i++){
 				 if(mot[i]===lettre){
@@ -1007,17 +1006,43 @@
 				 /* si tout le mot est trouve */
 				 if(mot === motSecret){
 					 /* on envoie la lettre, le mot, le temps,le nombre derreur, on met tous les bouttons non clickables */
-					// var motCache = $('#valeurMotCache').text();
-					// var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text();
-					 alert("Bravo !!! vous avez trouvé tout le mot");
-					// var tempsRestant = $('#time').text();
+					 alert("Bravo !!! vous avez trouvé tout le mot  "+mot);
 					 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text()+'&motUser='+$('#valeurMotCache').text();
 					 $('#resultat').load('penduChallengeDicoCorrection .resultatGagnant', param);
 					 $('.commun').attr('disabled','disabled');
-					 $('#time').remove();
-					 $('#infosTempsRestant').remove();
+				     $('#time').hide();
+					 $('#infosTempsRestant').hide(); 
 					 $('#resultat').show();
-				 }
+					
+					 /* ----------------ON COMPTE 10 SECONDES AVANT LA REDIRECTION--------------------------- */
+					 var temps = 10;
+				     var affiche = document.querySelector('#time');			   
+					   	  	var start = Date.now(),
+					        diff,
+					        minutes,
+					        seconds;
+					    	function timer() {
+						        // get the number of seconds that have elapsed since 
+						        // startTimer() was called
+						        diff = temps - (((Date.now() - start) / 1000) | 0);
+						
+						        // does the same job as parseInt truncates the float
+						        minutes = (diff / 60) | 0;
+						        seconds = (diff % 60) | 0;
+						
+						        minutes = minutes < 10 ? "0" + minutes : minutes;
+						        seconds = seconds < 10 ? "0" + seconds : seconds;
+						
+						        affiche.textContent = minutes + ":" + seconds; 
+					
+						        if (diff <= 0) {									
+						        	location ='http://localhost:8080/penduChallengeDico';
+						        }
+					    };
+					    timer();
+					    setInterval(timer, 1000);
+				    /* ---------------------FIN POUR LA REDIRECTION----------------- */
+				 };
 				 /* si le nombre d'erreur est égal à 5, le jeu est fini */
 				 var nbErreurs = $('#nbErreur').text();
 				 if(nbErreurs === "5"){
@@ -1026,15 +1051,12 @@
 					 $('#resultat').load('penduChallengeDicoCorrectionCinqsErreurs .resultatCinqErreurs', param);
 					 $('.commun').attr('disabled','disabled');
 					 $('#infosTempsRestant').remove();					 
-					// $('#resultat').show();
 				 }
 			}
 			
 			/* POUR LA GESTION DU TIMER ----------------------------------------------------- */
 			window.onload = function () {
 				$('#resultat').hide();
-				/* $('#resultatTempsFini').hide();
-				$('#resultatCinqErreurs').hide(); */
 				
 				var corrects = "${longueurMot}";
 			    var fiveMinutes = 60 * 0.3 * corrects,
@@ -1043,7 +1065,6 @@
 		    
 			};
 			function startTimer(duration, display) {
-			      /* $('#redirect').hide(); */
 		   	  	var start = Date.now(),
 		        diff,
 		        minutes,
@@ -1072,13 +1093,11 @@
 						 $('#infosTempsRestant').remove();
 			        	 $('#resultat').show();
 			        	 $('#image').load('imageErreurPendu #image5');
-			      //  	 $('#time').hide();
-			     //   	 window.location = "http://localhost:8080/penduSoloDicoJeu";
 			        	 
 			            // add one second so that the count down starts at the full duration
 			            // example 05:00 not 04:59
 			            
-			             start = Date.now() + 10000000; 
+			             start = Date.now() + 100000000; 
 			        }
 			    
 		    };

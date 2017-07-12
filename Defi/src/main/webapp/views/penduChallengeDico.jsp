@@ -5,11 +5,12 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Penu Challenge</title>
 <style type="text/css">
@@ -145,7 +146,7 @@
 							<div>
 								<!-- bouton détails sur les jeux ------------------------------------------------------------------------------------------- -->
 								 <button data-toggle="modal" href="infosPenduDicoChallenge" data-target="#infos" class="btn btn-primary">
-							        Détails sur vos jeux en solo DICO
+							        Détails sur vos jeux en Challenge DICO
 							      </button><br>
 							      <div class="modal fade" id="infos">
 							        <div class="modal-dialog modal-lg">  
@@ -154,11 +155,11 @@
 							      </div>
 							</div><br>
 							<div>
-								<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">Vos dix derniers jeux</h2>
+								<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">Vos derniers jeux</h2>
 							</div>
-							<table class="table table-bordered table-striped table-condensed" style="text-align: center;">
+							<table id="tableauDataTable" class="table table-bordered table-striped table-condensed" style="text-align: center;">
 								<thead>
-									<tr>
+									<tr class="success">
 										<th colspan="3">Le Jeu</th>
 										<th>Moi</th>
 										<th colspan="2">Ami</th>
@@ -178,7 +179,7 @@
 										<tr>
 											<td><c:out value="${pendu.dateString }"></c:out></td>
 											<td><c:out value="${pendu.mot }"></c:out></td>
-											<td><%-- <c:out value="${pendu.lettre }"></c:out> --%>???</td>
+											<td><c:out value="${pendu.lettreString }"></c:out></td>
 											<td><c:out value="${pendu.score }"></c:out>/<c:out value="${pendu.scoreMax }"></c:out></td>
 											<td><a href="voirAmi?id=${pendu.monFriend.id }"><c:out value="${pendu.monFriend.nom }"></c:out></a></td>
 											<td><c:out value="${pendu.scoreAmi }"></c:out>/<c:out value="${pendu.scoreMax }"></c:out></td>
@@ -239,9 +240,40 @@
 				  $("#actionEnvoi").load("accepterEtInfosChallengeDicoRecus .annulerEnvoi", param);
 			  })			  
 		  };
+		  
+		  $(document).ready(function() {
+			    $('#tableauDataTable').DataTable({
+			    	"language": {
+			    		"sProcessing": "Traitement en cours...",
+			    		"sSearch": "Rechercher&nbsp;:",
+			    		"sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+			    		"sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+			    		"sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+			    		"sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+			    		"sInfoPostFix": "",
+			    		"sLoadingRecords": "Chargement en cours...",
+			    		"sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+			    		"sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+			    		"oPaginate": {
+			    		"sFirst": "Premier",
+			    		"sPrevious": "Pr&eacute;c&eacute;dent",
+			    		"sNext": "Suivant",
+			    		"sLast": "Dernier"
+			    		},
+			    		"oAria": {
+			    		"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+			    		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+			    		}
+			    		}
+			    });
+			    
+			} );
 		</script>
 		
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

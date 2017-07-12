@@ -117,7 +117,6 @@
 				<c:choose>
 					<c:when test="${empty gm.mesSolos}">
 						<h3 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">VOUS N'AVEZ PAS DE JEUX &Agrave;	 AFFICHER POUR LE MOMMENT</h3>
-						<h4 style="text-align: center; color: windowframe;   ">COMMENT &Ccedil;A MARCHE</h4>
 					</c:when>
 					<c:otherwise>
 						<!-- bouton détails sur les jeux ------------------------------------------------------------------------------------------- -->

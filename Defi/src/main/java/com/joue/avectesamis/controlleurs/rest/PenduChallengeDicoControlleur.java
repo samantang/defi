@@ -282,17 +282,14 @@ public class PenduChallengeDicoControlleur {
 	@RequestMapping(value="penduChallengeDicoJeu", method=RequestMethod.GET)
 	public String penduChallengeDicoJeu(Model model, PenduModel penduModel, HttpServletRequest request, Word word, Long amiId){
 		word = new Word(request);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
+				
 		HttpSession session = request.getSession();
 		Long id =(Long) session.getAttribute("id");
 //		le temps en fonction du nombre de r�sultats possibles
 		int temps =0;
 		
 //		recup�raiton de l'ami
-		Long idAmi= 
-				(long) Integer.parseInt(request.getParameter("idAmi"));
+		Long idAmi= (long) Integer.parseInt(request.getParameter("idAmi"));
 		session.setAttribute("idAmi", idAmi);
 		Friend ami= metier.getFriend(idAmi);
 		
@@ -303,8 +300,6 @@ public class PenduChallengeDicoControlleur {
 		String mot = "";
 		
 		
-//		Random r = new Random();
-//		char lettre = 'x';
 //		le code du jeu chez moi
 		String codeAttenteMoiDico= penduDao.getCodeAttenteMoiAmiDico(id, idAmi);
 //		le code chez mon ami s'il n'a pas encore jou�
@@ -318,6 +313,7 @@ public class PenduChallengeDicoControlleur {
 //			recupération d'un mot au hasard dans le DICO
 			word.initWord(request);
 			mot = word.getWord();
+			System.out.println("le mot est : "+mot);
 //			à partir du mot tiré au sort, on choisit une lettre qui sera affichée pour guider le joueur
 			String motComplet = word.getWord();
 			int longueurMot = motComplet.length();
@@ -327,12 +323,15 @@ public class PenduChallengeDicoControlleur {
 			
 			session.setAttribute("motComplet", motComplet);
 			session.setAttribute("lettreString", lettreString);
+			session.setAttribute("lettreChar", lettreDevoilee);
+			session.setAttribute("motSecret", word.getSecretWord());
 						
 						model.addAttribute("longueurMot", longueurMot);
 						model.addAttribute("lettreDevoilee", lettreDevoilee);
 						model.addAttribute("penduModel", penduModel);
 						model.addAttribute("word", word);
 						model.addAttribute("motComplet", motComplet);
+						model.addAttribute("motSecret", word.getSecretWord());
 						System.out.println("il n'a pas encore joué");
 		}else{
 			for(PenduDicoChallenge c:ami.getMesChallengesJouesPenduDico()){
@@ -341,6 +340,7 @@ public class PenduChallengeDicoControlleur {
 //					recuperer egalement le mot caché de la BDD, qui doit être enregiste
 					String motSecret = c.getMotSecret().toUpperCase();
 					String motComplet = c.getMot().toUpperCase();
+					System.out.println("le mot est : "+c.getMot());
 					int longueurMot = motComplet.length();
 					int indexLettre = longueurMot/2;
 					char lettreDevoilee = motComplet.charAt(indexLettre);
@@ -378,6 +378,7 @@ public class PenduChallengeDicoControlleur {
 //		recuperation du mot, nombre de coups, nombre d'erreurs, temps restant, points gagnés, pointsMax, du mot cache
 		String motComplet = (String) session.getAttribute("motComplet");
 		String motSecet = (String) session.getAttribute("motSecret");
+		System.out.println("le mot secret est ================== "+motSecet);
 		String lettreString = (String) session.getAttribute("lettreString");
 		char lettreChar = (char) session.getAttribute("lettreChar");
 		String nbErreursString = request.getParameter("nbErreurs");
@@ -412,13 +413,9 @@ public class PenduChallengeDicoControlleur {
 			points = 0;
 		}
 //		je peux inserer les données dans la base que si "motUser = null"
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
-		String dateString = df.format(now);
-		
-		
-		System.out.println("LES INFOS DU RESULTAT "+motComplet+" "+motSecet+" "+lettreString+" "+lettreChar+" "+nbErreursString+" "+nbErreurs+" "+tempsRestantString+" lesPoints: "+points+" et "+pointsMax);
-		
+		String dateString = df.format(now);		
 		
 		int nbCoups =0;
 		int score =0;
@@ -428,33 +425,27 @@ public class PenduChallengeDicoControlleur {
 		boolean aide = false;
 		Collection<Character> lesChoix =null;
 		
-		Long id =  2L;
-//				(Long) session.getAttribute("id");
-//		le temps en fonction du nombre de r�sultats possibles
+		Long id =  (Long) session.getAttribute("id");
 		
 //		recup�raiton de l'ami
-		Long idAmi= 1L;
-//				(long) Integer.parseInt(request.getParameter("idAmi"));
+		Long idAmi = (Long) session.getAttribute("idAmi");
 		session.setAttribute("idAmi", idAmi);
 		Friend ami= metier.getFriend(idAmi);
 		
 //		moi
 		Friend moi = metier.getFriend(id);
+		PenduDicoChallenge challenge = new PenduDicoChallenge(new Date(), dateString, nbErreurs, tempsRestantString, false, motComplet, nbErreurs, points, pointsMax, lettreString, motSecet);
+		penduDao.savePenduDicoChallenge(challenge, id, idAmi);
 		
-//		PenduDicoChallenge challenge = new PenduDicoChallenge(new Date(), "laDate", temps, nbErreurs, tempsRestants, true, mot, nbCoups, true, 0, null, score, scoreMax, aide, nbAide);
-//		penduDao.savePenduDicoChallenge(challenge, id, idAmi);
-		
-//		map.put("challenge", challenge);
-//		model.addAttribute("challenge", challenge);
-		
-		int longueurMot = 10000000;
-		model.addAttribute("longueurMot", longueurMot);
-		
+		model.addAttribute("challenge", challenge);
+				
 		model.addAttribute("motComplet", motComplet);
 		model.addAttribute("nbErreurs", nbErreursString);
 		model.addAttribute("lettreChar", lettreChar);
 		model.addAttribute("points", points);
 		model.addAttribute("pointsMax", pointsMax);
+		model.addAttribute("tempsRestantString", tempsRestantString);
+		model.addAttribute("motSecet", motSecet);
 		
 		return "penduChallengeDicoCorrection";
 	}
@@ -572,7 +563,7 @@ public class PenduChallengeDicoControlleur {
 		PenduDicoChallenge challenge = penduDao.getDicoChallengeById(idJeu);
 //		si le jeu n'avait été publié au par avant 
 		if(!challenge.isPublie()){
-			DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 			Date now = new Date();
 			String dateString = df.format(now);
 			String message = "le "+dateString+", j'ai joué à un PENUDICOCHALLENGE contre "+challenge.getMonFriend().getNom()+" "
@@ -582,6 +573,11 @@ public class PenduChallengeDicoControlleur {
 											+ "Temps Restant: moi "+challenge.getTempsRestantMoi()+" lui: "+challenge.getTempsRestantAmi();
 			System.out.println(message);
 			Post post = new Post(new Date(), message, true, TypePost.PENDUDICOCHALLENGE);
+			challenge.setPublie(true);
+			
+			metier.posterPost(id, message);
+			penduDao.publierChallengeDico(idJeu);
+			
 			return "publierDicoChallengeEtInfos";
 		}
 		

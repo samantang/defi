@@ -131,10 +131,17 @@
 										<td>${solo.score }/${solo.scoreMax }</td>
 										<%-- <td><a href="publierSoloDico?id=${solo.id}">pubier</a></td>
 										<td><a href="supprimerSoloDico?id=${solo.id}">Supp</a></td> --%>
-										<td><button id="${solo.id}" onclick="publierUnSolo(this,${solo.id} )"  class="btn btn-primary" >
-									        	<span class="glyphicon glyphicon-share"></span>
-									     	 </button>
-									     	 <%-- <a  class="btn btn-ifo" href="publierSoloDico?id=${solo.id}">Publier</a> --%>
+										<td>
+									     	 <c:choose>
+												<c:when test="${solo.publie ==true }">
+													<em style="color: green;">Publié</em>
+												</c:when>
+												<c:otherwise>
+													<button id="${solo.id}" onclick="publierUnSolo(this,${solo.id} )"  class="btn btn-primary" >
+											        	<span class="glyphicon glyphicon-share"></span>
+											     	 </button>
+												</c:otherwise>
+											</c:choose>	
 								      	</td>
 									</tr>
 								</c:forEach>

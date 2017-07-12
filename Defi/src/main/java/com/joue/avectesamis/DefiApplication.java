@@ -48,6 +48,8 @@ public class DefiApplication implements CommandLineRunner{
 //		metier.envoyerChallenge(4L, 3L); 
 //		metier.accepterChallenge(3L, 4L);
 		
+//		penduDao.sendChallengeDico(1L, 2L);
+//		penduDao.acceptChallengeDico(2L, 1L);
 		
 //		challengeDao.envoyerDemandeAmi(1L, 2L);
 //		challengeDao.accepterAmi(2L, 1L);

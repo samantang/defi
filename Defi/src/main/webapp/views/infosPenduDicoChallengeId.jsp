@@ -28,8 +28,9 @@
 </head>
 <body>
 		<div class="modal-header">
-		  <button type="button" class="close" data-dismiss="modal">&times;</button>
-		  <h2>LES DETAILS JEU</h2>
+		  <button type="button" class="close quitterInfos" data-dismiss="modal">&times;</button>
+		  <h2>LES DETAILS DU  JEU</h2>
+		  <button class="btn-success quitterInfos">QUITTER</button>
 		</div>
 		<div id="infoPublicationChallenge">
 		</div>
@@ -37,22 +38,24 @@
  				 <div>
 						<table class="table table-bordered table-striped table-condensed" style="text-align: center;">
 								<thead>
-									<tr>
-										<th colspan="3">Le Jeu</th>
-										<th colspan="3">Moi</th>
-										<th colspan="4">Ami</th>
+									<tr class="success">
+										<th colspan="2">Le Jeu</th>
+										<th colspan="4">Moi</th>
+										<th colspan="5">Ami</th>
 										<th rowspan="2">Publier</th>
 									</tr>
 									<tr>
-										<th>Date</th>
+										
 										<th>Mot</th>
 										<th>Lettre</th>
+										<th>Date</th>
 										<th>Score</th>
-										<th>Temps Restant</th>
+										<th>Temps Res</th>
 										<th>NB Err</th>
 										<th>Nom</th>
+										<th>Date</th>
 										<th>Score</th>
-										<th>Temps Restant</th>
+										<th>Temps Res</th>
 										<th>NB Err</th>
 										<!-- <th>Publier</th> -->
 									</tr>
@@ -60,22 +63,34 @@
 								<tbody>
 									<%-- <c:forEach items="${challenge }" var="pendu"> --%>
 										<tr>
+											<td><c:out value="${challenge.mot }"></c:out></td>
+											<td><c:out value="${challenge.lettreString }"></c:out></td>
 											<td><c:out value="${challenge.dateString }"></c:out></td>
-											<td><c:out value="${challenge.mot }"></c:out></td>
-											<td><%-- <c:out value="${challenge.pendu.lettre }"></c:out> --%>???</td>
 											<td><c:out value="${challenge.score }"></c:out>/<c:out value="${challenge.scoreMax }"></c:out></td>
-											<td><c:out value="${challenge.mot }"></c:out></td>
-											<td><c:out value="${challenge.mot }"></c:out></td>
-											<td><a href="voirAmi?id=${challenge.monFriend.id }"><c:out value="${challenge.monFriend.nom }"></c:out></a></td>
-											<td><c:out value="${challenge.scoreAmi }"></c:out>/<c:out value="${challenge.scoreMax }"></c:out></td>
-											<td><c:out value="${challenge.mot }"></c:out></td>
-											<td><c:out value="${challenge.mot }"></c:out></td>
+											<td><c:out value="${challenge.tempsRestantMoi }"></c:out></td>
+											<td><c:out value="${challenge.nbErreurs }"></c:out></td>
+											<td><a href="voirAmi?id=${challenge.monFriend.id }"><c:out value="${challenge.monFriend.nom }"/>&nbsp;<c:out value="${challenge.monFriend.prenom }"/></a></td>
+											<c:choose>
+												<c:when test="${challenge.dateStringAmi == null }">
+													<td>pas joué</td>
+													<td>pas joué</td>
+													<td>pas joué</td>
+													<td>pas joué</td>
+												</c:when>
+												<c:otherwise>
+													<td><c:out value="${challenge.dateStringAmi }"></c:out></td>
+													<td><c:out value="${challenge.scoreAmi }"></c:out>/<c:out value="${challenge.scoreMax }"></c:out></td>
+													<td><c:out value="${challenge.tempsRestantAmi }"></c:out></td>
+													<td><c:out value="${challenge.nbErreursAmi }"></c:out></td>
+												</c:otherwise>
+											</c:choose>
 											<td>
 												<c:choose>
+													<c:when test="${challenge.dateStringAmi == null }">
+														<button class="btn btn-danger"></button>
+													</c:when>
 													<c:when test="${challenge.publie == true }">
-														<button   class="btn btn-primary btn-success" >
-											        		publié
-											        	</button>
+														<em style="color: green;">publié</em>
 													</c:when>
 													<c:otherwise>
 														<button id="${challenge.id}" onclick="publierUnChallenge(this,${challenge.id} )"  class="btn btn-primary" >
@@ -91,6 +106,11 @@
 					</div>
 				</div>
 					<script type="text/javascript">
+					$(function (){
+						$('.quitterInfos').click(function(){
+							location = 'http://localhost:8080/penduChallengeDico';
+						})
+					});
 					function publierUnChallenge(lui, id){
 						lui.disabled='true';
 						var param = 'idChallenge='+id+'';

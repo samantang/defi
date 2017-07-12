@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 <title>PENDU SOLO</title>
 <style type="text/css">
 .modal-dialog {
@@ -30,12 +31,13 @@
 		<div class="modal-header">
 		  <button type="button" class="close" data-dismiss="modal">&times;</button>
 		  <h2>LES DETAILS DE VOS JEUX EN DICO SOLO</h2>
+		  <button class="btn-success quitterInfosSoloDico">QUITTER</button><br>
 		</div>
 		<div id="infoPublicationSolo">
 		</div>
 			<div class="modal-body">
  				 <div>
-						<table class="table table-bordered table-striped table-condensed">
+						<table id="tableauDataTable" class="table table-bordered table-striped table-condensed">
 							<thead>
 								<tr>
 									<th>Date</th>
@@ -82,9 +84,19 @@
 											</c:choose>	
 										</td>
 										<td>
-											<button id="${solo.id}" onclick="publierUnSolo(this,${solo.id} )"  class="btn btn-primary" >
-									        	<span class="glyphicon glyphicon-share"></span>
-									     	 </button>
+											<c:choose>
+												<c:when test="${solo.publie == true }">
+													<button class="btn btn-danger">
+														<span>Publié</span>
+													</button>
+												</c:when>
+												<c:otherwise>
+													<button id="${solo.id}" onclick="publierUnSolo(this,${solo.id} )"  class="btn btn-primary" >
+											        	<span class="glyphicon glyphicon-share"></span>
+											     	 </button>
+												</c:otherwise>
+											</c:choose>
+										</td>
 										<td><a href="#">Supprimer</a></td>
 									</tr>
 								</c:forEach>
@@ -96,9 +108,46 @@
 						function publierUnSolo(lui, id){
 							lui.disabled='true';
 							var param = 'idSolo='+id+'';
-						//	alert(id);
 							$("#infoPublicationSolo").load("infoPublicationSolo", param);
 						};
-						</script>
+						$(function(){
+							$('.quitterInfosSoloDico').click(function(){
+								location ='http://localhost:8080/penduSoloDico';
+							})
+						});
+						
+						$(document).ready(function() {
+						    $('#tableauDataTable').DataTable({
+						    	"language": {
+						    		"sProcessing": "Traitement en cours...",
+						    		"sSearch": "Rechercher&nbsp;:",
+						    		"sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+						    		"sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+						    		"sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+						    		"sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+						    		"sInfoPostFix": "",
+						    		"sLoadingRecords": "Chargement en cours...",
+						    		"sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+						    		"sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+						    		"oPaginate": {
+						    		"sFirst": "Premier",
+						    		"sPrevious": "Pr&eacute;c&eacute;dent",
+						    		"sNext": "Suivant",
+						    		"sLast": "Dernier"
+						    		},
+						    		"oAria": {
+						    		"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+						    		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+						    		}
+						    		}
+						    });
+						    
+						} );
+						
+				</script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 	</body>
+	
+	
 </html>

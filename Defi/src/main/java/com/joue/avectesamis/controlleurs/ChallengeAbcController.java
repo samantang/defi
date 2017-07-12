@@ -673,10 +673,10 @@ public class ChallengeAbcController {
 			Date now = new Date();
 			String dateString = df.format(now);
 			String message = "le "+dateString+", j'ai joué à un ABC-CHALLENGE contre "+challenge.getMonFriend().getNom()+" "
-					+ ""+challenge.getMonFriend().getPrenom()+"\n"+", les ressultats sont de ce duel sont: "+"\n"+""
-							+ "POINTS: moi: "+challenge.getScore()+" lui: "+challenge.getScoreAmi()+"\n"+""
+					+ ""+challenge.getMonFriend().getPrenom()+"\n"+", les ressultats de ce duel sont: "+"\n"+""
+							+ "SCORE => MOI: "+challenge.getScore()+" LUI: "+challenge.getScoreAmi()+"\n"+""
 									+ "LA LETTRE: "+challenge.getLettre()+"\n"
-											+ "Temps Restant: moi "+challenge.getTempsRestant()+" lui: "+challenge.getTempsRestantAmi();
+											+ "TEMPS RESTANT => MOI "+challenge.getTempsRestant()+", LUI: "+challenge.getTempsRestantAmi();
 			System.out.println(message);
 			Post post = new Post(new Date(), message, true, TypePost.ABCCHALLENGE);
 			metier.posterPost(id, message);

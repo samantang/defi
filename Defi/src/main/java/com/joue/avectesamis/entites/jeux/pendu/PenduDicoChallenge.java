@@ -60,6 +60,10 @@ public class PenduDicoChallenge implements Serializable {
 	private boolean timeOutAmi;
 	private boolean publie;
 	
+	private String lettreString;
+//	private char lettre;
+	private int nbErreursAmi;
+
 	
 	
 	
@@ -79,12 +83,99 @@ public class PenduDicoChallenge implements Serializable {
 //	public void setLettre(char lettre) {
 //		this.lettre = lettre;
 //	}
+	
+	
+//	/**
+//	 * @return the lettreString
+//	 */
+//	public String getLettreString() {
+//		return lettreString;
+//	}
+//
+//	/**
+//	 * @return the lettre
+//	 */
+//	public char getLettre() {
+//		return lettre;
+//	}
+//
+//	/**
+//	 * @param lettre the lettre to set
+//	 */
+//	public void setLettre(char lettre) {
+//		this.lettre = lettre;
+//	}
+//
+//	/**
+//	 * @param lettreString the lettreString to set
+//	 */
+//	public void setLettreString(String lettreString) {
+//		this.lettreString = lettreString;
+//	}
+	
+	/**
+	 * @return the nbErreursAmi
+	 */
+	public int getNbErreursAmi() {
+		return nbErreursAmi;
+	}
+
+	/**
+	 * @param nbErreursAmi the nbErreursAmi to set
+	 */
+	public void setNbErreursAmi(int nbErreursAmi) {
+		this.nbErreursAmi = nbErreursAmi;
+	}
 
 	/**
 	 * @return the publie
 	 */
 	public boolean isPublie() {
 		return publie;
+	}
+
+	/**
+ * @param date
+ * @param dateString
+ * @param nbErreurs
+ * @param tempsRestantMoi
+ * @param timeOut
+ * @param mot
+ * @param imageIconJeu
+ * @param score
+ * @param scoreMax
+ * @param lettreString
+	 * @param motSecet 
+ */
+public PenduDicoChallenge(Date date, String dateString, int nbErreurs,
+		String tempsRestantMoi, boolean timeOut, String mot, int imageIconJeu,
+		int score, int scoreMax, String lettreString, String motSecet) {
+	super();
+	this.date = date;
+	this.dateString = dateString;
+	this.nbErreurs = nbErreurs;
+	this.tempsRestantMoi = tempsRestantMoi;
+	this.timeOut = timeOut;
+	this.mot = mot;
+	this.imageIconJeu = imageIconJeu;
+	this.score = score;
+	this.scoreMax = scoreMax;
+	this.lettreString = lettreString;
+	this.motSecret = motSecet;
+}
+
+	/**
+	 * @return the lettreString
+	 */
+	public String getLettreString() {
+		return lettreString;
+	}
+
+	/**
+	 * @param lettreString the lettreString to set
+	 */
+	public void setLettreString(String lettreString) {
+		this.lettreString = lettreString;
 	}
 
 	/**

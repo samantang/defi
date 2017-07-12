@@ -147,6 +147,9 @@ public class PenduDaoImpl implements PenduDao {
 			penduAmi.setTempsRestantAmi(challenge.getTempsRestantMoi());
 			penduAmi.setDateStringAmi(challenge.getDateString());
 			penduAmi.setAideAmi(challenge.isAide());
+			penduAmi.setTempsRestantAmi(challenge.getTempsRestantMoi());
+			penduAmi.setNbErreursAmi(challenge.getNbErreurs());
+			penduAmi.setDateStringAmi(challenge.getDateString());
 			System.out.println("le code d'indentification de l'ami dans ses joues : "+penduAmi.getCodeIndentification());
 			System.out.println("l'id du jeu de mon ami : "+penduAmi.getId());
 			
@@ -156,6 +159,9 @@ public class PenduDaoImpl implements PenduDao {
 			challenge.setTempsRestantAmi(penduAmi.getTempsRestantMoi());
 			challenge.setDateStringAmi(penduAmi.getDateString());
 			challenge.setAideAmi(penduAmi.isAide());
+			challenge.setTempsRestantAmi(penduAmi.getTempsRestantMoi());
+			challenge.setNbErreursAmi(penduAmi.getNbErreurs());
+			challenge.setDateStringAmi(penduAmi.getDateString());
 			
 //			enregistrement de l'ami
 			em.persist(penduAmi);
@@ -605,6 +611,14 @@ public class PenduDaoImpl implements PenduDao {
 		
 		em.merge(moi);
 		em.merge(ami);
+	}
+
+	@Override
+	public void publierChallengeDico(Long idJeu) {
+		PenduDicoChallenge challenge = em.find(PenduDicoChallenge.class, idJeu);
+		challenge.setPublie(true);
+		em.merge(challenge);
+		
 	}
 
 }

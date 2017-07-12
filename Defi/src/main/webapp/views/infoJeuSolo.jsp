@@ -2,9 +2,9 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f" %>
 <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 <html>
 <head>
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Abc Solo</title>
 <style type="text/css">
@@ -119,34 +119,10 @@ $(function (){
 		location = 'http://localhost:8080/abcSoloHome';
 	})
 });
-$(document).ready(function() {
-    $('#tableauDataTable').DataTable({
-    	"language": {
-    		"sProcessing": "Traitement en cours...",
-    		"sSearch": "Rechercher&nbsp;:",
-    		"sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
-    		"sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-    		"sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-    		"sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-    		"sInfoPostFix": "",
-    		"sLoadingRecords": "Chargement en cours...",
-    		"sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
-    		"sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
-    		"oPaginate": {
-    		"sFirst": "Premier",
-    		"sPrevious": "Pr&eacute;c&eacute;dent",
-    		"sNext": "Suivant",
-    		"sLast": "Dernier"
-    		},
-    		"oAria": {
-    		"sSortAscending": ": activer pour trier la colonne par ordre croissant",
-    		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-    		}
-    		}
-    });
-    
-} );
+
+
 </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 </body>
