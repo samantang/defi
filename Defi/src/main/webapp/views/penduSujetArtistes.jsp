@@ -966,10 +966,7 @@
 							 $('#infosTempsRestantArtistes').remove();					 
 							// $('#resultat').show();
 						 }
-					}
-					
-					
-				
+					}				
 				
 				});
 </script>

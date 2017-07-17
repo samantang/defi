@@ -44,9 +44,7 @@ public class PenduSoloSujetControlleur {
 	@Autowired
 	private PenduDao penduDao;
 	@Autowired
-	private ChallengeMetier metier;
-	public static int nbFoisAppelResultat =0;
-	
+	private ChallengeMetier metier;	
 	@RequestMapping(value="pendusoloSujets" , method=RequestMethod.GET)
 	public String soloSujets(Model model, HttpServletRequest req, PenduModel penduModel ){
 		
@@ -359,12 +357,10 @@ public class PenduSoloSujetControlleur {
 		HttpSession session = req.getSession();
 		Long id =1L;
 		
-		session.setAttribute("soumissionPays", "oui");
-		
+		session.setAttribute("soumissionPays", "oui");		
 		
 		String motComplet = (String) session.getAttribute("motPays");
 		String nbErreurs = req.getParameter("nbErreursPays");
-		System.out.println("le nombre d'erreurs dans le pays est : "+nbErreurs);
 		int nbErreursInt = Integer.parseInt(nbErreurs);
 		String tempsRestant = 	req.getParameter("tempsRestant");
 		
@@ -407,7 +403,7 @@ public class PenduSoloSujetControlleur {
 			points = 0;
 		}
 		
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
 		String dateString = df.format(now);
 		
@@ -415,9 +411,7 @@ public class PenduSoloSujetControlleur {
 			System.out.println("le nombre d'erreurs est de cinq ==============");
 			penduSujetModel.setNbErreursPays(5);
 		}else {
-			System.out.println("la date now est "+now);
 			penduSujetModel.setDatePays(now);
-			System.out.println("la date now du model  est "+penduSujetModel.getDatePays());
 			penduSujetModel.setDateStringPays(dateString);
 			penduSujetModel.setLettreStringPays(lettreDevoilee);
 			penduSujetModel.setTempsDepartPays(null);
@@ -537,10 +531,7 @@ public class PenduSoloSujetControlleur {
 		session.setAttribute("pointsCapitales", points);
 		session.setAttribute("pointsMaxCapitales", pointsMax);
 		session.setAttribute("motCompletCapitales", motComplet);
-		session.setAttribute("nbErreursCapitales", nbErreurs);
-		
-		
-		
+		session.setAttribute("nbErreursCapitales", nbErreurs);		
 		
 		model.addAttribute("longueurMot", longueurMot);
 		model.addAttribute("nbErreurs", nbErreurs);
@@ -575,7 +566,7 @@ public class PenduSoloSujetControlleur {
 		int pointsMax =0;
 		int pointsPerdus =0;
 		int nbFoisLettreDansMot =0;
-		if(motUser!="null"){
+		if(motUser!=null){
 			for(int i =0; i<motComplet.length(); i++){
 				if(motComplet.charAt(i)==lettreChar){
 					nbFoisLettreDansMot = nbFoisLettreDansMot + 10;
@@ -600,7 +591,7 @@ public class PenduSoloSujetControlleur {
 			points = 0;
 		}
 		
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
 		String dateString = df.format(now);
 		
@@ -637,9 +628,7 @@ public class PenduSoloSujetControlleur {
 		session.setAttribute("pointsMaxNobels", pointsMax);
 		session.setAttribute("motCompletNobels", motComplet);
 		session.setAttribute("nbErreursNobels", nbErreurs);
-		
-		
-		
+	
 		model.addAttribute("longueurMot", longueurMot);
 		model.addAttribute("nbErreurs", nbErreurs);
 		model.addAttribute("motComplet", motComplet);
@@ -735,7 +724,6 @@ public class PenduSoloSujetControlleur {
 		session.setAttribute("pointsMaxArtistes", pointsMax);
 		session.setAttribute("motCompletArtistes", motComplet);
 		session.setAttribute("nbErreursArtistes", nbErreurs);
-		
 		
 		model.addAttribute("longueurMot", longueurMot);
 		model.addAttribute("nbErreurs", nbErreurs);
@@ -835,7 +823,6 @@ public class PenduSoloSujetControlleur {
 		session.setAttribute("motCompletPresident", motComplet);
 		session.setAttribute("nbErreursPresident", nbErreurs);
 		
-		
 		model.addAttribute("longueurMot", longueurMot);
 		model.addAttribute("nbErreurs", nbErreurs);
 		model.addAttribute("motComplet", motComplet);
@@ -849,9 +836,6 @@ public class PenduSoloSujetControlleur {
 	@RequestMapping(value="resultatPenduSujets")
 	public String resultatPenduSujets(Model model, SocialModel sm, HttpServletRequest req, GameModel gm, PenduModel penduModel, PenduSujetModel penduSujetModel){
 
-		nbFoisAppelResultat ++;
-		System.out.println("le nombre de fois appelle de resultat "+nbFoisAppelResultat);
-		System.out.println("nb fois");
 //		recupération pour chaque sujet: le mot, la lettre, les points (gagnés et totals)
 //		pour tous les sujets: la longueur
 //		le temps restant
@@ -1059,10 +1043,7 @@ public class PenduSoloSujetControlleur {
 //		le temps restant
 		HttpSession session = req.getSession();
 		
-		Long id =(Long) session.getAttribute("id");
-		
-		System.out.println("le temps est fini ====================");
-		
+		Long id =(Long) session.getAttribute("id");		
 		PenduSujetsSolo penduSujetsSolo = new PenduSujetsSolo();
 		
 		String motCompletPays = (String) session.getAttribute("motPays");
@@ -1190,18 +1171,17 @@ public class PenduSoloSujetControlleur {
 		
 		Long idSolo = Long.valueOf(idSoloStr);
 		PenduSujetsSolo sujetSolo = penduDao.getSujetSolo(idSolo);
-//		le message du post
-		String messagePost = ""+sujetSolo.getDateString()+" a joué un soloSujets avec les mots suivants:  "+sujetSolo.getMotPays()+", "+sujetSolo.getMotCapitale()+", "+sujetSolo.getMotPresident()+", "+sujetSolo.getMotNobel()+", "+sujetSolo.getMotArtiste()+ " . J'ai eu au total"
-				+ " "+sujetSolo.getScore()+"/"+sujetSolo.getScoreMax()+" Points";		
 //		comme le jeu ne doit etre publie qu'une seule fois, s'il n'est pas publie on le publie 
 //		sinon on informe à l'utilisateur qu'il est déjà pubie
 		if(sujetSolo.isPublie()){
 			return "infoPubSoloDejaPublie";
 		}
+//		le message du post
+		String messagePost = ""+sujetSolo.getDateString()+" a joué un soloSujets avec les mots suivants:  "+sujetSolo.getMotPays()+", "+sujetSolo.getMotCapitale()+", "+sujetSolo.getMotPresident()+", "+sujetSolo.getMotNobel()+", "+sujetSolo.getMotArtiste()+ " . J'ai eu au total"
+				+ " "+sujetSolo.getScore()+"/"+sujetSolo.getScoreMax()+" Points";		
+
 		
 		Post post = new Post(new Date(), messagePost, true, TypePost.PENDUSUJETSOLO);		
-		System.out.println("le message du Post "+post.getMessage());
-		System.out.println("le type du Post "+post.getTypePost());
 		
 		metier.posterPost(id, messagePost);
 		

@@ -123,7 +123,8 @@
 				  $('.validerSujets')
 				  .click(function(){
 					  var param ='tempsRestant='+$('#time').text()+'';
-					  $('button').attr('href', 'resultatPenduSujets/?'+param);
+					  /* $('button').attr('href', 'resultatPenduSujets/?'+param); */
+					  	window.location.href ='resultatPenduSujetsChallenge/?'+param; 
 					  	$('.communPays').attr('disabled','disabled');
 			        	 $('.communCapitales').attr('disabled','disabled');
 			        	 $('.communArtistes').attr('disabled','disabled');

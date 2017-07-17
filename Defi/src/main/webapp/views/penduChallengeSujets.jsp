@@ -138,14 +138,14 @@
 						</div>
 					<div>
 					<c:choose>
-						<c:when test="${empty penduModel.mesChallengesDico}">
+						<c:when test="${empty penduModel.mesChallengesSujetsJoues}">
 							<h3 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">Vous n'avez pas de jeux à afficher pour l'instant</h3>
 						</c:when>
 						<c:otherwise><br>
 							<div>
 								<!-- bouton détails sur les jeux ------------------------------------------------------------------------------------------- -->
-								 <button data-toggle="modal" href="infosPenduDicoChallenge" data-target="#infos" class="btn btn-primary">
-							        Détails sur vos jeux en solo DICO
+								 <button data-toggle="modal" href="infosPenduSujetsChallenge" data-target="#infos" class="btn btn-primary">
+							        Détails de vos jeux
 							      </button><br>
 							      <div class="modal fade" id="infos">
 							        <div class="modal-dialog modal-lg">  
@@ -159,32 +159,33 @@
 							<table class="table table-bordered table-striped table-condensed" style="text-align: center;">
 								<thead>
 									<tr>
-										<th colspan="3">Le Jeu</th>
-										<th>Moi</th>
-										<th colspan="2">Ami</th>
+										<th colspan="3">Moi</th>
+										<th colspan="4">Ami</th>
 										<th rowspan="2">Détails</th>
 									</tr>
 									<tr>
 										<th>Date</th>
-										<th>Mot</th>
-										<th>Lettre</th>
+										<th>temps Res</th>
 										<th>Score</th>
 										<th>Nom</th>
+										<th>Date</th>
+										<th>temps Res</th>
 										<th>Score</th>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach items="${penduModel.mesChallengesSujets }" var="pendu">
+									<c:forEach items="${penduModel.mesChallengesSujetsJoues }" var="pendu">
 										<tr>
-											<td><c:out value="${pendu.dateString }"></c:out></td>
-											<td><c:out value="${pendu.mot }"></c:out></td>
-											<td><%-- <c:out value="${pendu.lettre }"></c:out> --%>???</td>
-											<td><c:out value="${pendu.score }"></c:out>/<c:out value="${pendu.scoreMax }"></c:out></td>
-											<td><a href="voirAmi?id=${pendu.monFriend.id }"><c:out value="${pendu.monFriend.nom }"></c:out></a></td>
-											<td><c:out value="${pendu.scoreAmi }"></c:out>/<c:out value="${pendu.scoreMax }"></c:out></td>
+											<td><c:out value="${pendu.dateStringMoi }"></c:out></td>
+											<td><c:out value="${pendu.tempsRestantMoi }"></c:out></td>
+											<td> <c:out value="${pendu.scoreTotalMoi }"/>/<c:out value="${pendu.scoreTotalMax}"/></td>
+											<td><a href="voirAmi?id=${pendu.monFriend.id }"><c:out value="${pendu.monFriend.nom }"/></a></td>
+											<td><c:out value="${pendu.dateStringAmi }"></c:out></td>
+											<td><c:out value="${pendu.tempsRestantAmi }"></c:out></td>
+											<td> <c:out value="${pendu.scoreTotalAmi }"/>/<c:out value="${pendu.scoreTotalMax}"/></td>
 											<td>
-												<button data-toggle="modal" href="infosPenduDicoChallengeId?idChallenge=${pendu.id }" data-target="#infos"  class="btn btn-primary" >
-									        	<span class="glyphicon glyphicon-eye-open"></span>
+												<button data-toggle="modal" href="infosPenduSujetsChallengeId?idChallenge=${pendu.id }" data-target="#infos"  class="btn btn-primary" >
+									        		<span class="glyphicon glyphicon-eye-open"></span>
 									        	</button>
 											</td>
 										</tr>

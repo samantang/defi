@@ -44,6 +44,7 @@
 									<th colspan="4">Nobel</th>
 									<th colspan="4">President</th>
 									<th colspan="4">Artiste</th>
+									<th rowspan="2">Temps Rest</th>
 									<th rowspan="2">Score</th>
 									<th rowspan="2">Pub</th>
 								</tr>
@@ -94,6 +95,7 @@
 										<td><c:out value="${penduSujetsSolo.scoreArtiste}"></c:out>/<c:out value="${penduSujetsSolo.scoreMaxArtiste}"></c:out></td>
 										<td><c:out value="${penduSujetsSolo.tempsRestantArtiste}"></c:out></td>
 										<td><c:out value="${penduSujetsSolo.lettreStringArtiste}"></c:out></td>
+										<td><c:out value="${penduSujetsSolo.tempsRestantString }"></c:out></td>	
 										<td><c:out value="${penduSujetsSolo.score }"></c:out>/<c:out value="${penduSujetsSolo.scoreMax }"></c:out></td>
 										<td>
 											<button  onclick="publierUnSoloSujet(this,${penduSujetsSolo.id} )" class="btn btn-primary" >

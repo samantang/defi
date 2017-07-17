@@ -454,34 +454,37 @@ public class PenduChallengeDicoControlleur {
 	public String penduChallengeDicoCorrectionCinqsErreurs(Model model, PenduModel penduModel, HttpServletRequest request, Word word){
 		HttpSession session = request.getSession();		
 		
+		Long id =  (Long) session.getAttribute("id");
+		
+//		recup�raiton de l'ami
+		Long idAmi = (Long) session.getAttribute("idAmi");
+		session.setAttribute("idAmi", idAmi);
+		Friend ami= metier.getFriend(idAmi);
+		
 //		recuperation du mot, nombre de coups, nombre d'erreurs, temps restant, points gagnés, pointsMax, du mot cache
+		int pointsMax =  (int) session.getAttribute("pointsMax");
 		String motUser = request.getParameter("motUser");
 		String motComplet = (String) session.getAttribute("motComplet");
 		String motSecet = (String) session.getAttribute("motSecret");
 		String lettreString = (String) session.getAttribute("lettreString");
-		char lettreChar = (char) session.getAttribute("lettreChar");
+//		char lettreChar = (char) session.getAttribute("lettreChar");
 		String nbErreursString = request.getParameter("nbErreurs");
 		int nbErreurs = Integer.parseInt(nbErreursString);
 		String tempsRestantString =request.getParameter("tempsRestant");	
 		if(tempsRestantString.equals("0")){
 			System.out.println("le temps est fini ================= INSERTION DES DONNEES EN FONCTION ...");
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			Date now = new Date();
+			String dateString = df.format(now);
+			PenduDicoChallenge challenge = new PenduDicoChallenge(new Date(), dateString, 5, tempsRestantString, false, motComplet, nbErreurs, 0, pointsMax, lettreString, motSecet);
+			penduDao.savePenduDicoChallenge(challenge, id, idAmi);
+			
 			return "penduChallengeDicoCorrection";
 		}
-			
-		int points =0;
-		int nbFoisLettreDansMot =0;
-		int pointsMax =0;
-		
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		Date now = new Date();
-		String dateString = df.format(now);
-			
-		System.out.println("LES INFOS DU RESULTAT CINQS ERREURS "+motComplet+" "+motSecet+" "+lettreString+" "+lettreChar+" "+nbErreursString+" "+nbErreurs+" "+tempsRestantString+" lesPoints: "+points+" et "+pointsMax);
-		
+					
 		model.addAttribute("motComplet", motComplet);
 		model.addAttribute("nbErreurs", nbErreursString);
-		model.addAttribute("lettreChar", lettreChar);
-		model.addAttribute("points", points);
+//		model.addAttribute("lettreChar", lettreChar);
 		model.addAttribute("pointsMax", pointsMax);
 
 

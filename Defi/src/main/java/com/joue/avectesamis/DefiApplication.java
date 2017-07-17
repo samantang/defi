@@ -109,8 +109,8 @@ public class DefiApplication implements CommandLineRunner{
 //		penduDao.acceptChallengeDico(2L, 1L);
 //		penduDao.savePenduDicoChallenge(challengeb, 1L, 2L);
 //		
-//		penduDao.sedChallengeSujets(2L, 1L);
-//		penduDao.acceptChallengeSujets(3L, 2L);
+//		penduDao.sedChallengeSujets(1L, 4L);
+//		penduDao.acceptChallengeSujets(4L, 1L);
 		
 //		PenduSujetsChallenge penduSujetsChallenge = new PenduSujetsChallenge(new Date(), null, 3, "lePays", "laCapitale", "leNobel", "lartiste", "lePresident", 's', 'e', 'e', 'e', 'd');		
 //		penduDao.savePenduSujetChallenge(penduSujetsChallenge, 2L, 3L);

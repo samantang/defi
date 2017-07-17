@@ -87,7 +87,9 @@
 											<td>
 												<c:choose>
 													<c:when test="${challenge.dateStringAmi == null }">
-														<button class="btn btn-danger"></button>
+														<button class="btn btn-danger">
+															<span class="glyphicon glyphicon-ban-circle"></span>
+														</button>
 													</c:when>
 													<c:when test="${challenge.publie == true }">
 														<em style="color: green;">publié</em>

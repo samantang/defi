@@ -5,6 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 <title>Resultat Pendu Sujets</title>
 <style type="text/css">
 .modal-dialog {
@@ -28,9 +31,9 @@
 </head>
 <body>
 		<div class="modal-header">
-		  <button type="button" class="close" data-dismiss="modal">&times;</button>
+		  <button type="button" class="close retourPenduSujetsChallenge" data-dismiss="modal">&times;</button>
 		  <h1>Le résultat de votre jeu</h1>
-		  <h3>TOTAL POINTS GAGNES: <c:out value="${totalMaxPoints }"></c:out> SUR <c:out value="${totalPointsMax }"></c:out> </h3>
+		  <h3>TOTAL POINTS GAGNES: <c:out value="${totalPoints }"></c:out> SUR <c:out value="${totalPointsMax }"></c:out> </h3>
 		  <h3>Le temps Restant <c:out value="${tempsRestant }"></c:out> </h3>
 		</div>
 		<div class="modal-body">
@@ -70,5 +73,13 @@
 	 			<p> Pour ce Sujet vous avez fait <c:out value="${ nbErreursPresidents}"></c:out> erreurs.
 	 		</div>	 
 		</div>
+		<script type="text/javascript">
+			$(function (){
+				$('.retourPenduSujetsChallenge')
+					.click(function(){
+						location = "http://localhost:8080/penduChallengeSujets";
+					})
+			});
+		</script>
 </body>
 </html>

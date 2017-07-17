@@ -27,6 +27,8 @@ import com.joue.avectesamis.dao.PenduDao;
 import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.AbcSolo;
 import com.joue.avectesamis.entites.Friend;
+import com.joue.avectesamis.entites.Post;
+import com.joue.avectesamis.entites.TypePost;
 import com.joue.avectesamis.entites.jeux.Artistes;
 import com.joue.avectesamis.entites.jeux.Nobels;
 import com.joue.avectesamis.entites.jeux.Pays_Capitale;
@@ -40,12 +42,12 @@ import com.joue.avectesamis.models.Word;
 
 @Controller
 public class PenduChallengeSujetsControlleur {
-
+	
 	@Autowired
 	private PenduDao penduDao;
 	@Autowired
 	private ChallengeMetier metier;
-	
+		
 	@RequestMapping(value="penduChallengeSujets", method=RequestMethod.GET)
 	public String penduChallengeSujets(Model model, HttpServletRequest req, PenduModel penduModel, Word word ){
 		word.initWord(req);
@@ -57,155 +59,14 @@ public class PenduChallengeSujetsControlleur {
 		penduModel.setMesChallengesSujetsJoues(penduDao.mesSujetsChallenges(id));
 		penduModel.setMesChallengesSujetsEnvoyes(penduDao.mesChallengesSujetsEnvoyes(id));
 		penduModel.setMesChallengesSujetsEnAttentes(penduDao.mesChallengesSujetsAttentes(id));
-		List<PenduSujetsChallenge> mesChallengesJoues = penduDao.mesSujetsChallenges(id);
-		Map<String, Long> codeAmi = new HashMap<String, Long>();
-		
-		if(id != null){
-			
-			System.out.println("l'id n'est pas null");
+		List<PenduSujetsChallenge> mesChallengesJoues = penduDao.mesSujetsChallenges(id);		
+			for (PenduSujetsChallenge challenge : penduModel.getMesChallengesSujetsJoues()) {
+				System.out.println("l'artiste du challenge est "+challenge.getArtiste());
+			}
 			model.addAttribute("moi", moi);
 		    model.addAttribute("penduModel", penduModel);
 		    
 		    return "penduChallengeSujets";
-		}
-		
-//		les challenges de mes amis
-		List<PenduSujetsChallenge> challengesAmis = new ArrayList<PenduSujetsChallenge>();
-		PenduSujetsChallenge challenge = new PenduSujetsChallenge();
-		Map<Friend, String> attentesAmi = new HashMap<Friend, String>();
-
-		if (mesChallengesJoues!=null) {
-			for (PenduSujetsChallenge c : mesChallengesJoues) {
-				System.out.println("les elements du challengeJoue: "
-						+ c.getCodeIndentification() + " "
-						+ c.getMonFriend().getId());
-				//			recup�ration de l'id de l'ami associc� au jeu et du code d'identification pour les stocker dans une map
-				//			ensuite pour chaque id on recup�re l'ami correspondant 
-				//			
-				codeAmi.put(c.getCodeIndentification(), c.getMonFriend()
-						.getId());
-			}
-			//		recup�ration des ids dans la map pour cr�er les friends, puis comparer le code d'identification de la map avec les codes d'identifcation qui se trouvent 
-			//		dans les jeux d�j� jou�s de l'ami: s'il s'y trouvent alors l'ami a jou� donc r�cup�ration du jeu: si non alors il n'a pas encore jou�
-		}
-		Friend ami= null;
-		Set<Entry<String, Long>> setAmi = codeAmi.entrySet();
-		Iterator<Entry<String, Long>> it = setAmi.iterator();
-		while(it.hasNext()){
-			Entry<String, Long> e = it.next();
-//			recup�ration de l'ami par rappport � l'id
-			 ami = new Friend();
-			ami=metier.getFriend(e.getValue());
-			System.out.println("l'id de l'ami pour qui j'ai jou� le challenge ..."+ami.getId());
-//			les challenges jou�s de l'ami
-//			List<PenduSujetsChallenge> challengesAmi= ami.getMesChallengesJouesPenduDico();
-			List<PenduSujetsChallenge> challengesAmi= ami.getMesChallengesJouesPenduSujets();
-//			parcourt des challenges jou�s par l'ami
-			for(PenduSujetsChallenge c:challengesAmi){
-//				si on trouve un code d'identification dans ses challenges jou�s qui �quivaut au mien, recup�ration de tout le jeu de l'ami en rapport avec ce code
-				System.out.println("le code indentification ami=="+c.getCodeIndentification()+" le getKey de chez moi== "+e.getKey());
-				if(c.getCodeIndentification().equals(e.getKey())){
-//					l'ami a d�j� jou� => recup�ration du jeu en question
-					challenge = new PenduSujetsChallenge();
-//							(c.getId(),c.getCodeIndentification(), c.getEmail(), c.getScore(), c.getDate(), c.getLettre(), c.getTime(), c.getHelp(), c.getAgglo(), c.getaPresident(), c.getPresident(), c.getAnimal(), c.getArtiste(), c.getCapitale(), c.getPays(), c.getNobel(), c.getVille(), c.getTimeOut(), c.getMonFriend(), c.getFriend());
-					challengesAmis.add(challenge);
-				}
-				else{
-//					parcourt des jeux en attente chez l'ami, si on retrouve le code d'indtification dans les jeux en attentes alors il n'a pas encore jou�
-//					
-					attentesAmi=ami.getChallengeEnAttentes();
-					Set<Entry<Friend, String>> setAttenteAmi = attentesAmi.entrySet();
-					Iterator<Entry<Friend, String>> itAttenteAmi = setAttenteAmi.iterator();
-					while(itAttenteAmi.hasNext()){
-						Entry<Friend, String> entryAmi = itAttenteAmi.next();
-						System.out.println("e.getKey() dans attente == "+e.getKey());
-						System.out.println("code d'identification attente ===="+entryAmi.getValue());
-						if(e.getKey().equals(entryAmi.getValue())){
-							challenge = new PenduSujetsChallenge();
-							challengesAmis.add(challenge);
-							System.out.println("l'ami n'a pas encore jou� ---------------");
-						}
-					}
-				}
-			}
-		}
-		
-		
-		System.out.println("\n");
-//		comme l'affichage de des challenges jou�s par les amis ne se fait pas dans l'ordre souhait� (pour �a on PEUT utlitiser l'interface QUEUE), mais ici
-//		on parcourt mes challenges jou�s et on recup�re le code d'identification qu'on compare � celui des jeux de mes amis
-//		on remplit une autre liste de challengesAmisOrdre dans laquelle on insere � l'indice correspondant � celui de mes jeux (par rapport au code d'indentification)
-//		comme �a dans les deux listes (mes jeux et les jeux de mes amis), les jeux qui ont le meme code d'indentification ont le le m�me index, ce qui facilite l'affichage
-//		En fin on va couper la nouvelle liste qui aura la m�me longuer que la liste de mes jeux car tous mes jeux qui ont aussi �t� jou�s par un amis sont d�j� dans la nouvelle
-//		liste en fonction de l'index
-//		Deque<AbcChallenge> challengeAmiQueue = new ArrayDeque<AbcChallenge>();
-		List<PenduSujetsChallenge> challengeAmisOrdre = new ArrayList<PenduSujetsChallenge>();
-		PenduSujetsChallenge challengea = null;
-		List<String> listeCodeAmi = new ArrayList<String>();
-		if (mesChallengesJoues!=null) {
-			for (PenduSujetsChallenge abcMoi : mesChallengesJoues) {
-				for (PenduSujetsChallenge abcAmi : challengesAmis) {
-					listeCodeAmi.add(abcAmi.getCodeIndentification());
-					if (abcMoi.getCodeIndentification().equals(
-							abcAmi.getCodeIndentification())) {
-						//					challengeAmiQueue.offerLast(abcAmi);
-						challengeAmisOrdre.add(
-								mesChallengesJoues.indexOf(abcMoi), abcAmi);
-
-					} else {
-//						challengea = new PenduSujetsChallenge(null, null, 0,
-//								true, null, 0, true, 0, null, 0, true, 0, null,
-//								null, null);
-						//					challengeAmiQueue.offerLast(challengea);
-						challengeAmisOrdre.add(challengea);
-
-					}
-				}
-			}
-		}
-		//		la taille de mes jeux
-		int taille=0;
-		if (mesChallengesJoues!=null) {
-			taille = mesChallengesJoues.size();
-		}
-		List<PenduSujetsChallenge> challengeAmisOrdreCoupe=challengeAmisOrdre.subList(0, taille);
-		
-//		Mixage des deux listes pour faciliter l'affichage des duels dans le detail des challenges
-		List<PenduSujetsChallenge> mixChallenge = new ArrayList<PenduSujetsChallenge>();
-		if (mesChallengesJoues!=null) {
-			mixChallenge = mixageList(mesChallengesJoues,challengeAmisOrdreCoupe);
-		}
-		//		mise du mixchallenge en session pour l'affichage des details des duels
-		session.setAttribute("mixChallenge", mixChallenge);
-		
-		for(PenduSujetsChallenge c: mixChallenge){
-			System.out.println("LES CODE D'IDENTIFICATIONS DANS LE MIXCHALLENGE SONT "+c.getCodeIndentification());
-		}
-		
-		penduModel.setChallengeAmisOrdreSujetsCoupe(challengeAmisOrdreCoupe);
-		penduModel.setMesChallengesSujetsJoues(mesChallengesJoues);
-//	    recup�ration des derniers jeux
-	   List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(id);
-	    List<AbcSolo> mesSolos =  metier.getMesSolos(id);
-	    
-	    model.addAttribute("challengeAmisOrdreCoupe", challengeAmisOrdreCoupe);	  	    
-	    
-	    model.addAttribute("mesChallenges", mesChallenges);
-	    model.addAttribute("mesSolos", mesSolos);
-		
-		penduModel.setMesChallengesSujetsJoues(mesChallengesJoues);
-	    model.addAttribute("mesSolos", mesSolos);
-		penduModel.setChallengesSujetsAmis(challengesAmis);
-	    model.addAttribute("mesSolos", mesSolos);
-		session.setAttribute("mesChallengesJoues", mesChallengesJoues);
-		session.setAttribute("challengesAmis", challengesAmis);
-		model.addAttribute("penduModel", penduModel);
-		model.addAttribute("mesChallengesJoues", mesChallengesJoues);
-		model.addAttribute("challengesAmis", challengesAmis);
-		model.addAttribute("moi", moi);
-		
-		return "penduChallengeSujets";
-		
 	}
 //	Methode qui permet de mixer deux ArrayList
 	public List<PenduSujetsChallenge> mixageList(List<PenduSujetsChallenge> mesChallengesJoues, List<PenduSujetsChallenge> challengeAmisOrdreCoupe ){
@@ -216,10 +77,8 @@ public class PenduChallengeSujetsControlleur {
 	        if (i < mesChallengesJoues.size()) resultat.add(mesChallengesJoues.get(i));
 	        if (i < challengeAmisOrdreCoupe.size()) resultat.add(challengeAmisOrdreCoupe.get(i));
 	    }
-
 		
 		return resultat;
-		
 	}
 	
 	@RequestMapping(value="accepterPenduSujetChallenge", method=RequestMethod.GET)
@@ -235,18 +94,12 @@ public class PenduChallengeSujetsControlleur {
 //		metier.accepterChallenge(id, idAmi);
 		penduDao.acceptChallengeSujets(id, idAmi);
 		
-//		gm.setMesChallengesRecus(metier.mesChallengesRecus(id));
-//		penduModel.setMesChallengesDico(penduDao.mesDicoChallenges(id));
+
 		penduModel.setMesChallengesSujetsJoues(penduDao.mesSujetsChallenges(id));
-//		gm.setMesChallengesEnvoyes(metier.mesChallengesEnvoyes(id));
-//		penduModel.setMesChallengesDicoEnvoyes(penduDao.mesChallengesDicoEnvoyes(id));
 		penduModel.setMesChallengesSujetsEnvoyes(penduDao.mesChallengesSujetsEnvoyes(id));
-//		gm.setMesChallengesEnAttentes(metier.mesChallengesEnAttentes(id));
 		penduModel.setMesChallengesDicoEnAttentes(penduDao.mesChallengesDicoAttentes(id));
 		penduModel.setMesChallengesSujetsEnAttentes(penduDao.mesChallengesSujetsAttentes(id));
-		
-		
-		
+				
 		model.addAttribute("penduModel", penduModel);
 		map.put("penduModel", penduModel);
 		
@@ -254,11 +107,7 @@ public class PenduChallengeSujetsControlleur {
 		
 	}
 	@RequestMapping(value="penduChallengeSujetsJeu", method=RequestMethod.GET)
-	public String penduChallengeSujetsJeu(Model model, PenduModel penduModel, HttpServletRequest request){
-		System.out.println("dans la methode penduChallengeSujetJeu");
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
+	public String penduChallengeSujetsJeu(Model model, PenduModel penduModel, HttpServletRequest request){				
 		HttpSession session = request.getSession();
 		Long id = (Long) session.getAttribute("id");
 //		le temps en fonction du nombre de r�sultats possibles 
@@ -275,9 +124,6 @@ public class PenduChallengeSujetsControlleur {
 //		le mot dans le DICO ou celui avec lequel il a joué (dans le cas ou il a joué avant moi)
 		String mot = "";
 		
-		
-//		Random r = new Random();
-//		char lettre = 'x';
 //		le code du jeu chez moi
 		String codeAttenteMoiSujets= penduDao.getCodeAttenteMoiAmiSujets(id, idAmi);
 		System.out.println("le code en attente chez moi "+codeAttenteMoiSujets);
@@ -286,58 +132,48 @@ public class PenduChallengeSujetsControlleur {
 		System.out.println("le code en attente chez mon ami "+codeAttenteAmiSujets);
 //		le code chez mon ami s'il a d�j� jou�
 		String codeJoueAmiSujets = penduDao.getCodeJoueAmiMoiSujets(id, idAmi);
-		
-//		char lettre ='x';
-//		Random random = new Random();
-		
-//		les maps qui vont stocker pour chaque intitule, le mot et la lettre
-		Map<Character, String> challengeSujetAgglo = new HashMap<Character, String>();
-		
-//		si mon code en attente est egale au code en attete de l'ami, ça veut dire qu'il n'ap pas encore joué, alors
+						
+//		si mon code en attente est egale au code en attete de l'ami, ça veut dire qu'il n'a pas encore joué, alors
 //		il faut tirer un mot dans le dico, sinon recuperer le mot avec lequel il a joue
 	
-		if (codeAttenteMoiSujets!=null && codeAttenteAmiSujets!=null ) {
-			System.out.println("les deux codes en attentes ne sont pas null ");
+		if (codeAttenteMoiSujets!=null || codeAttenteAmiSujets!=null ) {
 			if(codeAttenteMoiSujets.equals(codeAttenteAmiSujets)){
-				System.out.println("il n'a pas encore joué .....");
-				//			il n'a pas encore joue ALORS ...
-							
-				//			on tire une lettre au hasard
-				//			choisir dans un intitule de la BDD les mots contenant cette lettre
-				//			garder un seul mot
-				//			enregistrer dans une map qui va porter le nom de l'intitule, le mot et la lettre
-				//			FAIRE CECI POUR TOUS LES INTITULES
-							
-				//			agglomerations
-//							lettre = (char) (random.nextInt(26)+'a');			
-//							List<String> sujetAgglo= penduDao.challengeSujetAgglo(lettre);
-//							String csa = sujetAgglo.get(random.nextInt(sujetAgglo.size()));
-//							 challengeSujetAgglo = new HashMap<Character, String>();
-//							challengeSujetAgglo.put(lettre, csa);		
-//							map.put("challengeSujetAgglo", challengeSujetAgglo);
-				
-					chargementDesSujets(model, request);
+				System.out.println("il n'a pas encore joué .....");				
+				chargementDesSujets(model, request);
 							
 						}else{
+//							ajout d'un objet en session qui permettra de savoir lors de la correction si je suis le premier ou second à jouer
+							session.setAttribute("second", "second");
+//							parcourt des challenges joués chez l'ami, si on trouve un code d'identification équivalent à mon code d'identification en 
+//							attente, alors on doit recuper les informations du jeu de mon ami qui serviront de critère pour mon jeu
 							for(PenduSujetsChallenge c:ami.getMesChallengesJouesPenduSujets()){
 								if(c.getCodeIndentification().equals(codeAttenteMoiSujets)){
+									
 //									recupéretion dans le jeux de mon ami car moi aussi je dois jouer avec les memes lettres et mots
 									
 //									LES PAYS
-									String motPays = c.getPaysS();
+									String motPays = c.getPays();
 									char lettrePays = Character.toUpperCase(c.getLettrePays());
 									
+									int longueurMotPays =0;
 									String motCachePays="";
 									String motCacheDepartPays="";
-									for (int i = 0; i < motPays.length(); i++) {
-										motCachePays = new String(motCachePays+"*");
-										if (motPays.charAt(i)==lettrePays) {
-											motCacheDepartPays = new String(motCacheDepartPays+lettrePays);
-										} else {
-											motCacheDepartPays = new String(motCacheDepartPays+"*");
+									if (motPays!=null) {
+										for (int i = 0; i < motPays.length(); i++) {
+											motCachePays = new String(
+													motCachePays + "*");
+											if (motPays.charAt(i) == lettrePays) {
+												motCacheDepartPays = new String(
+														motCacheDepartPays
+																+ lettrePays);
+											} else {
+												motCacheDepartPays = new String(
+														motCacheDepartPays
+																+ "*");
+											}
 										}
+										longueurMotPays = motPays.length();
 									}
-									int longueurMotPays = motPays.length();
 									
 									System.out.println("le pays choisit est : "+motPays);
 									String idBouton = String.valueOf(lettrePays);
@@ -345,6 +181,7 @@ public class PenduChallengeSujetsControlleur {
 									
 									session.setAttribute("lettreStringPays", lettreStringPays);
 									session.setAttribute("motPays", motPays);
+									session.setAttribute("pointsMaxPays", c.getScoreMaxPays());
 									
 									model.addAttribute("motCacheDepartPays", motCacheDepartPays);
 									model.addAttribute("motCachePays", motCachePays);
@@ -355,9 +192,10 @@ public class PenduChallengeSujetsControlleur {
 									
 									
 //									LES CAPITALES 
-									String motCapitales = c.getCapitaleS();
+									String motCapitales = c.getCapitale();
 									char lettreCapitales = Character.toUpperCase(c.getLettreCapitale());
 									
+									int longueurMotCapitales =0;
 									String motCacheCapitales="";
 									String motCacheDepartCapitales="";
 									for (int i = 0; i < motCapitales.length(); i++) {
@@ -367,8 +205,8 @@ public class PenduChallengeSujetsControlleur {
 										} else {
 											motCacheDepartCapitales = new String(motCacheDepartCapitales+"*");
 										}
+										longueurMotCapitales = motCapitales.length();
 									}
-									int longueurMotCapitales = motCapitales.length();
 									
 									System.out.println("la capitale choisie est: "+motCapitales);
 									String idBoutonCaptiale = String.valueOf(lettreCapitales);
@@ -376,6 +214,7 @@ public class PenduChallengeSujetsControlleur {
 									
 									session.setAttribute("lettreStringCapitales", lettreStringCapitale);
 									session.setAttribute("motCapitales", motCapitales);
+									session.setAttribute("pointsMaxCapitales", c.getScoreMaxCapitale());
 									
 									
 									model.addAttribute("motCacheDepartCapitales", motCacheDepartCapitales);
@@ -387,20 +226,28 @@ public class PenduChallengeSujetsControlleur {
 									
 									
 //									LES NOBELS
-									String motNobels = c.getNobelS();
-									char lettreNobels = Character.toUpperCase(c.getLettreNobel());
+									String motNobels = c.getNobel();
+									char lettreNobels = Character.toUpperCase(c.getLettreNoble());
 									
+									int longueurMotNobels =0;
 									String motCacheNobels="";
 									String motCacheDepartNobels ="";
-									for (int i = 0; i < motNobels.length(); i++) {
-										motCacheNobels = new String(motCacheNobels+"*");
-										if (motNobels.charAt(i)==lettreNobels) {
-											motCacheDepartNobels = new String(motCacheDepartNobels+lettreNobels);
-										} else {
-											motCacheDepartNobels = new String(motCacheDepartNobels+"*");
+									if (motNobels!=null) {
+										for (int i = 0; i < motNobels.length(); i++) {
+											motCacheNobels = new String(
+													motCacheNobels + "*");
+											if (motNobels.charAt(i) == lettreNobels) {
+												motCacheDepartNobels = new String(
+														motCacheDepartNobels
+																+ lettreNobels);
+											} else {
+												motCacheDepartNobels = new String(
+														motCacheDepartNobels
+																+ "*");
+											}
 										}
+										longueurMotNobels = motNobels.length();
 									}
-									int longueurMotNobels = motNobels.length();
 									
 									System.out.println("la Nobel choisie est: "+motNobels);
 									String idBoutonNobels = String.valueOf(lettreNobels);
@@ -415,23 +262,33 @@ public class PenduChallengeSujetsControlleur {
 									model.addAttribute("lettreNobels", lettreNobels);
 									model.addAttribute("longueurMotNobels", longueurMotNobels);
 									model.addAttribute("idBoutonNobels", idBoutonNobels+"Nobels");
+									session.setAttribute("pointsMaxNobels", c.getScoreMaxNobel());
 									
 									
 //									LES ARTISTES
-									String motArtistes = c.getArtisteS();
+									String motArtistes = c.getArtiste();
 									char lettreArtistes = Character.toUpperCase(c.getLettreArtiste());
 									
+									int longueurMotArtistes =0;
 									String motCacheArtistes="";
 									String motCacheDepartArtistes ="";
-									for (int i = 0; i < motArtistes.length(); i++) {
-										motCacheArtistes = new String(motCacheArtistes+"*");
-										if (motArtistes.charAt(i)==lettreArtistes) {
-											motCacheDepartArtistes = new String(motCacheDepartArtistes+lettreArtistes);
-										} else {
-											motCacheDepartArtistes = new String(motCacheDepartArtistes+"*");
+									if (motArtistes != null) {
+										for (int i = 0; i < motArtistes
+												.length(); i++) {
+											motCacheArtistes = new String(
+													motCacheArtistes + "*");
+											if (motArtistes.charAt(i) == lettreArtistes) {
+												motCacheDepartArtistes = new String(
+														motCacheDepartArtistes
+																+ lettreArtistes);
+											} else {
+												motCacheDepartArtistes = new String(
+														motCacheDepartArtistes
+																+ "*");
+											}
 										}
+										longueurMotArtistes = motArtistes.length();
 									}
-									int longueurMotArtistes = motArtistes.length();
 									
 									System.out.println("lArtiste choisi est: "+motArtistes);
 									String idBoutonArtistes = String.valueOf(lettreArtistes);
@@ -439,6 +296,7 @@ public class PenduChallengeSujetsControlleur {
 									
 									session.setAttribute("lettreStringArtistes", lettreStringArtistes);
 									session.setAttribute("motArtistes", motArtistes);
+									session.setAttribute("pointsMaxArtistes", c.getScoreMaxArtiste());
 									
 									model.addAttribute("motCacheDepartArtistes", motCacheDepartArtistes);
 									model.addAttribute("motCacheArtistes", motCacheArtistes);
@@ -449,20 +307,29 @@ public class PenduChallengeSujetsControlleur {
 									
 									
 //									LES PRESIDENTS
-									String motPresident = c.getPresidentS();
+									String motPresident = c.getPresident();
 									char lettrePresident = Character.toUpperCase(c.getLettrePresident());
 									
+									int longueurMotPresident =0;
 									String motCachePresident="";
 									String motCacheDepartPresident="";
-									for (int i = 0; i < motPresident.length(); i++) {
-										motCachePresident = new String(motCachePresident+"*");
-										if (motPresident.charAt(i)==lettrePresident) {
-											motCacheDepartPresident = new String(motCacheDepartPresident+lettrePresident);
-										} else {
-											motCacheDepartPresident = new String(motCacheDepartPresident+"*");
+									if (motPresident!=null) {
+										for (int i = 0; i < motPresident
+												.length(); i++) {
+											motCachePresident = new String(
+													motCachePresident + "*");
+											if (motPresident.charAt(i) == lettrePresident) {
+												motCacheDepartPresident = new String(
+														motCacheDepartPresident
+																+ lettrePresident);
+											} else {
+												motCacheDepartPresident = new String(
+														motCacheDepartPresident
+																+ "*");
+											}
 										}
+										longueurMotPresident = motPresident.length();
 									}
-									int longueurMotPresident = motPresident.length();
 									
 									System.out.println("le Presi choisi est: "+motPresident);
 									String idBoutonPresident = String.valueOf(lettrePresident);
@@ -470,6 +337,7 @@ public class PenduChallengeSujetsControlleur {
 									
 									session.setAttribute("lettreStringPresident", lettreStringPresident);
 									session.setAttribute("motPresident", motPresident);
+									session.setAttribute("pointsMaxPresident", c.getScoreMaxPresident());
 									
 									model.addAttribute("motCacheDepartPresident", motCacheDepartPresident);
 									model.addAttribute("motCachePresident", motCachePresident);
@@ -477,15 +345,12 @@ public class PenduChallengeSujetsControlleur {
 									model.addAttribute("lettrePresident", lettrePresident);
 									model.addAttribute("longueurMotPresident", longueurMotPresident);
 									model.addAttribute("idBoutonPresident", idBoutonPresident+"President");
-									
-									
-									
-									
+																		
 									
 									int longueurMot = longueurMotPays+longueurMotCapitales+longueurMotNobels+longueurMotArtistes+longueurMotPresident;
 									model.addAttribute("longueurMot", longueurMot);
 														
-								return "penduChallengeSujetJeu";
+								return "penduChallengeSujetsJeu";
 								}					
 							}
 						}
@@ -496,7 +361,6 @@ public class PenduChallengeSujetsControlleur {
 	}
 	private void chargementDesSujets(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		System.out.println("nous sommes dans la methode de chargement des sujets");
 //		Pays
 		Random random = new  Random();
 		char lettre = (char) (random.nextInt(26)+'a');
@@ -531,6 +395,8 @@ public class PenduChallengeSujetsControlleur {
 		
 		session.setAttribute("lettreStringPays", lettreStringPays);
 		session.setAttribute("motPays", motPays);
+		session.setAttribute("pointsMaxPays", motPays.length()*10); // a modifier car si le user ne joue pas une categorie alors cette valeur sera prise
+																		// et elle peut ne pas être vraie si on a une lettre qui se trouve deux fois dans le mot
 		
 		model.addAttribute("motCacheDepartPays", motCacheDepartPays);
 		model.addAttribute("motCachePays", motCachePays);
@@ -572,6 +438,7 @@ public class PenduChallengeSujetsControlleur {
 		
 		session.setAttribute("lettreStringCapitales", lettreStringCapitale);
 		session.setAttribute("motCapitales", motCapitales);
+		session.setAttribute("pointsMaxCapitales", motCapitales.length()*10);
 		
 		
 		model.addAttribute("motCacheDepartCapitales", motCacheDepartCapitales);
@@ -614,6 +481,7 @@ public class PenduChallengeSujetsControlleur {
 		
 		session.setAttribute("lettreStringNobels", lettreStringNobels);
 		session.setAttribute("motNobels", motNobels);
+		session.setAttribute("pointsMaxNobels", (motNobels.length()-1)*10);
 		
 		model.addAttribute("motCacheDepartNobels", motCacheDepartNobels);
 		model.addAttribute("motCacheNobels", motCacheNobels);
@@ -655,6 +523,7 @@ public class PenduChallengeSujetsControlleur {
 		
 		session.setAttribute("lettreStringArtistes", lettreStringArtistes);
 		session.setAttribute("motArtistes", motArtistes);
+		session.setAttribute("pointsMaxArtistes", motArtistes.length()*10);
 		
 		model.addAttribute("motCacheDepartArtistes", motCacheDepartArtistes);
 		model.addAttribute("motCacheArtistes", motCacheArtistes);
@@ -677,9 +546,7 @@ public class PenduChallengeSujetsControlleur {
 		String motPresidentEspace = csPresident.toUpperCase();
 		
 //		pour la suppression des espaces
-		 String motPresident = motPresidentEspace.replaceAll("\\s", "");
-		
-		
+		 String motPresident = motPresidentEspace.replaceAll("\\s", "");		
 								
 		String motCachePresident="";
 		String motCacheDepartPresident="";
@@ -699,6 +566,7 @@ public class PenduChallengeSujetsControlleur {
 		
 		session.setAttribute("lettreStringPresident", lettreStringPresident);
 		session.setAttribute("motPresident", motPresident);
+		session.setAttribute("pointsMaxPresident", motPresident.length()*10);
 		
 		model.addAttribute("motCacheDepartPresident", motCacheDepartPresident);
 		model.addAttribute("motCachePresident", motCachePresident);
@@ -706,118 +574,123 @@ public class PenduChallengeSujetsControlleur {
 		model.addAttribute("lettrePresident", lettrePresident);
 		model.addAttribute("longueurMotPresident", longueurMotPresident);
 		model.addAttribute("idBoutonPresident", idBoutonPresident+"President");
-
-		
-		
 		
 		int longueurMot = longueurMotPays+longueurMotCapitales+longueurMotNobels+longueurMotArtistes+longueurMotPresident;
 		model.addAttribute("longueurMot", longueurMot);
 		
 	}
 	@RequestMapping(value="resultatPenduSujetsChallenge", method=RequestMethod.GET)
-	public String resultatPenduSujetsChallenge ( Model model, PenduModel penduModel, HttpServletRequest req, Word word){
-		
-		
+	public String resultatPenduSujetsChallenge ( Model model, PenduModel penduModel, HttpServletRequest req, Word word){		
 //		recupération pour chaque sujet: le mot, la lettre, les points (gagnés et totals)
 //		pour tous les sujets: la longueur
 //		le temps restant
 		HttpSession session = req.getSession();
-		Long moi = 2L;
-//				(Long) session.getAttribute("id");
+		Long moi =(Long) session.getAttribute("id");
+		Long ami =(Long) session.getAttribute("idAmi");
 		
-		PenduSujetsSolo penduSujetsSolo = new PenduSujetsSolo();
+		PenduSujetsChallenge penduSujets = new PenduSujetsChallenge();
 		
 		String motCompletPays = (String) session.getAttribute("motPays");
+		penduSujets.setPays(motCompletPays);
 		String lettreDevoileePays = (String) session.getAttribute("lettreStringPays");
 		char lettreCharPays = lettreDevoileePays.charAt(0);
-		int pointsMaxPays = (Integer) session.getAttribute("pointsMaxPays");
-		int pointsPays = (Integer) session.getAttribute("pointsPays");
+		int pointsMaxPays = (int) session.getAttribute("pointsMaxPays");
+		int pointsPays = 0;
 		String nbErreursPays = (String)session.getAttribute("nbErreursPays");
 		System.out.println("le mot du pays: "+motCompletPays+", la lettre : "+lettreCharPays+", les pointsMax: "+pointsMaxPays);
-//		savoir si on dejà soumis les pays pour correction, dans ce cas on met les données dans les attributs du pendu qui sera ensuite enregiste dans la BDD, sinon on les laisse par defaut
+//		savoir si on dejà a soumis les pays pour correction, dans ce cas on met les données dans les attributs du pendu qui sera ensuite enregiste dans la BDD, sinon on les laisse par defaut
 		String soumissionPays = (String) session.getAttribute("soumissionPays");
 		if (soumissionPays =="oui") {
-			penduSujetsSolo.setMotPays(motCompletPays);
-			penduSujetsSolo.setLettreStringPays(lettreDevoileePays);
-			penduSujetsSolo.setLettreCharPays(lettreCharPays);
+			
+			pointsPays = (Integer) session.getAttribute("pointsPays");
+			penduSujets.setLettreStringPays(lettreDevoileePays);
+			penduSujets.setLettrePays(lettreCharPays);
 			System.out.println("le nombre d'erreurs dans pays "+nbErreursPays);
-			penduSujetsSolo.setNbErreursPays(Integer.parseInt(nbErreursPays));
-			penduSujetsSolo.setScorePays(pointsPays);
-			penduSujetsSolo.setScoreMaxPays(pointsMaxPays);
+			penduSujets.setNbErreursPaysMoi(Integer.parseInt(nbErreursPays));
+			penduSujets.setScorePaysMoi(pointsPays);
+			penduSujets.setScoreMaxPays(pointsMaxPays);
 		}
 		String motCompletCapitales = (String) session.getAttribute("motCapitales");
+		penduSujets.setCapitale(motCompletCapitales);
 		String lettreDevoileeCapitales = (String) session.getAttribute("lettreStringCapitales");
 		char lettreCharCapitales = lettreDevoileeCapitales.charAt(0);
 		Integer pointsMaxCapitales = (Integer) session.getAttribute("pointsMaxCapitales");
-		Integer pointsCapitales = (Integer) session.getAttribute("pointsCapitales");
+		Integer pointsCapitales = 0;
 		String nbErreursCapitales = (String)session.getAttribute("nbErreursCapitales");
 		System.out.println("le mot de la  Capitale: "+motCompletCapitales+", la lettre : "+lettreCharCapitales+", les pointsMax: "+pointsMaxCapitales);
 		String soumissionCapitale = (String) session.getAttribute("soumissionCapitale");
 		if (soumissionCapitale=="oui") {
-			penduSujetsSolo.setMotCapitale(motCompletCapitales);
-			penduSujetsSolo.setLettreStringCapitale(lettreDevoileeCapitales);
-			penduSujetsSolo.setLettreCharCapitale(lettreCharCapitales);
-			penduSujetsSolo.setNbErreursCapitale(Integer
+			
+			pointsCapitales = (Integer) session.getAttribute("pointsCapitales");
+			penduSujets.setLettreStringCapitale(lettreDevoileeCapitales);
+			penduSujets.setLettreCapitale(lettreCharCapitales);
+			penduSujets.setNbErreursCapitaleMoi(Integer
 					.parseInt(nbErreursCapitales));
-			penduSujetsSolo.setScoreCapitale(pointsCapitales);
-			penduSujetsSolo.setScoreMaxCapitale(pointsMaxCapitales);
+			penduSujets.setScoreCapitaleMoi(pointsCapitales);
+			penduSujets.setScoreMaxCapitale(pointsMaxCapitales);
 		}
 		String motCompletNobels = (String) session.getAttribute("motNobels");
+		penduSujets.setNobel(motCompletNobels);
 		String lettreDevoileeNobels = (String) session.getAttribute("lettreStringNobels");
 		char lettreCharNobels = lettreDevoileeNobels.charAt(0);
-		int pointsMaxNobels = (Integer) session.getAttribute("pointsMaxNobels");
-		int pointsNobels = (Integer) session.getAttribute("pointsNobels");
+		int pointsMaxNobels = 0;
+		int pointsNobels = 0;
 		String nbErreursNobels = (String)session.getAttribute("nbErreursNobels");
 		System.out.println("le mot du Nobel: "+motCompletNobels+", la lettre : "+lettreCharNobels+", les pointsMax: "+pointsMaxNobels);
 		String soumissionNobel = (String) session.getAttribute("soumissionNobel");
 		if (soumissionNobel=="oui") {
-			penduSujetsSolo.setMotNobel(motCompletNobels);
-			penduSujetsSolo.setLettreStringNobel(lettreDevoileeNobels);
-			penduSujetsSolo.setLettreCharNobel(lettreCharNobels);
-			penduSujetsSolo
-					.setNbErreursNobel(Integer.parseInt(nbErreursNobels));
-			penduSujetsSolo.setScoreNobel(pointsNobels);
-			penduSujetsSolo.setScoreMaxNobel(pointsMaxNobels);
+			pointsMaxNobels =  (int) session.getAttribute("pointsMaxNobels");
+			pointsNobels = (Integer) session.getAttribute("pointsNobels");
+			penduSujets.setLettreStringNobel(lettreDevoileeNobels);
+			penduSujets.setLettreNoble(lettreCharNobels);
+			penduSujets
+					.setNbErreursNobelMoi(Integer.parseInt(nbErreursNobels));
+			penduSujets.setScoreNobelMoi(pointsNobels);
+			penduSujets.setScoreMaxNobel(pointsMaxNobels);
 		}
 		String motCompletArtistes = (String) session.getAttribute("motArtistes");
+		penduSujets.setArtiste(motCompletArtistes);
 		String lettreDevoileeArtistes = (String) session.getAttribute("lettreStringArtistes");
 		char lettreCharArtistes = lettreDevoileeArtistes.charAt(0);
 		int pointsMaxArtistes = (Integer) session.getAttribute("pointsMaxArtistes");
-		int pointsArtistes = (Integer) session.getAttribute("pointsArtistes");
+		int pointsArtistes = 0;
 		String nbErreursArtistes = (String)session.getAttribute("nbErreursArtistes");
 		System.out.println("le mot de l'ARTISTE: "+motCompletArtistes+", la lettre : "+lettreCharArtistes+", les pointsMax: "+pointsMaxArtistes);
 		String soumissionArtiste = (String) session.getAttribute("soumissionArtiste");
 		if (soumissionArtiste=="oui") {
-			penduSujetsSolo.setMotArtiste(motCompletArtistes);
-			penduSujetsSolo.setLettreStringArtiste(lettreDevoileeArtistes);
-			penduSujetsSolo.setLettreCharArtiste(lettreCharArtistes);
-			penduSujetsSolo.setNbErreursArtiste(Integer
+			
+			pointsArtistes = (Integer) session.getAttribute("pointsArtistes");
+			penduSujets.setLettreStringArtiste(lettreDevoileeArtistes);
+			penduSujets.setLettreArtiste(lettreCharArtistes);
+			penduSujets.setNbErreursArtisteMoi(Integer
 					.parseInt(nbErreursArtistes));
-			penduSujetsSolo.setScoreArtiste(pointsArtistes);
-			penduSujetsSolo.setScoreMaxArtiste(pointsMaxArtistes);
+			penduSujets.setScoreArtisteMoi(pointsArtistes);
+			penduSujets.setScoreMaxArtiste(pointsMaxArtistes);
 		}
 		String motCompletPresidents = (String) session.getAttribute("motPresident");
+		penduSujets.setPresident(motCompletPresidents);
 		String lettreDevoileePresidents = (String) session.getAttribute("lettreStringPresident");
 		char lettreCharPresidents = lettreDevoileePresidents.charAt(0);
-		int pointsMaxPresidents = (Integer) session.getAttribute("pointsMaxPresident");
-		int pointsPresidents = (Integer) session.getAttribute("pointsPresident");
+		int  pointsMaxPresidents = (int) session.getAttribute("pointsMaxPresident");
+		int pointsPresidents = 0;
 		String nbErreursPresidents = (String)session.getAttribute("nbErreursPresident");
-		System.out.println("le mot du President: "+motCompletPresidents+", le mot complet : "+motCompletPresidents+", les pointsMax: "+pointsMaxPresidents);
+//		System.out.println("le mot du President: "+motCompletPresidents+", le mot complet : "+motCompletPresidents+", les pointsMax: "+pointsMaxPresidents);
 		String soumissionPresident = (String) session.getAttribute("soumissionPresident");
 		if (soumissionPresident=="oui") {
-			penduSujetsSolo.setMotPresident(motCompletPresidents);
-			penduSujetsSolo.setLettreStringPresident(lettreDevoileePresidents);
-			penduSujetsSolo.setLettreCharPresident(lettreCharPresidents);
-			penduSujetsSolo.setNbErreursPresident(Integer
+			
+			pointsPresidents = (Integer) session.getAttribute("pointsPresident");
+			penduSujets.setLettreStringPresident(lettreDevoileePresidents);
+			penduSujets.setLettrePresident(lettreCharPresidents);
+			penduSujets.setNbErreursPresidentMoi(Integer
 					.parseInt(nbErreursPresidents));
-			penduSujetsSolo.setScorePresident(pointsPresidents);
-			penduSujetsSolo.setScoreMaxPresident(pointsMaxPresidents);
+			penduSujets.setScorePresidentMoi(pointsPresidents);
+			penduSujets.setScoreMaxPresident(pointsMaxPresidents);
 		}
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
 		String dateString = df.format(now);
-		penduSujetsSolo.setDate(now);
-		penduSujetsSolo.setDateString(dateString); 
+		penduSujets.setDate(now);
+		penduSujets.setDateStringMoi(dateString); 
 		
 //		suppression des données en session ..............................................................................
 //		session.removeAttribute("motCompletPays");
@@ -855,9 +728,25 @@ public class PenduChallengeSujetsControlleur {
 //		session.removeAttribute("nbErreursPresidents");
 //		session.removeAttribute("soumissionPresidents");
 		
+		Integer longueurSujets = (Integer)session.getAttribute("longueurMot");
+		String tempsRestant = req.getParameter("tempsRestant");
+		
+//		int longueurDesMots = (int) session.getAttribute("longueurMot");
+//		penduSujets.setLongueurDesMots(longueurDesMots);
+		
+		int totalPoints = pointsPays+pointsCapitales+pointsNobels+pointsArtistes+pointsPresidents;
+		int totalPointsMax = pointsMaxArtistes+pointsMaxCapitales+pointsMaxNobels+pointsMaxPays+pointsMaxPresidents;
+		
+//		penduSujets.setLongueurDesMots(lon);
+		
+		penduSujets.setScoreTotalMoi(totalPoints);
+		penduSujets.setScoreTotalMax(totalPointsMax);
+		penduSujets.setTempsRestantMoi(tempsRestant);
+		
+		System.out.println("AVANT LE SAVE DANS LE CONTROLLEUR ++++++++");
 //		Enregistement des données dans la base
-		penduDao.savePenduSujetSolo(penduSujetsSolo, moi);
-		System.out.println("après l'insertion dans la BDD, la dateString "+penduSujetsSolo.getDateString());
+		penduDao.savePenduSujetChallenge(penduSujets, moi, ami);
+		
 		
 //		Envoie des resultats à la vue pour affichage
 		
@@ -891,13 +780,7 @@ public class PenduChallengeSujetsControlleur {
 		model.addAttribute("pointsPresidents", pointsPresidents);
 		model.addAttribute("nbErreursPresidents", nbErreursPresidents);
 		
-		
-		
-		Integer longueurSujets = (Integer)session.getAttribute("longueurMot");
-		String tempsRestant = req.getParameter("tempsRestant");
-		
-		int totalPoints = pointsPays+pointsCapitales+pointsNobels+pointsArtistes+pointsPresidents;
-		int totalPointsMax = pointsMaxArtistes+pointsMaxCapitales+pointsMaxNobels+pointsMaxPays+pointsMaxPresidents;
+	
 		
 		model.addAttribute("totalPoints", totalPoints);
 		model.addAttribute("totalPointsMax", totalPointsMax);
@@ -945,5 +828,60 @@ public class PenduChallengeSujetsControlleur {
 	
 		return "infosActionPenduDicoChallenge";
 		
+	}
+	@RequestMapping(value="infosPenduSujetsChallenge")
+	public String infosPenduSujetsChallenge (Model model, PenduModel penduModel, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		List<PenduSujetsChallenge> challenges = penduDao.mesSujetsChallenges(id);
+		
+		model.addAttribute("pendus", challenges);
+		model.addAttribute("penduModel", penduModel);
+		return "infosPenduSujetsChallenge";
+		
+	}
+	@RequestMapping(value="infosPenduSujetsChallengeId")
+	public String infosPenduSujetsChallengeId (Model model, PenduModel penduModel, HttpServletRequest req){
+		Long idChallenge = Long.parseLong(req.getParameter("idChallenge"));
+		PenduSujetsChallenge pendu = penduDao.getSujetChallenge(idChallenge);
+		
+		model.addAttribute("pendu", pendu);
+		model.addAttribute("penduModel", penduModel);
+		return "infosPenduSujetsChallengeId";
+		
+	}
+	@RequestMapping(value="infoPublicationChallengeSujet")
+	public String infoPublicationChallengeSujet(Model model, PenduModel penduModel, HttpServletRequest req){
+		Long idChallenge = Long.parseLong(req.getParameter("idChallenge"));
+		PenduSujetsChallenge challenge = penduDao.getSujetChallenge(idChallenge);
+		
+		HttpSession session = req.getSession();
+		Long id =  (Long) session.getAttribute("id");
+		
+//		si le jeu n'avait été publié au par avant 
+		if(!challenge.isPublie()){
+			String message = "le "+challenge.getDateStringMoi()+", j'ai joué à un PENU.SUJET.CHALLENGE contre "+challenge.getMonFriend().getNom()+" "
+					+ ""+challenge.getMonFriend().getPrenom()+"\n"+", les ressultats sont de ce duel sont: "+"\n"+""
+							+ "POINTS TOTAUX: MOI: "+challenge.getScoreTotalMoi()+" => LUI: "+challenge.getScoreTotalAmi()+"\n"+""
+									+ "LES SUJETS: PAYS "+challenge.getPays()+": MOI "+challenge.getScorePaysMoi()+", LUI "+challenge.getPays()+"\n"
+									+ " CAPITALE: "+challenge.getCapitale()+": MOI "+challenge.getScoreCapitaleMoi()+", LUI "+challenge.getScoreCapitaleAmi()+"\n"
+									+ " NOBEL: "+challenge.getNobel()+": MOI "+challenge.getScoreNobelMoi()+", LUI "+challenge.getScoreNobelAmi()+"\n"
+									+ " ARTISTE: "+challenge.getArtiste()+": MOI "+challenge.getScoreArtisteMoi()+", LUI "+challenge.getScoreArtisteAmi()+"\n"
+									+ "PRESIDENT "+challenge.getPresident()+": MOI "+challenge.getScorePresidentMoi()+", LUI "+challenge.getScorePresidentAmi()+"\n"
+											+ "TEMPS RESTANT: MOI "+challenge.getTempsRestantMoi()+" => LUI: "+challenge.getTempsRestantAmi();
+			System.out.println(message);
+			Post post = new Post(new Date(), message, true, TypePost.PENDUSUJETCHALLENGE);
+			challenge.setPublie(true);
+			
+			metier.posterPost(id, message);
+			penduDao.publierChallengeSujets(idChallenge);
+			
+			return "publierDicoChallengeEtInfos";
+		}
+		
+		
+		model.addAttribute("pendu", challenge);
+		model.addAttribute("penduModel", penduModel);
+		return "publierDicoChallengeEtInfos";
 	}
 }

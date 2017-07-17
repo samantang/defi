@@ -70,8 +70,9 @@
 				<div class="modal fade" id="infos">
 			        <div class="modal-dialog modal-lg">  
 			          <div class="modal-content"></div>  
-			        </div> 
+			        </div>
 			      </div>
+			      <div><button class="btn btn-danger quitterLeJeuPenduChallengeSujets">Quitter la page</button></div> <br><hr>
 				<div id="resultatSujets"></div>
 					<ul class="nav nav-pills">
 					    <li class="active"><a href="#pays">Pays</a></li>
@@ -103,15 +104,7 @@
 					    <div class="tab-pane" id="agglos">LES AGGLOMERATIONS</div>
 					    <!-- <div class="tab-pane" id="villesFr">LES VILLES DE FRANCE</div> -->
 					</div>
-				
 				</div>
-				
-				
-				
-				
-				
-						
-				
 			</div>
 			<%-- <div class="col-md-3 col-lg-3">
 				<div id ="image"> ici une image qui représente le jeu</div>
@@ -138,17 +131,24 @@
 				  });
 				  /* pour la validation du jeu avec le boutton */
 				  $('.validerSujets')
-				  .click(function(){
+				 	 .click(function(){
 					  var param ='tempsRestant='+$('#time').text()+'';
-					  $('button').attr('href', 'penduChallengeCorrection/?'+param);
+					  	window.location.href ='resultatPenduSujetsChallenge/?'+param; 
+					  	/* $('button').attr('href', 'resultatPenduSujetsChallenge/?'+param); */
 					  	$('.communPays').attr('disabled','disabled');
 			        	 $('.communCapitales').attr('disabled','disabled');
 			        	 $('.communArtistes').attr('disabled','disabled');
 			        	 $('.communNobels').attr('disabled','disabled');
 			        	 $('.communPresidents').attr('disabled','disabled');
-			        	 /* $('#resultatChallengeSujets').load(''); */
-			        	 /* $('.validerSujets').attr('disabled','disabled'); */
 			        	 $('#infosTemps').remove();
+			        	 $('.quitterLeJeuPenduChallengeSujets').show();
+			        	 $('.validerSujets').hide();
+			        	 
+			        	 
+				  });
+				  $('.quitterLeJeuPenduChallengeSujets')
+				  .click(function(){
+					  location = "http://localhost:8080/penduChallengeSujets";
 				  })
 				});
 			
@@ -157,6 +157,7 @@
 						$('#infosTempsFini').hide();
 						/* $('#resultatTempsFini').hide();
 						$('#resultatCinqErreurs').hide(); */
+						$('.quitterLeJeuPenduChallengeSujets').hide();
 						
 						var corrects = '${longueurMot}';
 					    var fiveMinutes = 60 * 0.2 * corrects,
@@ -185,11 +186,6 @@
 					        display.textContent = minutes + ":" + seconds; 
 				
 					        if (diff <= 0) {
-					        	
-					        	 /* var motCache = $('#valeurMotCache').text();
-					        	 alert(motCache);
-								 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+$('#time').text()+'&motUser='+$('#valeurMotCache').text();
-					        	 $('#resultat').load('resultatPendu .resultatTempsFini', param);*/
 					        	 $('.communPays').attr('disabled','disabled');
 					        	 $('.communCapitales').attr('disabled','disabled');
 					        	 $('.communArtistes').attr('disabled','disabled');
@@ -201,17 +197,12 @@
 					        	 $('#infosTempsFini').val('00');
 					        	 
 					        	 $('#image').load('imageErreurPendu #image5'); 
-					        //	 $('#resultat').load('resultatPenduSujetsTempsFini'); 
-					        	 
-					        	 
-					             /* start = Date.now() + 10000000;  */
 					        }
-					    
 				    };
-				    // we don't want to wait a full second before the timer starts
 				    timer();
 				    setInterval(timer, 1000);
-				}
+				};
+									
 	</script>
 </body>
 </html>

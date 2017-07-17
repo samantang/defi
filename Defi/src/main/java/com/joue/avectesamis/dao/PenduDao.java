@@ -66,6 +66,8 @@ public interface PenduDao {
 	public List<Pays_Capitale> challengeSujetPays(char c);
 	public List<Pays_Capitale> challengeSujetCapitale(char c);
 	public List<String> challengeSujetVilleF(char c);
+	public PenduSujetsChallenge getSujetChallenge(Long idChallenge);
+	public void publierChallengeSujets(Long idChallenge);
 	
 	
 	

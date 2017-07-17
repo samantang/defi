@@ -122,7 +122,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${penduModel.mesSujetsoSolo }" var="solo" begin="0" end="18" step="2" >
+								<c:forEach items="${penduModel.mesSujetsoSolo }" var="solo" >
 									<tr>
 										<td ><c:out value="${solo.dateString }"></c:out></td>
 										<td><c:out value="${solo.scorePays }"></c:out>/<c:out value="${solo.scoreMaxPays }"></c:out></td>
