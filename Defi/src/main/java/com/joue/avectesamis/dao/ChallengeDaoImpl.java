@@ -521,6 +521,7 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		String nom = moi.getNom();
 		String randomString = random.toString();
 		String code = nom+randomString;
+		System.out.println("le code est ========== "+code);
 		
 		moi.getChallengesEnvoyes().put(ami, code);
 		ami.getChallengesRecus().put(moi, code);

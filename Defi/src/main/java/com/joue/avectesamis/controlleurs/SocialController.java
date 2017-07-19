@@ -436,6 +436,62 @@ public class SocialController {
 		Friend moi = metier.getFriend(id);
 		sm.setMesAmis((List<Friend>) moi.getFriends());
 		
+		/**
+		 * si les paramettres de l'action de ne sont pas nulles, alors l'utilisateur a surment cliquer sur action dans 'mesamis'
+		 * alors on recupere l'action concernée et agir en fonction (challenger, annuler, accepter, ...)
+		 * si tel est le cas alors on appelera la page de chargement de la table à la fin de la methode, juste avant la methode
+		 * qui renvoie à la page 'mesamis'
+		 */
+		if (req.getParameter("action")!=null) {
+			Long idAmi = Long.valueOf(req.getParameter("idAmi"));
+			
+			switch (req.getParameter("action")) {
+//			pour les envois de challenges
+			case "challengeABC":
+				metier.envoyerChallenge(id, idAmi);
+				break;
+			case "challengeDICO":
+				penduDao.sendChallengeDico(id, idAmi);
+				break;
+			case "challengeSUJETS":
+				penduDao.sedChallengeSujets(id, idAmi);
+				break;
+//				pour les annulations de challenges
+			case "annulerEnvoiABC":
+				metier.annulerEnvoiChallenge(id, idAmi);
+				break;
+			case "annulerEnvoiDICO":
+				penduDao.annulerEnvoiChallengeDico(id, idAmi);
+				break;
+			case "annulerEnvoiSUJETS":
+				penduDao.annulerEnvoiChallengeSujets(id, idAmi);
+				break;
+//				pour les acceptations de challenges
+			case "accepterABC":
+				metier.accepterChallenge(id, idAmi);
+				break;
+			case "accepterDICO":
+				penduDao.acceptChallengeDico(id, idAmi);
+				break;
+			case "accepterSUJETS":
+				penduDao.acceptChallengeSujets(id, idAmi);
+				break;
+//				pour les refus de challenges 
+			case "refuserABC":
+				metier.refuserChallenge(id, idAmi);
+				break;
+			case "refuserDICO":
+				penduDao.refuserChallengeDico(id, idAmi);
+				break;
+			case "refuserSUJETS":
+				penduDao.refuserChallengeSujets(id, idAmi);
+				break;
+			default:
+				break;
+			}
+		}
+		
+		
 //		recuperation des mes amis
 		Collection<Friend> mesAmis = moi.getFriends();
 		
@@ -449,9 +505,9 @@ public class SocialController {
 			ami.setNom(" "+friend.getNom()+" ");
 			ami.setPrenom(friend.getPrenom()+" ");
 //			Pour le jeu ABC
-			if (moi.getChallengeenvoiyes().contains(friend)) {
+			if (moi.getChallengesEnvoyes().containsKey(friend)) {
 				ami.setAbcAnnuler(true);
-			}else if (moi.getChallengerecus().contains(friend)) {
+			}else if (moi.getChallengesRecus().containsKey(friend)) {
 				ami.setAbcRefuser(true);
 			}else if (moi.getChallengeEnAttentes().containsKey(friend)) {
 				ami.setAbcAttente(true);
@@ -474,26 +530,14 @@ public class SocialController {
 			}else if (moi.getChallengesRecusPenduSujets().containsKey(friend)) {
 				ami.setSujetsRefuser(true);
 			}else if (moi.getChallengeEnAttentesPenduSujets().containsKey(friend)) {
-				ami.setSujetsRefuser(true);
+				ami.setSujetsAttente(true);
 			}else {
 				ami.setSujetsChallenger(true);
 			}
 			amisJeuxModel.add(ami);
-//			for (MesAmisJeuxModel mesAmisJeuxModel : amisJeuxModel) {
-//				System.out.println("mon ami est "+mesAmisJeuxModel.getId()+""+mesAmisJeuxModel.getNom()+""
-//						+mesAmisJeuxModel.getAbcAnnuler()+" "+mesAmisJeuxModel.getAbcChallenger()+" "+mesAmisJeuxModel.getAbcRefuser()+" "
-//						+mesAmisJeuxModel.getDicoAnnuler()+" "+mesAmisJeuxModel.getDicoChallenger()+" "+mesAmisJeuxModel.getDicoRefuser()+" "
-//						+mesAmisJeuxModel.getSujetsAnnuler()+" "+mesAmisJeuxModel.getSujetsChallenger()+" "+mesAmisJeuxModel.getSujetsRefuser());
-//				System.out.println("\n");
-//			}
+
 		}
-		for (MesAmisJeuxModel mesAmisJeuxModel : amisJeuxModel) {
-			System.out.println("mon ami est: "+mesAmisJeuxModel.getId()+""+mesAmisJeuxModel.getNom()+""
-					+mesAmisJeuxModel.isAbcAnnuler()+" "+mesAmisJeuxModel.isAbcChallenger()+" "+mesAmisJeuxModel.isAbcRefuser()+" "
-					+mesAmisJeuxModel.isDicoAnnuler()+" "+mesAmisJeuxModel.isDicoChallenger()+" "+mesAmisJeuxModel.isDicoRefuser()+" "
-					+mesAmisJeuxModel.isSujetsAnnuler()+" "+mesAmisJeuxModel.isSujetsChallenger()+" "+mesAmisJeuxModel.isSujetsRefuser());
-			System.out.println("\n");
-		}
+
 		model.addAttribute("amisJeuxModel", amisJeuxModel);
 		
 //		les amis pour lesquels Annuler la demande
@@ -539,50 +583,12 @@ public class SocialController {
 				}
 			}
 		}
-//		for (int i = 0; i < tousLesInscrits.size(); i++) {
-//			Iterator<Friend> amisIterator = amisEnvoyerDemande.iterator();
-//			while (amisIterator.hasNext()) {
-//				Friend friend = (Friend) amisIterator.next();
-//				if (friend.getId().equals(tousLesInscrits.get(i).getId()) ) {
-//					tousLesInscrits.remove(i);
-//				}
-//			}
-//		}
-		
-		
-		
-		
-		
-//		pour la suppression de moi dans tousLesInscrits		
-//		for (int i = 0; i < tousLesInscrits.size()+1; i++) {
-//			Iterator<Friend> tousIterator = tousLesInscrits.iterator();
-//			while (tousIterator.hasNext()) {
-//				Friend friend = (Friend) tousIterator.next();
-//				if (friend.getId().equals(moi.getId())) {
-//					tousLesInscrits.remove(i);
-//				}
-//			}
-//		}
 		
 		
 		tousLesInscrits.removeAll(amisJouerAvec);
 		tousLesInscrits.removeAll(amisAccepterDemande);
 		tousLesInscrits.removeAll(amisAnnulerDemande);
-//		supression de moi sur la liste
-//		for (Friend friend : tousLesInscrits) {
-//			if(friend.getId()==moi.getId()){
-//				tousLesInscrits.remove(friend);
-//			}
-//		}
-
-//		for (Iterator iterator = tousLesInscrits.iterator(); iterator.hasNext();) {
-//			Friend friend = (Friend) iterator.next();
-//			if(friend.getId()== moi.getId()){
-//				tousLesInscrits.remove(friend);
-//			}
-//		}
-		
-		
+			
 		
 //		en session le nombre de demande d'amis et de jeu
 		session.setAttribute("nbAmisJoueAvec", amisJouerAvec.size());
@@ -608,6 +614,13 @@ public class SocialController {
 		 model.addAttribute("id", id);
 		
 		model.addAttribute("sm", sm);
+//		si le parametre n'est pas null, alors on surement cliquer sur un boutton de la page messamis alors il faut recharger
+//		juste la table
+		if (req.getParameter("rechargerTable")!=null) {
+			return "rechargerTableAmis";
+		}
+		
+		
 		return "mesamis";
 		
 	}

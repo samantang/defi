@@ -894,24 +894,8 @@
   <%
   out.println("no");
   %>
-
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrapValidator.min.js"></script>
-   <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.js"></script> 
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.inview.min.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/wow.min.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/mousescroll.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/smoothscroll.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.countTo.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/lightbox.min.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/main.js"></script>
-  <%-- <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/html5shiv.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/respond.min.js"></script> --%> 
-  <%-- <script src="<%=request.getContextPath()%>/resources/js/entete.js"></script> --%>
   
-</body>
-<script type="text/javascript">
+  <script type="text/javascript">
 	$(document).ready(function () {
 		var validator = $("#registration-form").bootstrapValidator({
 			feedbackIcons: {
@@ -981,4 +965,22 @@
 		
 	});
 </script>
+
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrapValidator.min.js"></script>
+   <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.js"></script> 
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.inview.min.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/wow.min.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/mousescroll.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/smoothscroll.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.countTo.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/lightbox.min.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/main.js"></script>
+  <%-- <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/html5shiv.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/respond.min.js"></script> --%> 
+  <%-- <script src="<%=request.getContextPath()%>/resources/js/entete.js"></script> --%>
+  
+</body>
+
 </html>

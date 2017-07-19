@@ -8,77 +8,9 @@
 <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-
-
-<title>Mes Amis</title>
-<style type="text/css">
-	.menuGauche ul {
-	    background: #CCCCFF;
-	    padding: 20px;
-	    margin-top: 10px;
-	    list-style-type: none;
-	}
-	.menuGauche ul li {
-	    background: #cce5ff;
-	    margin: 5px;
-	}
-	.menuGauche ul li a{
-		color: #000000;
-	    text-decoration: none;
-	}
-	.menuGauche ul li a:hover{
-		color: green;
-	}
-	.menuDroit {
-		position: fixed;
-	}
-	.menuGauche{
-		position: fixed;
-	}
-	td, th {
-	text-align: center;
-	}
-</style>
 </head>
 <body>
-	
-	<jsp:include page="entete.jsp"></jsp:include>
- <div style="margin-top: 55px" >		
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3 col-lg-3">
-				<c:choose>
-					<c:when test="${moi.nomPhoto == null}">
-						<img height="50px" width="50px" src="<%=request.getContextPath()%>/resources/images/user.png" alt="">
-						<p>Ajouter de photo de profil </p>
-						<f:form action="changerPhoto" method="POST" enctype="multipart/form-data" modelAttribute="sm">
-							<input type="file" name="file">
-							<input type="submit" value="changer">
-						</f:form>
-					</c:when>
-					<c:otherwise>
-						<img src="photoUser?id=${id }" height="80px" width="80px" />
-					</c:otherwise>
-				</c:choose>
-				<div>
-					<div class="menuGauche">
-						<c:import url="menuGauche.jsp"></c:import>
-					</div>
-				</div>	
-			</div>
-			<div class="col-md-6 col-lg-6">
-				<div align="center">
-					
-				<c:choose>
-					<c:when test=" ${empty amisJeuxModel }">
-						<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">VOUS N'AVEZ AUCUN AMI POUR L'INSTANT</h2><br>
-					</c:when>
-					<c:otherwise>
-						<div>
-							<h2 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  ">VOS AMIS ET LES CHALLENGES</h2><br>
-							<div id="infosActionJeu"></div>
-							<div id="leTableau">
-								<table id="tableauDataTable" class="table table-bordered table-striped table-condensed" >
+		<table id="tableauDataTable" class="table table-bordered table-striped table-condensed" >
 									<thead>
 										<tr class="success">
 											<th style="text-align: center;">AMIS</th>
@@ -146,21 +78,8 @@
 										</c:forEach>
 									</tbody>
 								</table>
-							</div>	
-						</div>
-					</c:otherwise>
-				</c:choose>
-				
-				
-			</div></div>
-			<div class="col-md-3 col-lg-3">
-				<div>
-					<jsp:include page="menuDroit.jsp"></jsp:include>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+								
+								
 <script type="text/javascript">
 	$(document).ready(function() {
 	    $('#tableauDataTable').DataTable({

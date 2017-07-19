@@ -627,9 +627,8 @@ public class ChallengeAbcController {
 		Long idAmi= (long) Integer.parseInt(req.getParameter("idAmi"));
 		
 		metier.envoyerChallenge(id, idAmi);
-		SocialController social = new SocialController();
-		social.mesamis(model, sm, req);
-		return "userhome";
+
+	return "resultatPendu";
 		
 	}
 	@RequestMapping(value="infosDetailsChallenge")

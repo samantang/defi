@@ -1086,7 +1086,7 @@
 			        if (diff <= 0) {
 
 			        	 var motCache = $('#valeurMotCache').text();
-						 var param ='nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+0+'&motUser='+$('#valeurMotCache').text();
+						 var param = 'nbErreurs='+$('#nbErreur').text()+'&tempsRestant='+0+'&motUser='+$('#valeurMotCache').text();
 			        	 $('#resultat').load('penduChallengeDicoCorrectionCinqsErreurs .resultatTempsFini', param);
 			        	 $('.commun').attr('disabled','disabled');
 			        	 $('#time').remove();

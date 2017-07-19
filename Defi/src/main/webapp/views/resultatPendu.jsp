@@ -20,5 +20,8 @@
 						
 					<div class="resultatCinqErreurs">AIII !!! vous avez fait cinq erreurs avant de trouver le mot
 						${motComplet}, et par conséquent le jeu est fini, pour celui-ci vous avez gagné ${score } points sur ${pointsMax } possibles </div>
+
+					<div style="color: green;" class="infoEnvoieDeamande">la demande a bien été envoyée
+					</div>
 </body>
 </html>
