@@ -9,10 +9,10 @@
 </head>
 	<body>
 		<div class="menuDroit">
-			<h3> <strong> VOS DERNIERS JEUX</strong></h3>
+			<h3 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000000;  "> VOS DERNIERS JEUX </h3>
 			<div class="panel panel-default " style="margin-top: 15px;"> 
 				<div class="panel-heading" style="text-align: center;">
-			    	<a href="#solo" data-toggle="collapse">Vos Jeux SOLO</a><br>
+			    	<a href="#solo" data-toggle="collapse">Vos ABC SOLO</a><br>
 			                	les 10 derniers
 			    </div>
 			       <div id="solo" class="panel-collapse collapse">
@@ -29,7 +29,7 @@
 										<th>Aide</th>
 									</tr>
 								
-									<c:forEach items="${mesSolos}" var="solo" begin="0" end="${tailleSolos }">
+									<c:forEach items="${sessionScope.mesSolos}" var="solo" begin="0" end="${tailleSolos }">
 										<tr>
 											<td><c:out value="${solo.abcsolojeux.datestring}"></c:out></td>
 										
@@ -46,10 +46,10 @@
 			</div>
 			<div class="panel panel-default " style="margin-top: 15px;"> 
 				<div class="panel-heading" style="text-align: center;">
-			    	<a href="#cha" data-toggle="collapse">Vos Jeux CHALLENGE</a><br>
+			    	<a href="#dico" data-toggle="collapse">VOS DICOS SOLO</a><br>
 			                	les 10 derniers
 			    </div>
-			       <div id="cha" class="panel-collapse collapse">
+			       <div id="dico" class="panel-collapse collapse">
 			         <div class="panel-body">
 							<table class="table table-bordered table-striped table-condensed ">
 								<!-- <thead> -->
@@ -58,20 +58,42 @@
 									
 										<th>Score</th>
 									
-										<th>Lettre</th>
-									
-										<th>Aide</th>
 									</tr>
 								
-									<c:forEach items="${mesChallenges}" var="cha" begin="0" end="${tailleChallenges }">
+									<c:forEach items="${sessionScope.mesDicoSolos}" var="dico" begin="0" end="10">
 										<tr>
-											<td><c:out value="${cha.date}"></c:out></td>
+											<td><c:out value="${dico.dateString}"></c:out></td>
 										
-											<td><c:out value="${cha.score}"></c:out>/<c:out value="${cha.scoreMax}"></c:out></td>
+											<td><c:out value="${dico.score}"></c:out>/<c:out value="${dico.scoreMax}"></c:out></td>
+				
+										</tr>
+									</c:forEach>
+							</table>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default " style="margin-top: 15px;"> 
+				<div class="panel-heading" style="text-align: center;">
+			    	<a href="#sujet" data-toggle="collapse">VOS SUJETS SOLO</a><br>
+			                	les 10 derniers
+			    </div>
+			       <div id="sujet" class="panel-collapse collapse">
+			         <div class="panel-body">
+							<table class="table table-bordered table-striped table-condensed ">
+								<!-- <thead> -->
+									<tr>
+										<th>Date</th>
+									
+										<th>Score</th>
+									
+									</tr>
+								
+									<c:forEach items="${sessionScope.mesSujetsSolos}" var="sujet" begin="0" end="10">
+										<tr>
+											<td><c:out value="${sujet.dateString}"></c:out></td>
 										
-											<td><c:out value="${cha.lettre}"></c:out></td>
-										
-											<td><c:out value="${cha.help}"></c:out></td>
+											<td><c:out value="${sujet.score}"></c:out>/<c:out value="${sujet.scoreMax}"></c:out></td>
+				
 										</tr>
 									</c:forEach>
 							</table>

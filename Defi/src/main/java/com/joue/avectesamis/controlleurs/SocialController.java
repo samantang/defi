@@ -36,6 +36,8 @@ import com.joue.avectesamis.entites.AbcChallenge;
 import com.joue.avectesamis.entites.AbcSolo;
 import com.joue.avectesamis.entites.Friend;
 import com.joue.avectesamis.entites.Post;
+import com.joue.avectesamis.entites.jeux.pendu.PenduDicoSolo;
+import com.joue.avectesamis.entites.jeux.pendu.PenduSujetsSolo;
 import com.joue.avectesamis.metier.ChallengeMetier;
 import com.joue.avectesamis.models.Inscription;
 import com.joue.avectesamis.models.MesAmisJeuxModel;
@@ -115,6 +117,14 @@ public class SocialController {
 	    List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(id);
 	    List<AbcSolo> mesSolos =  metier.getMesSolos(id);
 	    
+	    Collection<PenduDicoSolo> mesDicoSolos = penduDao.mesDicoSolos(id);
+	    Collection<PenduSujetsSolo> mesSujetsSolos = penduDao.mesSujetsSolos(id);
+	    
+	    
+	    
+	    model.addAttribute("mesDicoSolos", mesDicoSolos);
+	    model.addAttribute("mesSujetsSolos", mesSujetsSolos);
+	    
 	    model.addAttribute("mesChallenges", mesChallenges);
 	    model.addAttribute("mesSolos", mesSolos);
 	    model.addAttribute("sm", sm);
@@ -161,9 +171,17 @@ public class SocialController {
 //		les amis avec lesquels Jouer
 		List<Friend> amisJouerAvec = metier.amisJouerAvec(idUser);
 		
-//		en session le nombre de demande d'amis et de jeu
-		session.setAttribute("nbAmisJoueAvec", amisJouerAvec.size());
-		session.setAttribute("nbAmisAccepterDemande", amisAccepterDemande.size());
+		int nbNotificationsDico = penduDao.mesChallengesDicoAttentes(idUser).size()+
+				penduDao.mesChallengesDicoRecus(idUser).size();
+		int nbNotificationsSujets = penduDao.mesChallengesSujetsAttentes(idUser).size()+
+				penduDao.mesChallengesSujetsRecus(idUser).size();
+		int nbNotificationsAbc = amisJouerAvec.size()+amisAccepterDemande.size();
+		
+		
+//		en session le nombre de notifications par jeu
+		session.setAttribute("nbNotificationsDico", nbNotificationsDico);
+		session.setAttribute("nbNotificationsSujets", nbNotificationsSujets);
+		session.setAttribute("nbNotificationsAbc", nbNotificationsAbc);
 	    
 	    	    
 	    
@@ -171,8 +189,17 @@ public class SocialController {
 //	    ajout du prenom de l'utilisateur en cours dans la session pour l'affichage dans la vue
 	    session.setAttribute("prenomUser", moi.getPrenom());
 //	    recup�ration des derniers jeux
-	   List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(idUser);
+	    List<AbcChallenge> mesChallenges= metier.mesDerniersChallenges(idUser);
 	    List<AbcSolo> mesSolos =  metier.getMesSolos(idUser);
+	    Collection<PenduDicoSolo> mesDicoSolos = penduDao.mesDicoSolos(idUser);
+	    Collection<PenduSujetsSolo> mesSujetsSolos = penduDao.mesSujetsSolos(idUser);
+	    
+	    session.setAttribute("mesSolos", mesSolos);
+	    session.setAttribute("mesDicoSolos", mesDicoSolos);
+	    session.setAttribute("mesSujetsSolos", mesSujetsSolos);
+	    
+	    model.addAttribute("mesDicoSolos", mesDicoSolos);
+	    model.addAttribute("mesSujetsSolos", mesSujetsSolos);
 	    
 	    // recup�ration de tous les posts et des commentaires
 	    sm.setPosts(metier.getPosts());
@@ -186,9 +213,6 @@ public class SocialController {
 			message = message + p.getMessage();
 		};
 		session.setAttribute("message", message);
-	    
-//	    recup�ration de l'utisteur
-//	    Friend moi = metier.getFriend(id);
 	    
 	    
 	    model.addAttribute("moi", moi);
@@ -734,10 +758,7 @@ public class SocialController {
 		sm.setMesAmis((List<Friend>) moi.getFriends());
 		
 //		TEST POUR METHODES
-		metier.annulerEnvoiChallenge(1L, 2L);
-		
-//		FIN TEST POUR METHODES
-		
+		metier.annulerEnvoiChallenge(1L, 2L);		
 		
 //		les amis pour lesquels Annuler la demande
 		List<Friend> amisAnnulerDemande = metier.amisAnnulerDemande(id);

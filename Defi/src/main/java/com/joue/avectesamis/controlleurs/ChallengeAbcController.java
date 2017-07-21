@@ -684,5 +684,19 @@ public class ChallengeAbcController {
 		return "infoPublicationSoloAbcChallenge";
 		
 	}
+	@RequestMapping(value="notificationsAbc")
+	public String notificationsAbc(Model model, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		List<Friend> challengesEnAttentes = metier.mesChallengesEnAttentes(id);
+		List<Friend> mesChallengesRecus = metier.mesChallengesRecus(id);
+		
+		int nbNotificationsDico = challengesEnAttentes.size()+mesChallengesRecus.size();
+		model.addAttribute("nbNotificationsAbc", nbNotificationsDico);
+		
+		model.addAttribute("challengesEnAttentes", challengesEnAttentes);
+		model.addAttribute("mesChallengesRecus", mesChallengesRecus);
+		return "notificationsAbc";
+	}
 	
 }

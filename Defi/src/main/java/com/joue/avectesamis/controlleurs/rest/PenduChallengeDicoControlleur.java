@@ -587,4 +587,18 @@ public class PenduChallengeDicoControlleur {
 		return "publierDicoChallengeEtInfos";
 		
 	}
+	@RequestMapping(value="notificationsDico")
+	public String notificationsDico(Model model, HttpServletRequest req){
+		HttpSession session = req.getSession();
+		Long id = (Long) session.getAttribute("id");
+		List<Friend> challengesEnAttentes = penduDao.mesChallengesDicoAttentes(id);
+		List<Friend> mesChallengesRecus = penduDao.mesChallengesDicoRecus(id);
+		
+		int nbNotificationsDico = challengesEnAttentes.size()+mesChallengesRecus.size();
+		model.addAttribute("nbNotificationsDico", nbNotificationsDico);
+		
+		model.addAttribute("challengesEnAttentes", challengesEnAttentes);
+		model.addAttribute("mesChallengesRecus", mesChallengesRecus);
+		return "notificationsDico";
+	}
 }

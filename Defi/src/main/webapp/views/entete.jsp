@@ -17,12 +17,11 @@
 	 background-color: #CEFFF8;
       
 	}
-	
+
 </style>
 </head>
 	<body data-spy="scroll" data-target=".navbar">
 
-<div class="container-fluid">
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -33,58 +32,46 @@
         </button>
         <a href="#" class="navbar-brand">Challenge-Friend</a>
       </div>
-      <c:choose>
-      	<c:when test="${empty sessionScope.id }">
-	      	<div class="collapse navbar-collapse">
-		        <ul class="nav navbar-nav">
-		          <li class="active"><a href="#userhome">Accueil</a></li>
-		          <li><a href="#produits">Produits</a></li>
-		          <li><a href="#nouvelles">Nouvelles</a></li>
-		          <li><a href="#localisation">Localisation</a></li>          
-		        </ul>
-		        <ul class="nav navbar-nav navbar-right">
-		        	<!-- <button data-toggle="modal" data-backdrop="false" href="#formulaire" class="btn btn-primary btn-sm">inscription</button>  -->
-		        	<li><a href="#formulaire" data-toggle="modal" data-backdrop="false"><span class="glyphicon glyphicon-user inscription"></span> Inscription</a></li>
-		        </ul>       
-		        	
-		         <f:form class="navbar-form navbar-right inline-form" role="form" action="loginUser" modelAttribute="sm" method="post">
-		            <div class="form-group">
-		              <input type="text" class="input-sm form-control" placeholder="email" name="userid" size="10">
-		               <input type="password" class="input-sm form-control" placeholder="mot de passe" name="password" size="8">
-		              <input type="submit" class="btn btn-primary btn-sm" value="connexion">	              
-		            </div>
-		          </f:form>          
-		      </div>
-      	</c:when>
-      	<c:otherwise>
       		<div class="collapse navbar-collapse">
-      			<div class="collapse navbar-collapse">
       				<ul class="nav navbar-nav navbar-right">
-			        	<!-- <button data-toggle="modal" data-backdrop="false" href="#formulaire" class="btn btn-primary btn-sm">inscription</button>  -->
 			        	<li><a id="deconnexion" href="deconnexion" data-target="deconnexion"><span class="glyphicon glyphicon-user"></span> Déconnexion</a></li>
 		        	</ul> 
       				<ul class="nav navbar-nav navbar-right">
-      					<li  class="active"><a href="#index">Accueil</a></li>
-      					<li><a   title="les demandes de challenge amis à accepter" href="javascript:" onclick="challengesAaccepter()" ><span class="glyphicon glyphicon-hand-right"></span> <c:out value="${sessionScope.nbAmisAccepterDemande}"></c:out> Challenges à accepter</a></li>
-      					<li><a  title="les challenges amis à Jouer" href="javascript:" onclick="challengesAJouer()"><span class="glyphicon glyphicon-hourglass"></span> <c:out value="${sessionScope.nbAmisJoueAvec}"></c:out> Challenges à jouer</a></li>
-      					<%-- <c:forEach items=""></c:forEach> --%>
+      					<li  class="active"><a href="userhome">Accueil</a></li>
+      					<li><a   title="les challenges ABC" href="javascript:" onclick="notificationsChallengeAbc()" ><span class="glyphicon glyphicon-hourglass"></span> <c:choose><c:when test="${sessionScope.nbNotificationsAbc ==0}">0</c:when><c:otherwise><span style="color: orange;"><c:out value="${sessionScope.nbNotificationsAbc}"/></span></c:otherwise> </c:choose> ABC</a></li>
+      					<li><a  title="les challenges DICO" href="javascript:" onclick="notificationsChallengeDico()"><span class="glyphicon glyphicon-hourglass"></span> <c:choose><c:when test="${sessionScope.nbNotificationsDico ==0}">0</c:when><c:otherwise><span style="color: orange;"><c:out value="${sessionScope.nbNotificationsDico}"/></span></c:otherwise> </c:choose> DICO</a></li>
+      					<li><a  title="les challenges SUJETS" href="javascript:" onclick="notificationsChallengeSujets()"><span class="glyphicon glyphicon-hourglass"></span> <c:choose><c:when test="${sessionScope.nbNotificationsSujets ==0}">0</c:when><c:otherwise><span style="color: orange;"><c:out value="${sessionScope.nbNotificationsSujets}"/></span></c:otherwise> </c:choose> SUJETS</a></li>      					
       					<li><a href=""><c:out value="${sessionScope.prenomUser}"></c:out> </a></li>
       				</ul>
-      			</div>	
+			        	<form class="navbar-form navbar-left" >
+						  <div class="input-group">
+						    <input type="text" class="form-control" placeholder="Chercher ...">
+						    <!-- <div class="input-group-btn">
+						      <button class="btn btn-default" type="submit">
+						        <i class="glyphicon glyphicon-search"></i>
+						      </button>
+						    </div> -->
+						  </div>
+						</form>
       		</div>
-      	</c:otherwise>
-      </c:choose>
     </div>
   </nav> 
-  <div class="container">
+   <div class="container">
   	<div class="row">
-  		<div class="col-sm-3 col-md-3 "></div>
-  		<div class="col-sm-3 col-md-3 "></div>
-  		<div class="col-sm-3 col-md-3 "></div>
-  		<div class="col-sm-3 col-md-3 "><div id="challengesAJouer" style="position: fixed;z-index: 1;"></div></div>
+  		
+  		<div class="col-sm-3 col-md-4 "></div>
+  		<div class="col-sm-3 col-md-4 "></div>
+  		<div class="col-sm-3 col-md-3 ">
+  			<!-- <div id="challengesAaccepter" style="position: fixed;z-index: 1;"></div> -->
+  			<div id="challengesAJouer" style="position: fixed;z-index: 1;"></div>
+  			
+  		</div>
+  		<div class="col-sm-3 col-md-1 "></div>
   	</div>
-  </div>
+  </div> 
+  <!-- <div id="challengesAJouer" style="position: fixed;z-index: 1;"></div> --> 
   <div id="challengesAaccepter" style="position: fixed;z-index: 2;"></div>  
+
   
 <!-- iscription -----------------------------------------------------------------------------------------------------------------------------------------------------  -->
 
@@ -148,8 +135,16 @@
 
 <!-- fin inscription------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
 
-  
-</div>
+  <script type="text/javascript">
+ $(document).ready(function() {
+	 /* pour cacher les notification quand on click ailleur */
+	document.body.addEventListener('click', function(){
+		$('#challengesAaccepter').hide();
+		$('#challengesAJouer').hide();
+	});
+}); 
+</script>
+<!-- </div> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/resources/js/entete.js"></script> 
