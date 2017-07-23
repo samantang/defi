@@ -203,12 +203,12 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		Friend moi = em.find(Friend.class, m);
 		Comment comment = new Comment(com, new Date());
 		
-//		em.persist(post);
 		em.persist(comment);
 		
 		comment.setPost(post);
+//		comment.getFriends().add(moi);
 		post.getComments().add(comment);
-		post.setFriendpost(moi);
+//		post.setFriendpost(moi);
 		moi.getComments().add(comment);		
 		
 		

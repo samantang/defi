@@ -34,24 +34,24 @@
 							<c:choose>
 								<c:when test="${sm.jeu == true}">
 									<div class="jeuxPublies">
-									<p><img alt="" src="photoUser?id=${sm.friendpost.id }" height="30px" width="30px">&nbsp;${sm.friendpost.nom}</p>
-									<p> ${sm.message }</p>
-									<p> ${sm.date }</p>
-									 <!-- si j'ai pas encore aimé ce poste on affiche "aimer", sinon on affiche "ne plus aimer" -->
-									 	<%-- <c:if test="${moi.posts }"></c:if> --%>
-										<a href="aimerPost?id=${sm.id }">aimer</a> &nbsp;&nbsp;
-										<a href="neplusAimerPost?id=${sm.id }"> ne plus aimer</a><br>
-										<a href="quiAimePost?id=${sm.id }">${sm.nbLikesPost} personnes aimment ça</a>
-										<f:form modelAttribute="sm" action="commenterPost">
-											<f:textarea path="commentaire"  placeholder=" votre commentaire ..." />
-											<f:input path="idPost" type="hidden" value="${sm.id }" />
-											<input type="submit" value="commenter">
-										</f:form>	
-										<p id="idcommentaire"></p><br>
-											<c:forEach items="${sm.comments }" var="com">
-												<p><strong> ${com.friends }</strong></p>
-												<strong>le commentaire: ${com.commentaire }</strong><br><br><hr>
-											</c:forEach>
+										<p><img alt="" src="photoUser?id=${sm.friendpost.id }" height="30px" width="30px">&nbsp;${sm.friendpost.nom}</p>
+										<p> ${sm.message }</p>
+										<p> ${sm.date }</p>
+										 <!-- si j'ai pas encore aimé ce poste on affiche "aimer", sinon on affiche "ne plus aimer" -->
+										 	<%-- <c:if test="${moi.posts }"></c:if> --%>
+											<a href="aimerPost?id=${sm.id }">aimer</a> &nbsp;&nbsp;
+											<a href="neplusAimerPost?id=${sm.id }"> ne plus aimer</a><br>
+											<a href="quiAimePost?id=${sm.id }">${sm.nbLikesPost} personnes aimment ça</a>
+											<f:form modelAttribute="sm" action="commenterPost">
+												<f:textarea path="commentaire"  placeholder=" votre commentaire ..." />
+												<f:input path="idPost" type="hidden" value="${sm.id }" />
+												<input type="submit" value="commenter">
+											</f:form>	
+											<p id="idcommentaire"></p><br>
+												<c:forEach items="${sm.comments }" var="com">
+													<p><strong> ${com.friends }</strong></p>
+													<strong>le commentaire: ${com.commentaire }</strong><br><br><hr>
+												</c:forEach>
 									</div>
 								</c:when>
 								<c:otherwise>
@@ -75,7 +75,6 @@
 											</f:form>	
 											<p id="idcommentaire"></p><br>
 									</div>	
-											
 								</c:otherwise>	
 							</c:choose>			
 						</c:forEach>
