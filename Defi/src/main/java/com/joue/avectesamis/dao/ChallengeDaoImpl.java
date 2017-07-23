@@ -1023,4 +1023,11 @@ public class ChallengeDaoImpl implements ChallengeDao {
 		return challenge;
 	}
 
+
+	@Override
+	public List<Friend> mesAmisLike(Long id, String parameter) {
+		Query query = em.createQuery("select f from Friend f where f.prenom like"+"'"+parameter+"%'");
+		return query.getResultList();
+	}
+
 }

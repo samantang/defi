@@ -45,7 +45,7 @@
       				</ul>
 			        	<form class="navbar-form navbar-left" >
 						  <div class="input-group">
-						    <input type="text" class="form-control" placeholder="Chercher ...">
+						    <input name="searchName"  type="text" size="50" id="searchbox" placeholder="Chercher des amis" onkeyup="suggest()"/>
 						    <!-- <div class="input-group-btn">
 						      <button class="btn btn-default" type="submit">
 						        <i class="glyphicon glyphicon-search"></i>
@@ -56,15 +56,14 @@
       		</div>
     </div>
   </nav> 
+  
    <div class="container">
   	<div class="row">
-  		
-  		<div class="col-sm-3 col-md-4 "></div>
+  		<div class="col-sm-3 col-md-4 "><div style="position: fixed; z-index: 3; margin-top: 55px" id="suggestion"></div></div>
   		<div class="col-sm-3 col-md-4 "></div>
   		<div class="col-sm-3 col-md-3 ">
   			<!-- <div id="challengesAaccepter" style="position: fixed;z-index: 1;"></div> -->
-  			<div id="challengesAJouer" style="position: fixed;z-index: 1;"></div>
-  			
+  			<div id="challengesAJouer" style="position: fixed; z-index: 1;"></div>
   		</div>
   		<div class="col-sm-3 col-md-1 "></div>
   	</div>
@@ -141,8 +140,57 @@
 	document.body.addEventListener('click', function(){
 		$('#challengesAaccepter').hide();
 		$('#challengesAJouer').hide();
+		$('#suggestion').hide();
 	});
 }); 
+/*  $('#rechecheAutoComplete').on('change paste keyup', function() {
+	 	var v = $(this).val();
+	   var valeur = 'valeur='+v+'';
+	   $('#afficheAutoComplete').load('rechecheAutoComplete', valeur);
+	   
+	}); */
+	function suggest()
+	{
+	        var xmlhttp;
+	        var elem = document.getElementById("searchbox").value;
+	        if(elem.length >= 2){	        
+		        if(window.XMLHttpRequest)
+		        {
+		                xmlhttp = new XMLHttpRequest();
+		        }
+		        else if(window.ActiveXObject)
+		        {
+		                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		        }
+		        xmlhttp.open("GET","rechecheAutoComplete?elem="+elem,true);
+		        xmlhttp.send();
+		        xmlhttp.onreadystatechange=function()
+		        {
+		                    if(xmlhttp.readyState==4 && xmlhttp.status==200)
+		                    {
+		                            var data = xmlhttp.responseText;
+		                            if(data.trim()=="no")
+		                            {
+		                                document.getElementById('suggestion').style.backgroundColor="";
+		                                document.getElementById('suggestion').style.border="";
+		                                document.getElementById('suggestion').innerHTML="";
+		                            }
+		                            else
+		                            {
+		    
+		                                //document.getElementById('suggestion').style="border:2px solid black";
+		                                document.getElementById('suggestion').style.backgroundColor="#FFFBF0";
+		                                document.getElementById('suggestion').style.border="1px solid grey";
+		                                document.getElementById('suggestion').style.borderTop="none";
+		                                document.getElementById('suggestion').style.borderRadius="6px";
+		                                document.getElementById('suggestion').style.display="inline";
+		                                document.getElementById('suggestion').style.textDecoration="none";
+		                                document.getElementById('suggestion').innerHTML=data;
+		                            }
+		                }
+		            }
+	        }
+	}
 </script>
 <!-- </div> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

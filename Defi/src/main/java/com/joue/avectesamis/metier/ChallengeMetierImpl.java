@@ -490,6 +490,12 @@ public class ChallengeMetierImpl implements ChallengeMetier{
 		return dao.getMonChallenge(id, idJeu);
 	}
 
+	@Override
+	public List<Friend> mesAmisLike(Long id, String parameter) {
+		// TODO Auto-generated method stub
+		return dao.mesAmisLike(id, parameter);
+	}
+
 	
 	
 

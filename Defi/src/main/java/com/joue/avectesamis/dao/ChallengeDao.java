@@ -118,6 +118,7 @@ public interface ChallengeDao {
 	public String getCodeAttenteMoiAmi(Long moi, Long ami);
 	public String getCodeAttenteAmiMoi(Long moi, Long ami);
 	public String getCodeJoueAmiMoi(Long moi, Long ami);
+	public List<Friend> mesAmisLike(Long id, String parameter);
 	
 
 }

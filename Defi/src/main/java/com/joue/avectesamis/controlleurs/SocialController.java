@@ -947,4 +947,21 @@ public class SocialController {
 		return "mesAmis";
 		
 	}
+	@RequestMapping(value="rechecheAutoComplete")
+	public String rechecheAutoComplete(Model model ,HttpServletRequest request, SocialModel sm){
+		System.out.println("la valeur ecrite est "+request.getParameter("elem"));
+		HttpSession session = request.getSession();
+		Long id =  (Long) session.getAttribute("id");
+		
+		List<Friend> mesAmisLike = metier.mesAmisLike(id, request.getParameter("elem"));
+		
+		for (Friend friend : mesAmisLike) {
+			System.out.println("le prenom de l'ami est "+friend.getPrenom());
+		}
+		
+		model.addAttribute("mesAmisLike", mesAmisLike);
+		model.addAttribute("nbAmis", mesAmisLike.size());
+		return "rechecheAutoComplete";
+		
+	}
 }
