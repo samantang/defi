@@ -183,10 +183,9 @@ public class ChallengeDaoImpl implements ChallengeDao {
 	}
 
 	@Override
-	public void posterPost(Long m, String messagePost) {
+	public void posterPost(Long m, String messagePost, Post p) {
 		
 		Friend moi = em.find(Friend.class, m);
-		 Post p = new Post(messagePost, new Date());
 		 em.persist(p);
 		 moi.getPosts().add(p);
 		 p.setFriendpost(moi);
@@ -1028,6 +1027,20 @@ public class ChallengeDaoImpl implements ChallengeDao {
 	public List<Friend> mesAmisLike(Long id, String parameter) {
 		Query query = em.createQuery("select f from Friend f where f.prenom like"+"'"+parameter+"%'");
 		return query.getResultList();
+	}
+
+
+	@Override
+	public void posterPost(Long moi, String messagePost) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void publierChallenge(AbcChallenge challenge) {
+		challenge.setPublie(true);
+		em.merge(challenge);
 	}
 
 }

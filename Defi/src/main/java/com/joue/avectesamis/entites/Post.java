@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -54,11 +55,167 @@ public class Post implements Serializable{
 //	private Collection<Post> posts;
 	@Enumerated(EnumType.STRING)
 	private TypePost typePost;
+//	Pour mieux organiser l'affichage du jeu
+	@OneToOne
+	private Friend moi;
+	@OneToOne
+	private Friend ami;
+	private int scoreMax;
+	private int scoreMoi;
+	private int scoreAmi;
+	private boolean aideMoi;
+	private boolean aideAmi;
+	private String tempsResantMoi;
+	private String tempsRestantAmi;
 	
 	
 	
 	
 	 
+	/**
+	 * @return the moi
+	 */
+	public Friend getMoi() {
+		return moi;
+	}
+
+
+	/**
+	 * @param moi the moi to set
+	 */
+	public void setMoi(Friend moi) {
+		this.moi = moi;
+	}
+
+
+	/**
+	 * @return the ami
+	 */
+	public Friend getAmi() {
+		return ami;
+	}
+
+
+	/**
+	 * @param ami the ami to set
+	 */
+	public void setAmi(Friend ami) {
+		this.ami = ami;
+	}
+
+
+	/**
+	 * @return the scoreMax
+	 */
+	public int getScoreMax() {
+		return scoreMax;
+	}
+
+
+	/**
+	 * @param scoreMax the scoreMax to set
+	 */
+	public void setScoreMax(int scoreMax) {
+		this.scoreMax = scoreMax;
+	}
+
+
+	/**
+	 * @return the scoreMoi
+	 */
+	public int getScoreMoi() {
+		return scoreMoi;
+	}
+
+
+	/**
+	 * @param scoreMoi the scoreMoi to set
+	 */
+	public void setScoreMoi(int scoreMoi) {
+		this.scoreMoi = scoreMoi;
+	}
+
+
+	/**
+	 * @return the scoreAmi
+	 */
+	public int getScoreAmi() {
+		return scoreAmi;
+	}
+
+
+	/**
+	 * @param scoreAmi the scoreAmi to set
+	 */
+	public void setScoreAmi(int scoreAmi) {
+		this.scoreAmi = scoreAmi;
+	}
+
+
+	/**
+	 * @return the aideMoi
+	 */
+	public boolean isAideMoi() {
+		return aideMoi;
+	}
+
+
+	/**
+	 * @param aideMoi the aideMoi to set
+	 */
+	public void setAideMoi(boolean aideMoi) {
+		this.aideMoi = aideMoi;
+	}
+
+
+	/**
+	 * @return the aideAmi
+	 */
+	public boolean isAideAmi() {
+		return aideAmi;
+	}
+
+
+	/**
+	 * @param aideAmi the aideAmi to set
+	 */
+	public void setAideAmi(boolean aideAmi) {
+		this.aideAmi = aideAmi;
+	}
+
+
+	/**
+	 * @return the tempsResantMoi
+	 */
+	public String getTempsResantMoi() {
+		return tempsResantMoi;
+	}
+
+
+	/**
+	 * @param tempsResantMoi the tempsResantMoi to set
+	 */
+	public void setTempsResantMoi(String tempsResantMoi) {
+		this.tempsResantMoi = tempsResantMoi;
+	}
+
+
+	/**
+	 * @return the tempsRestantAmi
+	 */
+	public String getTempsRestantAmi() {
+		return tempsRestantAmi;
+	}
+
+
+	/**
+	 * @param tempsRestantAmi the tempsRestantAmi to set
+	 */
+	public void setTempsRestantAmi(String tempsRestantAmi) {
+		this.tempsRestantAmi = tempsRestantAmi;
+	}
+
+
 	/**
  * @param postDate
  * @param message

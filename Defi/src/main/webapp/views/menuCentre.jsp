@@ -36,12 +36,60 @@
 									<div class="jeuxPublies">
 										<p><img alt="" src="photoUser?id=${sm.friendpost.id }" height="30px" width="30px">&nbsp;${sm.friendpost.nom}</p>
 										<p> ${sm.message }</p>
+										<table class="table table-bordered table-striped table-condensed">
+											<thead>
+												<tr>
+													<th>Joueur</th>
+													<th>Aide</th>
+													<th>Temps restant</th>
+													<th>Score Total</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>MOI</td>
+													<td>
+														<c:choose>
+															<c:when test="${sm.aideMoi == true }">
+																OUI
+															</c:when>
+															<c:otherwise>
+																NON
+															</c:otherwise>
+														</c:choose>
+													</td>
+													<td><c:out value="${sm.tempsResantMoi }"/></td>
+													<td><c:out value="${sm.scoreMoi }"/>/<c:out value="${sm.scoreMax }"/></td>
+												</tr>
+												<tr>
+													<td><a href="voirAmi?id=${sm.ami.id}"><c:out value="${sm.ami.nom }"/></a> </td>
+													<td>
+														<c:choose>
+															<c:when test="${sm.aideAmi == true }">
+																OUI
+															</c:when>
+															<c:otherwise>
+																NON
+															</c:otherwise>
+														</c:choose>
+													</td>
+													<td><c:out value="${sm.tempsRestantAmi }"/></td>
+													<td><c:out value="${sm.scoreAmi }"/>/<c:out value="${sm.scoreMax }"/></td>
+												</tr>
+											</tbody>
+										</table>
 										<p> ${sm.date }</p>
 										 <!-- si j'ai pas encore aimé ce poste on affiche "aimer", sinon on affiche "ne plus aimer" -->
 										 	<%-- <c:if test="${moi.posts }"></c:if> --%>
 											<a href="aimerPost?id=${sm.id }">aimer</a> &nbsp;&nbsp;
 											<a href="neplusAimerPost?id=${sm.id }"> ne plus aimer</a><br>
-											<a href="quiAimePost?id=${sm.id }">${sm.nbLikesPost} personnes aimment ça</a>
+											<a href="quiAimePost?id=${sm.id }">${sm.nbLikesPost} personnes aimment ça</a><br><br>
+											<c:forEach items="${sm.comments }" var="com">
+													<c:forEach items="${com.friends }" var="fr">
+														<p><img alt="" src="photoUser?id=${fr.id }" height="30px" width="30px">  &nbsp; <strong>${fr.nom }&nbsp; ${fr.prenom }</strong></p>
+													</c:forEach>
+													<p> &nbsp; &nbsp; &nbsp; ${com.commentaire }</p><br>
+											</c:forEach>
 											<f:form modelAttribute="sm" action="commenterPost">
 												<f:textarea path="commentaire"  placeholder=" votre commentaire ..." />
 												<f:input path="idPost" type="hidden" value="${sm.id }" />
@@ -67,7 +115,7 @@
 														<p><img alt="" src="photoUser?id=${fr.id }" height="30px" width="30px">  &nbsp; <strong>${fr.nom }&nbsp; ${fr.prenom }</strong></p>
 													</c:forEach>
 													<p> &nbsp; &nbsp; &nbsp; ${com.commentaire }</p><br>
-												</c:forEach>
+											</c:forEach>
 											<f:form modelAttribute="sm" action="commenterPost">
 												<f:textarea path="commentaire"  placeholder=" votre commentaire ..." />
 												<f:input path="idPost" type="hidden" value="${sm.id }" />

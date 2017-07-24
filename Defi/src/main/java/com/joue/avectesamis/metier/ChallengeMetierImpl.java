@@ -496,6 +496,17 @@ public class ChallengeMetierImpl implements ChallengeMetier{
 		return dao.mesAmisLike(id, parameter);
 	}
 
+	@Override
+	public void posterPost(Long id, String message, Post post) {
+		// TODO Auto-generated method stub
+		dao.posterPost(id, message, post);
+	}
+
+	@Override
+	public void publierChallenge(AbcChallenge challenge) {
+		dao.publierChallenge(challenge);
+	}
+
 	
 	
 

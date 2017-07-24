@@ -678,8 +678,22 @@ public class ChallengeAbcController {
 											+ "TEMPS RESTANT => MOI "+challenge.getTempsRestant()+", LUI: "+challenge.getTempsRestantAmi();
 			System.out.println(message);
 			Post post = new Post(new Date(), message, true, TypePost.ABCCHALLENGE);
-			metier.posterPost(id, message);
-//			return "infoPublicationSoloAbcChallenge";
+//			ajout des information du challenge dans le poste pour faciliter l'affichage
+			post.setScoreMax(challenge.getScoreMax());
+			post.setScoreMoi(challenge.getScore());
+			post.setScoreAmi(challenge.getScoreAmi());
+			post.setAideMoi(challenge.isAide());
+			post.setAideAmi(challenge.isAideAmi());
+			post.setTempsResantMoi(challenge.getTempsRestant());
+			post.setTempsRestantAmi(challenge.getTempsRestantAmi());
+			Friend moi = metier.getFriend(id);
+			Friend ami = challenge.getMonFriend();
+			post.setMoi(moi);
+			post.setAmi(ami);
+			
+			challenge.setPublie(true);
+			metier.publierChallenge(challenge);
+			metier.posterPost(id, message, post);
 		}
 		return "infoPublicationSoloAbcChallenge";
 		

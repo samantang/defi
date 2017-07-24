@@ -89,6 +89,37 @@ public class PenduSujetsChallenge implements Serializable{
 	
 	private int longueurDesMots;
 	
+	private boolean aideMoi;
+	private boolean aideAmi;
+	
+	/**
+	 * @return the aideMoi
+	 */
+	public boolean isAideMoi() {
+		return aideMoi;
+	}
+
+	/**
+	 * @param aideMoi the aideMoi to set
+	 */
+	public void setAideMoi(boolean aideMoi) {
+		this.aideMoi = aideMoi;
+	}
+
+	/**
+	 * @return the aideAmi
+	 */
+	public boolean isAideAmi() {
+		return aideAmi;
+	}
+
+	/**
+	 * @param aideAmi the aideAmi to set
+	 */
+	public void setAideAmi(boolean aideAmi) {
+		this.aideAmi = aideAmi;
+	}
+
 	/**
 	 * 
 	 */

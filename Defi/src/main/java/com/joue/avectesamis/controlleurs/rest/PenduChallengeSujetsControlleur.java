@@ -871,9 +871,22 @@ public class PenduChallengeSujetsControlleur {
 											+ "TEMPS RESTANT: MOI "+challenge.getTempsRestantMoi()+" => LUI: "+challenge.getTempsRestantAmi();
 			System.out.println(message);
 			Post post = new Post(new Date(), message, true, TypePost.PENDUSUJETCHALLENGE);
+//			ajout des information du challenge dans le poste pour faciliter l'affichage
+			post.setScoreMax(challenge.getScoreTotalMax());
+			post.setScoreMoi(challenge.getScoreTotalMoi());
+			post.setScoreAmi(challenge.getScoreTotalAmi());
+			post.setAideMoi(challenge.isAideMoi());
+			post.setAideAmi(challenge.isAideAmi());
+			post.setTempsResantMoi(challenge.getTempsRestantMoi());
+			post.setTempsRestantAmi(challenge.getTempsRestantAmi());
+			Friend moi = metier.getFriend(id);
+			Friend ami = challenge.getMonFriend();
+			post.setMoi(moi);
+			post.setAmi(ami);
+			
 			challenge.setPublie(true);
 			
-			metier.posterPost(id, message);
+			metier.posterPost(id, message, post);
 			penduDao.publierChallengeSujets(idChallenge);
 			
 			return "publierDicoChallengeEtInfos";

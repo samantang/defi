@@ -110,5 +110,7 @@ public interface ChallengeMetier {
 	public AbcSolo detailsSolo(Long id);
 	public AbcChallenge getAbcChallengeById(Long id);
 	public List<Friend> mesAmisLike(Long id, String parameter);
+	public void posterPost(Long id, String message, Post post);
+	public void publierChallenge(AbcChallenge challenge);
 	
 }

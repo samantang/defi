@@ -119,6 +119,8 @@ public interface ChallengeDao {
 	public String getCodeAttenteAmiMoi(Long moi, Long ami);
 	public String getCodeJoueAmiMoi(Long moi, Long ami);
 	public List<Friend> mesAmisLike(Long id, String parameter);
+	public void posterPost(Long id, String message, Post post);
+	public void publierChallenge(AbcChallenge challenge);
 	
 
 }

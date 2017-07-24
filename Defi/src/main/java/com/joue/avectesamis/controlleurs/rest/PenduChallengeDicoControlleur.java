@@ -574,11 +574,23 @@ public class PenduChallengeDicoControlleur {
 							+ "POINTS: moi: "+challenge.getScore()+" lui: "+challenge.getScoreAmi()+"\n"+""
 									+ "LE MOT: "+challenge.getMot()+"\n"
 											+ "Temps Restant: moi "+challenge.getTempsRestantMoi()+" lui: "+challenge.getTempsRestantAmi();
-			System.out.println(message);
 			Post post = new Post(new Date(), message, true, TypePost.PENDUDICOCHALLENGE);
+//			ajout des information du challenge dans le poste pour faciliter l'affichage
+			post.setScoreMax(challenge.getScoreMax());
+			post.setScoreMoi(challenge.getScore());
+			post.setScoreAmi(challenge.getScoreAmi());
+			post.setAideMoi(challenge.isAide());
+			post.setAideAmi(challenge.isAideAmi());
+			post.setTempsResantMoi(challenge.getTempsRestantMoi());
+			post.setTempsRestantAmi(challenge.getTempsRestantAmi());
+			Friend moi = metier.getFriend(id);
+			Friend ami = challenge.getMonFriend();
+			post.setMoi(moi);
+			post.setAmi(ami);
+			
 			challenge.setPublie(true);
 			
-			metier.posterPost(id, message);
+			metier.posterPost(id, message, post);
 			penduDao.publierChallengeDico(idJeu);
 			
 			return "publierDicoChallengeEtInfos";
